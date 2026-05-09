@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AZ Aluminium | Precision & Architectural Elegance</title>
+    <meta
+      name="description"
+      content="Premium Aluminium and Glass solutions. Precision engineering for doors, windows, and facades."
+    />
+    <meta
+      name="keywords"
+      content="Aluminium, Windows, Doors, Glass, Construction, Architecture, Netherlands"
+    />
+    <meta name="author" content="AZ Aluminium" />
+    <meta property="og:title" content="AZ Aluminium - Integrated Solutions" />
+    <meta
+      property="og:description"
+      content="Discover our architectural aluminium projects and products."
+    />
+    <meta property="og:image" content="images/og-image.jpg" />
+    <meta property="og:url" content="https://az-aluminium.com" />
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/products.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="az-navbar navbar navbar-expand-lg sticky-top bg-white">
+      <div class="container-fluid px-lg-5">
+        <a class="navbar-brand az-brand" href="index.html">
+          <img src="images/logo.png" alt="AZ Aluminium Logo" height="55" />
+        </a>
+
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebarMenu"
+        >
+          <i class="fa-solid fa-bars-staggered var(--primary-blue)"></i>
+        </button>
+
+        <div
+          class="collapse navbar-collapse justify-content-between"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="products.html">Products</a></li>
+            <li>
+              <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+            </li>
+            <li><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link" href="projects.html">Projects</a></li>
+            <li><a class="nav-link" href="about.html">About Us</a></li>
+          </ul>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-globe header-icon"></i>
+            <i class="fa-regular fa-clock header-icon"></i>
+            <i class="fa-solid fa-phone header-icon"></i>
+
+            <a href="quote.html" class="btn btn-quote ms-4">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Mobile Sidebar -->
+    <div class="offcanvas offcanvas-start" id="sidebarMenu">
+      <div class="offcanvas-header pt-4">
+        <h5 class="text-white px-3">Menu</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+      <div class="offcanvas-body px-4">
+        <a class="nav-link" href="products.html">Products</a>
+        <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+        <a class="nav-link" href="gallery.html">Gallery</a>
+        <a class="nav-link" href="projects.html">Projects</a>
+        <a class="nav-link" href="about.html">About Us</a>
+        <a href="quote.html" class="btn btn-quote w-100 mt-4">Get a Quote</a>
+      </div>
+    </div>
+
+    <main>
+      <section class="products-header-section">
+        <div class="header-accent-txt">SYSTEMS</div>
+
+        <div class="container px-lg-5">
+          <div class="row align-items-center">
+            <div class="col-lg-8">
+              <div class="breadcrumb-custom reveal">
+                <a href="index.html">HOME</a> /
+                <span class="text-white">PRODUCTS</span>
+              </div>
+
+              <div class="header-content">
+                <h1 class="product-page-title reveal">
+                  High-End Glazing & <br />
+                  <span style="color: var(--footer-orange)"
+                    >Aluminium Systems</span
+                  >
+                </h1>
+                <p class="product-page-desc reveal">
+                  Explore our professional range of custom-built aluminium
+                  structures. From sophisticated glass walls to intelligent
+                  solar verandas, engineered for a lifetime.
+                </p>
+              </div>
+            </div>
+
+            <div class="col-lg-4 text-center d-none d-lg-block reveal">
+              <div
+                class="tech-badge p-4 border border-secondary rounded-4"
+                style="
+                  border-style: dashed !important;
+                  border-color: rgba(255, 255, 255, 0.2) !important;
+                "
+              >
+                <i class="fa-solid fa-microchip fs-1 mb-3 text-white-50"></i>
+                <h6 class="fw-bold mb-1">SMART QUALITY</h6>
+                <p class="small text-white-50 mb-0">
+                  Certified European Hardware
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="products-main-area py-5 bg-white">
+        <div class="container">
+          <div class="custom-tab-wrapper">
+            <div class="category-switcher reveal">
+              <button
+                class="switch-btn active"
+                onclick="filterCatalog('doors', this)"
+              >
+                AZ DOORS
+              </button>
+              <button
+                class="switch-btn"
+                onclick="filterCatalog('garden', this)"
+              >
+                WINTER GARDENS
+              </button>
+            </div>
+          </div>
+
+          <div id="doors-panel" class="products-panel active-panel">
+            <div class="row g-4">
+              <div class="col-md-4 reveal">
+                <div
+                  class="product-card-vertical shadow"
+                  onclick="window.location.href = 'product-detail.html'"
+                >
+                  <div class="top-selling-badge">Top Selling</div>
+                  <img
+                    src="https://azaluminium.nl/wp-content/uploads/2024/12/باب_كراج4_.png"
+                    class="bg-image"
+                    alt="Garage Door"
+                  />
+                  <div class="card-bottom-title">
+                    <h3>Garage Doors</h3>
+                  </div>
+                  <div class="card-actions-reveal">
+                    <a
+                      class="btn btn-quote"
+                      href="quote.html"
+                      style="border-radius: 50px"
+                      >Order Quote</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 reveal">
+                <div
+                  class="product-card-vertical shadow"
+                  onclick="window.location.href = 'product-detail.html'"
+                >
+                  <img
+                    src="https://azaluminium.nl/wp-content/uploads/2024/12/زجاج-منزلق_.png"
+                    class="bg-image"
+                    alt="Sliding Walls"
+                  />
+                  <div class="card-bottom-title">
+                    <h3>Glazen Wanden</h3>
+                  </div>
+                  <div class="card-actions-reveal">
+                    <a
+                      class="btn btn-quote"
+                      href="quote.html"
+                      style="border-radius: 50px"
+                      >Order Quote</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 reveal">
+                <div
+                  class="product-card-vertical shadow"
+                  onclick="window.location.href = 'product-detail.html'"
+                >
+                  <img
+                    src="https://azaluminium.nl/wp-content/uploads/2024/12/باب-منزلق.png"
+                    class="bg-image"
+                    alt="Modern Sliding Door"
+                  />
+                  <div class="card-bottom-title">
+                    <h3>Sliding Doors</h3>
+                  </div>
+                  <div class="card-actions-reveal">
+                    <a
+                      class="btn btn-quote"
+                      href="quote.html"
+                      style="border-radius: 50px"
+                      >Order Quote</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="garden-panel" class="products-panel">
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div
+                  class="product-card-vertical shadow"
+                  onclick="window.location.href = 'product-detail.html'"
+                >
+                  <img
+                    src="https://azaluminium.nl/wp-content/uploads/2024/12/مظلة.png"
+                    class="bg-image"
+                    alt="Terrace Cover"
+                  />
+                  <div class="card-bottom-title">
+                    <h3>Terrasoverkapping</h3>
+                  </div>
+                  <div class="card-actions-reveal">
+                    <a
+                      class="btn btn-quote"
+                      href="quote.html"
+                      style="border-radius: 50px"
+                      >Order Quote</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div
+                  class="product-card-vertical shadow"
+                  onclick="window.location.href = 'product-detail.html'"
+                >
+                  <img
+                    src="https://azaluminium.nl/wp-content/uploads/2024/12/بيرغولا_.png"
+                    class="bg-image"
+                    alt="Pergola"
+                  />
+                  <div class="card-bottom-title">
+                    <h3>Modern Pergola</h3>
+                  </div>
+                  <div class="card-actions-reveal">
+                    <a
+                      class="btn btn-quote"
+                      href="quote.html"
+                      style="border-radius: 50px"
+                      >Order Quote</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div
+                  class="product-card-vertical shadow"
+                  onclick="window.location.href = 'product-detail.html'"
+                >
+                  <div
+                    class="top-selling-badge"
+                    style="background: var(--cta-orange)"
+                  >
+                    Eco Friendly
+                  </div>
+                  <img
+                    src="https://azaluminium.nl/wp-content/uploads/2024/12/بيرغولا2_.png"
+                    class="bg-image"
+                    alt="Bioclimatic Pergola"
+                  />
+                  <div class="card-bottom-title">
+                    <h3>Bioclimatic Pergola</h3>
+                  </div>
+                  <div class="card-actions-reveal">
+                    <a
+                      class="btn btn-quote"
+                      href="quote.html"
+                      style="border-radius: 50px"
+                      >Order Quote</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container px-lg-5">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="footer-logo mb-4">
+              <img
+                src="images/logo-white.png"
+                alt="AZ Aluminium Logo"
+                height="80"
+              />
+            </div>
+            <p class="footer-desc">
+              Precision engineering meeting architectural elegance for your
+              lifetime investment.
+            </p>
+          </div>
+
+          <div class="col-6 col-lg-2 ms-auto">
+            <div class="footer-title">Resources</div>
+            <a href="#" class="footer-link">Technical Specs</a>
+            <a href="#" class="footer-link">Installation Support</a>
+            <a href="#" class="footer-link">Maintenance Guide</a>
+            <a href="#" class="footer-link">Warranty</a>
+          </div>
+
+          <div class="col-6 col-lg-2">
+            <div class="footer-title">Support</div>
+            <a href="#" class="footer-link">Contact Support</a>
+            <a href="#" class="footer-link">FAQs</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+          </div>
+
+          <div class="col-lg-3">
+            <div class="footer-title">Office</div>
+            <p class="office-text">Precision Square 42</p>
+            <p class="office-text">Architectural District</p>
+            <p class="office-text">NL-1011 Amsterdam</p>
+            <div class="mt-4">
+              <i class="fa-solid fa-medal footer-social-icon"></i>
+              <i class="fa-solid fa-share-nodes footer-social-icon"></i>
+              <i class="fa-solid fa-globe footer-social-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="row align-items-center text-center text-md-start">
+            <div class="col-md-6 mb-3 mb-md-0">
+              © 2024 AZ Aluminium. Precision Engineering & Architectural
+              Elegance.
+            </div>
+            <div class="col-md-6 text-md-end">
+              <span class="mx-2 opacity-50 small">ISO 9001 CERTIFIED</span>
+              <span class="mx-2 opacity-50 small border-start ps-2"
+                >CE MARKED</span
+              >
+              <span class="ms-2 badge-eu"> MADE IN EU</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Mobile Bottom Navbar (UX Enhancement) -->
+    <nav class="mobile-bottom-nav">
+      <a href="index.html" class="m-nav-item active">
+        <i class="fa-solid fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="products.html" class="m-nav-item">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <span>Products</span>
+      </a>
+      <a href="quote.html" class="m-nav-cta text-decoration-none">
+        <i class="fa-solid fa-paper-plane"></i>
+      </a>
+      <a href="projects.html" class="m-nav-item">
+        <i class="fa-solid fa-hard-hat"></i>
+        <span>Projects</span>
+      </a>
+      <a href="gallery.html" class="m-nav-item">
+        <i class="fa-solid fa-images"></i>
+        <span>Gallery</span>
+      </a>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/products.js"></script>
+  </body>
+</html>

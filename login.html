@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AZ Aluminium | Precision & Architectural Elegance</title>
+    <meta
+      name="description"
+      content="Premium Aluminium and Glass solutions. Precision engineering for doors, windows, and facades."
+    />
+    <meta
+      name="keywords"
+      content="Aluminium, Windows, Doors, Glass, Construction, Architecture, Netherlands"
+    />
+    <meta name="author" content="AZ Aluminium" />
+    <meta property="og:title" content="AZ Aluminium - Integrated Solutions" />
+    <meta
+      property="og:description"
+      content="Discover our architectural aluminium projects and products."
+    />
+    <meta property="og:image" content="images/og-image.jpg" />
+    <meta property="og:url" content="https://az-aluminium.com" />
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/auth.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="az-navbar navbar navbar-expand-lg sticky-top bg-white">
+      <div class="container-fluid px-lg-5">
+        <a class="navbar-brand az-brand" href="index.html">
+          <img src="images/logo.png" alt="AZ Aluminium Logo" height="55" />
+        </a>
+
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebarMenu"
+        >
+          <i class="fa-solid fa-bars-staggered var(--primary-blue)"></i>
+        </button>
+
+        <div
+          class="collapse navbar-collapse justify-content-between"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="products.html">Products</a></li>
+            <li>
+              <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+            </li>
+            <li><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link" href="projects.html">Projects</a></li>
+            <li><a class="nav-link" href="about.html">About Us</a></li>
+          </ul>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-globe header-icon"></i>
+            <i class="fa-regular fa-clock header-icon"></i>
+            <i class="fa-solid fa-phone header-icon"></i>
+
+            <a href="quote.html" class="btn btn-quote ms-4">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Mobile Sidebar -->
+    <div class="offcanvas offcanvas-start" id="sidebarMenu">
+      <div class="offcanvas-header pt-4">
+        <h5 class="text-white px-3">Menu</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+      <div class="offcanvas-body px-4">
+        <a class="nav-link" href="products.html">Products</a>
+        <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+        <a class="nav-link" href="gallery.html">Gallery</a>
+        <a class="nav-link" href="projects.html">Projects</a>
+        <a class="nav-link" href="about.html">About Us</a>
+        <a href="quote.html" class="btn btn-quote w-100 mt-4">Get a Quote</a>
+      </div>
+    </div>
+
+    <main>
+      <div class="auth-wrapper">
+        <div class="auth-container">
+          <div class="auth-brand-panel">
+            <div class="panel-content">
+              <h2 class="fw-bold mb-3">Precision in Every Frame.</h2>
+              <p class="opacity-75 lh-lg mb-5" style="max-width: 350px">
+                Access your technical documents, project statuses, and bespoke
+                quote history in one centralized portal.
+              </p>
+
+              <div class="brand-badge shadow-sm">
+                <i class="fa-solid fa-certificate text-warning fs-4"></i>
+                <span class="small fw-bold"
+                  >Certified Architectural Excellence</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="auth-form-panel">
+            <div class="form-header mb-4">
+              <h3 class="fw-bold m-0">Welcome to the Portal</h3>
+              <p class="text-muted small">
+                Sign in to manage your architectural projects.
+              </p>
+            </div>
+
+            <form action="#">
+              <div class="form-group-custom">
+                <label>Professional Email</label>
+                <input
+                  type="email"
+                  class="input-custom"
+                  placeholder="name@company.com"
+                  required
+                />
+              </div>
+
+              <div class="form-group-custom">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-2"
+                >
+                  <label class="mb-0">Password</label>
+                  <a
+                    href="#"
+                    class="small text-danger text-decoration-none fw-bold"
+                    style="font-size: 11px"
+                    >Forgot password?</a
+                  >
+                </div>
+                <input
+                  type="password"
+                  class="input-custom"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                class="btn-cta-main w-100 py-3 mb-4 border-0"
+              >
+                Login to Portal
+              </button>
+
+              <div class="text-center position-relative my-4">
+                <hr class="opacity-10" />
+                <span
+                  class="position-absolute top-50 start-50 translate-middle px-3 bg-white text-muted small fw-bold"
+                  style="font-size: 10px"
+                  >OR CONTINUE WITH</span
+                >
+              </div>
+
+              <div class="social-login-row">
+                <button type="button" class="social-btn">
+                  <img
+                    src="https://img.icons8.com/color/24/000000/google-logo.png"
+                    alt="Google"
+                  />
+                  Google
+                </button>
+              </div>
+
+              <div class="mt-5 text-center">
+                <a
+                  href="index.html"
+                  class="text-az-blue text-decoration-none fw-bold small"
+                >
+                  Continue as Guest <i class="fas fa-arrow-right-long ms-2"></i>
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container px-lg-5">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="footer-logo mb-4">
+              <img
+                src="images/logo-white.png"
+                alt="AZ Aluminium Logo"
+                height="80"
+              />
+            </div>
+            <p class="footer-desc">
+              Precision engineering meeting architectural elegance for your
+              lifetime investment.
+            </p>
+          </div>
+
+          <div class="col-6 col-lg-2 ms-auto">
+            <div class="footer-title">Resources</div>
+            <a href="#" class="footer-link">Technical Specs</a>
+            <a href="#" class="footer-link">Installation Support</a>
+            <a href="#" class="footer-link">Maintenance Guide</a>
+            <a href="#" class="footer-link">Warranty</a>
+          </div>
+
+          <div class="col-6 col-lg-2">
+            <div class="footer-title">Support</div>
+            <a href="#" class="footer-link">Contact Support</a>
+            <a href="#" class="footer-link">FAQs</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+          </div>
+
+          <div class="col-lg-3">
+            <div class="footer-title">Office</div>
+            <p class="office-text">Precision Square 42</p>
+            <p class="office-text">Architectural District</p>
+            <p class="office-text">NL-1011 Amsterdam</p>
+            <div class="mt-4">
+              <i class="fa-solid fa-medal footer-social-icon"></i>
+              <i class="fa-solid fa-share-nodes footer-social-icon"></i>
+              <i class="fa-solid fa-globe footer-social-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="row align-items-center text-center text-md-start">
+            <div class="col-md-6 mb-3 mb-md-0">
+              © 2024 AZ Aluminium. Precision Engineering & Architectural
+              Elegance.
+            </div>
+            <div class="col-md-6 text-md-end">
+              <span class="mx-2 opacity-50 small">ISO 9001 CERTIFIED</span>
+              <span class="mx-2 opacity-50 small border-start ps-2"
+                >CE MARKED</span
+              >
+              <span class="ms-2 badge-eu"> MADE IN EU</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Mobile Bottom Navbar (UX Enhancement) -->
+    <nav class="mobile-bottom-nav">
+      <a href="index.html" class="m-nav-item active">
+        <i class="fa-solid fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="products.html" class="m-nav-item">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <span>Products</span>
+      </a>
+      <a href="quote.html" class="m-nav-cta text-decoration-none">
+        <i class="fa-solid fa-paper-plane"></i>
+      </a>
+      <a href="projects.html" class="m-nav-item">
+        <i class="fa-solid fa-hard-hat"></i>
+        <span>Projects</span>
+      </a>
+      <a href="gallery.html" class="m-nav-item">
+        <i class="fa-solid fa-images"></i>
+        <span>Gallery</span>
+      </a>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

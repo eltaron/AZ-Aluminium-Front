@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AZ Aluminium | Precision & Architectural Elegance</title>
+    <meta
+      name="description"
+      content="Premium Aluminium and Glass solutions. Precision engineering for doors, windows, and facades."
+    />
+    <meta
+      name="keywords"
+      content="Aluminium, Windows, Doors, Glass, Construction, Architecture, Netherlands"
+    />
+    <meta name="author" content="AZ Aluminium" />
+    <meta property="og:title" content="AZ Aluminium - Integrated Solutions" />
+    <meta
+      property="og:description"
+      content="Discover our architectural aluminium projects and products."
+    />
+    <meta property="og:image" content="images/og-image.jpg" />
+    <meta property="og:url" content="https://az-aluminium.com" />
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="az-navbar navbar navbar-expand-lg sticky-top bg-white">
+      <div class="container-fluid px-lg-5">
+        <a class="navbar-brand az-brand" href="index.html">
+          <img src="images/logo.png" alt="AZ Aluminium Logo" height="55" />
+        </a>
+
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebarMenu"
+        >
+          <i class="fa-solid fa-bars-staggered var(--primary-blue)"></i>
+        </button>
+
+        <div
+          class="collapse navbar-collapse justify-content-between"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="products.html">Products</a></li>
+            <li>
+              <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+            </li>
+            <li><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link" href="projects.html">Projects</a></li>
+            <li><a class="nav-link" href="about.html">About Us</a></li>
+          </ul>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-globe header-icon"></i>
+            <i class="fa-regular fa-clock header-icon"></i>
+            <i class="fa-solid fa-phone header-icon"></i>
+
+            <a href="quote.html" class="btn btn-quote ms-4">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Mobile Sidebar -->
+    <div class="offcanvas offcanvas-start" id="sidebarMenu">
+      <div class="offcanvas-header pt-4">
+        <h5 class="text-white px-3">Menu</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+      <div class="offcanvas-body px-4">
+        <a class="nav-link" href="products.html">Products</a>
+        <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+        <a class="nav-link" href="gallery.html">Gallery</a>
+        <a class="nav-link" href="projects.html">Projects</a>
+        <a class="nav-link" href="about.html">About Us</a>
+        <a href="quote.html" class="btn btn-quote w-100 mt-4">Get a Quote</a>
+      </div>
+    </div>
+
+    <main>
+      <section class="hero-section" id="hero">
+        <div class="container-fluid px-lg-5">
+          <div class="hero-content">
+            <span
+              class="text-uppercase tracking-widest small mb-2 d-block"
+              id="hero-tag"
+              style="color: #f97316"
+              >Premium Systems</span
+            >
+            <h1 id="hero-title">
+              Crafting Your <br />
+              Perfect Outdoor Vision
+            </h1>
+            <p id="hero-desc">
+              From architectural glass walls to high-end veranda systems. We
+              bring precision engineering to your home investment.
+            </p>
+            <a href="products.html" class="btn btn-quote"
+              >Discover More <i class="fa-solid fa-arrow-right ms-2"></i
+            ></a>
+          </div>
+        </div>
+
+        <div class="hero-side-nav">
+          <div class="hero-thumb active" onclick="changeHero(0)">
+            <img
+              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000"
+              alt=""
+            />
+            <span>Verandas</span>
+          </div>
+          <div class="hero-thumb" onclick="changeHero(1)">
+            <img
+              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000"
+              alt=""
+            />
+            <span>Glass Walls</span>
+          </div>
+          <div class="hero-thumb" onclick="changeHero(2)">
+            <img
+              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2000"
+              alt=""
+            />
+            <span>Inside Doors</span>
+          </div>
+          <div class="hero-thumb" onclick="changeHero(3)">
+            <img
+              src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=1000"
+              alt=""
+            />
+            <span>Zonwering</span>
+          </div>
+        </div>
+      </section>
+      <section class="about-section">
+        <div class="container px-lg-5">
+          <div class="row align-items-center g-5">
+            <div class="col-lg-6 reveal">
+              <div class="about-img-wrapper">
+                <div class="about-img-box">
+                  <img
+                    src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000"
+                    class="img-fluid"
+                    alt="AZ Projects"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6 ps-lg-5 reveal">
+              <div class="section-title-wrap">
+                <span class="section-tagline">Company Legacy</span>
+                <h2 class="section-main-title">
+                  Check Out Us And <br />
+                  Our Services
+                </h2>
+                <div class="d-flex align-items-center mt-3">
+                  <span class="decorative-line"></span>
+                  <span class="decorative-dot"></span>
+                </div>
+              </div>
+
+              <div class="about-text-content">
+                <p class="mb-4 opacity-75">
+                  AZ Aluminium was founded to play a leading role in the
+                  aluminum sector. The company offers a wide range of solutions
+                  that meet customers' needs in the design and construction of
+                  aluminum structures.
+                </p>
+
+                <p class="mb-4 opacity-75">
+                  It specializes in creating
+                  <strong>winter gardens (verandas) and pergolas</strong>,
+                  including bioclimatic systems which provide beautiful and
+                  comfortable spaces for various applications.
+                </p>
+
+                <p class="mb-4 opacity-75">
+                  We proudly operate across
+                  <strong>Germany, Belgium, and the Netherlands</strong>,
+                  delivering high-quality innovative and sustainable solutions
+                  that make us the ideal choice for modern design.
+                </p>
+              </div>
+
+              <div class="row g-4 mt-2">
+                <div class="col-6 col-md-4">
+                  <div class="about-stat">
+                    <span class="stat-num">3+</span>
+                    <span class="stat-text">Countries Served</span>
+                  </div>
+                </div>
+                <div class="col-6 col-md-4">
+                  <div class="about-stat">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-text">Modern Designs</span>
+                  </div>
+                </div>
+              </div>
+
+              <a href="about.html" class="btn btn-quote mt-5"
+                >More About AZ <i class="fa-solid fa-arrow-right ms-2"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="products-section-v2 reveal">
+        <div class="container mb-5">
+          <div class="row align-items-end">
+            <div class="col-8">
+              <span class="section-tagline">Excellence in Craft</span>
+              <h2 class="section-main-title mb-0">Our Premium Products</h2>
+              <div class="d-flex align-items-center mt-3">
+                <span class="decorative-line"></span>
+                <span class="decorative-dot"></span>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="carousel-controls d-none d-lg-block">
+                <button class="control-btn" onclick="scrollV2(-400)">
+                  <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <button class="control-btn" onclick="scrollV2(400)">
+                  <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Container الخارجي اللي بيعمل الـ Offset من اليسار -->
+        <div class="carousel-outer-container">
+          <div class="product-slider" id="sliderV2">
+            <div class="product-card-v2">
+              <div class="popular-badge">Top Selling</div>
+              <div class="hover-icon-box">
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800"
+                class="card-img"
+                alt=""
+              />
+              <h4 class="product-title-text">Veranda's</h4>
+              <div class="product-overlay"></div>
+            </div>
+
+            <div class="product-card-v2">
+              <div class="hover-icon-box">
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+              <img
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800"
+                class="card-img"
+                alt=""
+              />
+              <h4 class="product-title-text">Glazen wanden</h4>
+              <div class="product-overlay"></div>
+            </div>
+
+            <div class="product-card-v2">
+              <div class="hover-icon-box">
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+              <img
+                src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=800"
+                class="card-img"
+                alt=""
+              />
+              <h4 class="product-title-text">Kozijnen</h4>
+              <div class="product-overlay"></div>
+            </div>
+
+            <div class="product-card-v2">
+              <div class="hover-icon-box">
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+              <img
+                src="https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=800"
+                class="card-img"
+                alt=""
+              />
+              <h4 class="product-title-text">Inside Doors</h4>
+              <div class="product-overlay"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container px-3">
+          <div class="custom-progress-container">
+            <div class="custom-progress-bar" id="p-bar"></div>
+          </div>
+        </div>
+      </section>
+      <section class="steps-section">
+        <div class="container px-lg-5">
+          <div class="text-center mb-5 reveal">
+            <span class="section-tagline">Step-by-Step Guide</span>
+            <h2 class="section-main-title">Purchase and Payment Steps</h2>
+            <div class="d-flex justify-content-center align-items-center mt-3">
+              <span class="decorative-line"></span>
+              <span class="decorative-dot"></span>
+            </div>
+          </div>
+
+          <div class="row g-0">
+            <!-- Step 1 -->
+            <div class="col-lg-3 col-md-6">
+              <div class="step-card step-reveal delay-1">
+                <div class="step-accent-border"></div>
+                <div class="step-number-bg">1</div>
+                <div class="step-icon-box shadow-sm">
+                  <i class="fa-solid fa-comments-dollar"></i>
+                </div>
+                <h3 class="step-title">Request a Quote</h3>
+                <p class="step-text">
+                  Connect via WhatsApp, email, or our form. You’ll receive a
+                  response within hours to start your vision.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="col-lg-3 col-md-6">
+              <div class="step-card step-reveal delay-2">
+                <div class="step-accent-border"></div>
+                <div class="step-number-bg">2</div>
+                <div class="step-icon-box shadow-sm">
+                  <i class="fa-solid fa-file-signature"></i>
+                </div>
+                <h3 class="step-title">Approve Quotation</h3>
+                <p class="step-text">
+                  Review our transparent pricing. Once confirmed, we quickly
+                  finalize the technical contract details.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="col-lg-3 col-md-6">
+              <div class="step-card step-reveal delay-3">
+                <div class="step-accent-border"></div>
+                <div class="step-number-bg">3</div>
+                <div class="step-icon-box shadow-sm">
+                  <i class="fa-solid fa-ruler-combined"></i>
+                </div>
+                <h3 class="step-title">Precision Measure</h3>
+                <p class="step-text">
+                  Our engineering team visits to perform millimetric onsite
+                  measurements using laser equipment.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="col-lg-3 col-md-6">
+              <div class="step-card step-reveal delay-4">
+                <div class="step-accent-border"></div>
+                <div class="step-number-bg">4</div>
+                <div class="step-icon-box shadow-sm">
+                  <i class="fa-solid fa-house-chimney-window"></i>
+                </div>
+                <h3 class="step-title">Install & Complete</h3>
+                <p class="step-text">
+                  Final delivery, professional installation, and easy payment
+                  via your preferred digital methods.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="gallery-section reveal">
+        <div class="container px-lg-5">
+          <div class="text-center mb-5">
+            <span class="section-tagline">Project Showcase</span>
+            <h2 class="section-main-title">Inspiration Gallery</h2>
+            <div class="d-flex justify-content-center align-items-center mt-3">
+              <span class="decorative-line"></span>
+              <span class="decorative-dot"></span>
+            </div>
+          </div>
+
+          <div class="az-gallery-grid">
+            <div
+              class="gallery-item item-big shadow-sm"
+              onclick="openLightbox(0)"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000"
+                alt=""
+              />
+              <div class="gallery-overlay">
+                <div class="view-btn"><i class="fa-solid fa-expand"></i></div>
+              </div>
+            </div>
+
+            <div
+              class="gallery-item item-tall shadow-sm"
+              onclick="openLightbox(1)"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800"
+                alt=""
+              />
+              <div class="gallery-overlay">
+                <div class="view-btn"><i class="fa-solid fa-expand"></i></div>
+              </div>
+            </div>
+
+            <div class="gallery-item shadow-sm" onclick="openLightbox(2)">
+              <img
+                src="https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=800"
+                alt=""
+              />
+              <div class="gallery-overlay">
+                <div class="view-btn"><i class="fa-solid fa-expand"></i></div>
+              </div>
+            </div>
+
+            <div class="gallery-item shadow-sm" onclick="openLightbox(3)">
+              <img
+                src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=800"
+                alt=""
+              />
+              <div class="gallery-overlay">
+                <div class="view-btn"><i class="fa-solid fa-expand"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="final-cta-section">
+        <div class="cta-container reveal">
+          <span class="cta-tagline">Start Your Transformation</span>
+          <h2 class="cta-title">
+            Ready to Elevate Your Architectural Experience?
+          </h2>
+          <p class="cta-desc">
+            Get a personalized quotation from our experts and start building
+            your lifetime investment today with AZ Aluminium precision
+            engineering.
+          </p>
+
+          <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="quote.html" class="btn-cta-main">
+              <span>Get My Quote Now</span>
+              <i class="fa-solid fa-arrow-right-long"></i>
+            </a>
+
+            <!-- إضافة زر جانبي للواتساب (وهو جزء من المرحلة الثانية في مشروعك) -->
+            <a
+              href="https://wa.me/xxxxxx"
+              class="btn btn-outline-light px-5 py-3 d-flex align-items-center gap-2 border-2 fw-bold"
+              style="border-radius: 12px"
+            >
+              <i class="fa-brands fa-whatsapp fs-4"></i>
+              Talk to Expert
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="modal fade gallery-modal" id="lightboxModal" tabindex="-1">
+      <button type="button" class="btn-close-gallery" data-bs-dismiss="modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content text-center">
+          <div class="modal-body p-0">
+            <div class="modal-img-wrap">
+              <button class="nav-btn prev-btn" onclick="prevImg()">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <img src="" id="modalImg" class="img-fluid" alt="Full Image" />
+              <button class="nav-btn next-btn" onclick="nextImg()">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container px-lg-5">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="footer-logo mb-4">
+              <img
+                src="images/logo-white.png"
+                alt="AZ Aluminium Logo"
+                height="80"
+              />
+            </div>
+            <p class="footer-desc">
+              Precision engineering meeting architectural elegance for your
+              lifetime investment.
+            </p>
+          </div>
+
+          <div class="col-6 col-lg-2 ms-auto">
+            <div class="footer-title">Resources</div>
+            <a href="#" class="footer-link">Technical Specs</a>
+            <a href="#" class="footer-link">Installation Support</a>
+            <a href="#" class="footer-link">Maintenance Guide</a>
+            <a href="#" class="footer-link">Warranty</a>
+          </div>
+
+          <div class="col-6 col-lg-2">
+            <div class="footer-title">Support</div>
+            <a href="#" class="footer-link">Contact Support</a>
+            <a href="#" class="footer-link">FAQs</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+          </div>
+
+          <div class="col-lg-3">
+            <div class="footer-title">Office</div>
+            <p class="office-text">Precision Square 42</p>
+            <p class="office-text">Architectural District</p>
+            <p class="office-text">NL-1011 Amsterdam</p>
+            <div class="mt-4">
+              <i class="fa-solid fa-medal footer-social-icon"></i>
+              <i class="fa-solid fa-share-nodes footer-social-icon"></i>
+              <i class="fa-solid fa-globe footer-social-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="row align-items-center text-center text-md-start">
+            <div class="col-md-6 mb-3 mb-md-0">
+              © 2024 AZ Aluminium. Precision Engineering & Architectural
+              Elegance.
+            </div>
+            <div class="col-md-6 text-md-end">
+              <span class="mx-2 opacity-50 small">ISO 9001 CERTIFIED</span>
+              <span class="mx-2 opacity-50 small border-start ps-2"
+                >CE MARKED</span
+              >
+              <span class="ms-2 badge-eu"> MADE IN EU</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Mobile Bottom Navbar (UX Enhancement) -->
+    <nav class="mobile-bottom-nav">
+      <a href="index.html" class="m-nav-item active">
+        <i class="fa-solid fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="products.html" class="m-nav-item">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <span>Products</span>
+      </a>
+      <a href="quote.html" class="m-nav-cta text-decoration-none">
+        <i class="fa-solid fa-paper-plane"></i>
+      </a>
+      <a href="projects.html" class="m-nav-item">
+        <i class="fa-solid fa-hard-hat"></i>
+        <span>Projects</span>
+      </a>
+      <a href="gallery.html" class="m-nav-item">
+        <i class="fa-solid fa-images"></i>
+        <span>Gallery</span>
+      </a>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const heroData = [
+        {
+          title: "Crafting Your <br> Perfect Outdoor Vision",
+          desc: "From architectural glass walls to high-end veranda systems. We bring precision engineering to your home investment.",
+          tag: "Premium Verandas",
+          img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000",
+        },
+        {
+          title: "Infinity View <br> Sliding Glass Walls",
+          desc: "Seamlessly merge your interior with the garden using our ultralight aluminum sliding systems.",
+          tag: "Glazen Schuifwanden",
+          img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2000",
+        },
+        {
+          title: "Modern Minimal <br> Internal Doors",
+          desc: "Industrial style steel-look aluminum doors for the contemporary home office and living space.",
+          tag: "Binnendeuren",
+          img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2000",
+        },
+        {
+          title: "Automated Shading <br> Intelligent Comfort",
+          desc: "Smart sun protection systems that adapt to your weather and lifestyle automatically.",
+          tag: "Smart Zonwering",
+          img: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=2000",
+        },
+      ];
+    </script>
+    <script src="js/index.js"></script>
+  </body>
+</html>

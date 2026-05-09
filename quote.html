@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AZ Aluminium | Precision & Architectural Elegance</title>
+    <meta
+      name="description"
+      content="Premium Aluminium and Glass solutions. Precision engineering for doors, windows, and facades."
+    />
+    <meta
+      name="keywords"
+      content="Aluminium, Windows, Doors, Glass, Construction, Architecture, Netherlands"
+    />
+    <meta name="author" content="AZ Aluminium" />
+    <meta property="og:title" content="AZ Aluminium - Integrated Solutions" />
+    <meta
+      property="og:description"
+      content="Discover our architectural aluminium projects and products."
+    />
+    <meta property="og:image" content="images/og-image.jpg" />
+    <meta property="og:url" content="https://az-aluminium.com" />
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/quote.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="az-navbar navbar navbar-expand-lg sticky-top bg-white">
+      <div class="container-fluid px-lg-5">
+        <a class="navbar-brand az-brand" href="index.html">
+          <img src="images/logo.png" alt="AZ Aluminium Logo" height="55" />
+        </a>
+
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebarMenu"
+        >
+          <i class="fa-solid fa-bars-staggered var(--primary-blue)"></i>
+        </button>
+
+        <div
+          class="collapse navbar-collapse justify-content-between"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="products.html">Products</a></li>
+            <li>
+              <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+            </li>
+            <li><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link" href="projects.html">Projects</a></li>
+            <li><a class="nav-link" href="about.html">About Us</a></li>
+          </ul>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-globe header-icon"></i>
+            <i class="fa-regular fa-clock header-icon"></i>
+            <i class="fa-solid fa-phone header-icon"></i>
+
+            <a href="quote.html" class="btn btn-quote ms-4">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Mobile Sidebar -->
+    <div class="offcanvas offcanvas-start" id="sidebarMenu">
+      <div class="offcanvas-header pt-4">
+        <h5 class="text-white px-3">Menu</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+      <div class="offcanvas-body px-4">
+        <a class="nav-link" href="products.html">Products</a>
+        <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+        <a class="nav-link" href="gallery.html">Gallery</a>
+        <a class="nav-link" href="projects.html">Projects</a>
+        <a class="nav-link" href="about.html">About Us</a>
+        <a href="quote.html" class="btn btn-quote w-100 mt-4">Get a Quote</a>
+      </div>
+    </div>
+
+    <main>
+      <section class="spec-container py-5">
+        <div class="container px-lg-5">
+          <!-- 1. Breadcrumbs التفاعلية -->
+          <nav aria-label="breadcrumb" class="az-breadcrumb mb-5 reveal">
+            <ol class="breadcrumb">
+              <li
+                class="breadcrumb-item d-flex align-items-center gap-2"
+                id="brd-1"
+              >
+                <span class="step-num">1</span>
+                <a href="#" onclick="showStep(1)">Project Specifications</a>
+              </li>
+              <li
+                class="breadcrumb-item d-flex align-items-center gap-2 opacity-50"
+                id="brd-2"
+              >
+                <span class="step-num">2</span> <span>Contact Details</span>
+              </li>
+            </ol>
+          </nav>
+
+          <div class="row g-5">
+            <!-- العمود الأيسر: الحقول (Form) -->
+            <div class="col-lg-7">
+              <!-- القسم الأول: مواصفات المشروع -->
+              <div id="step-1" class="config-step active-step">
+                <h2 class="spec-title">Specify Your Project</h2>
+                <p class="spec-desc">
+                  Configure every detail of your system. Accuracy in technical
+                  specs ensures a seamless process.
+                </p>
+
+                <!-- 1. System Type -->
+                <div class="mb-5">
+                  <label class="az-label text-uppercase mb-3"
+                    >01. SYSTEM TYPE & POWER</label
+                  >
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div
+                        class="finish-card active"
+                        onclick="selectCard(this, 'type')"
+                      >
+                        <i class="fas fa-plug mb-2"></i>
+                        <span class="finish-name">Standard Electric</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div
+                        class="finish-card"
+                        onclick="selectCard(this, 'type')"
+                      >
+                        <i class="fas fa-sun mb-2"></i>
+                        <span class="finish-name">Solar Powered</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. Dimensions -->
+                <div class="mb-5 p-4 bg-light rounded-2 border">
+                  <label class="az-label text-uppercase mb-3"
+                    >02. Technical Dimensions (MM)</label
+                  >
+                  <div class="row g-4">
+                    <div class="col-md-6">
+                      <label class="small fw-bold opacity-75">WIDTH</label>
+                      <input
+                        type="number"
+                        id="width"
+                        class="az-input shadow-none"
+                        placeholder="e.g. 4000"
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label class="small fw-bold opacity-75"
+                        >DEPTH / HEIGHT</label
+                      >
+                      <input
+                        type="number"
+                        id="depth"
+                        class="az-input shadow-none"
+                        placeholder="e.g. 3000"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 3. Finish -->
+                <div class="mb-5">
+                  <label class="az-label text-uppercase mb-3"
+                    >03. PREFERRED FINISH (COLOUR)</label
+                  >
+                  <div class="row g-3">
+                    <div class="col-4">
+                      <div
+                        class="finish-card active"
+                        onclick="selectCard(this, 'finish')"
+                      >
+                        <div
+                          class="color-dot"
+                          style="background: #1c2431"
+                        ></div>
+                        <span class="finish-name">Anthracite</span>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div
+                        class="finish-card"
+                        onclick="selectCard(this, 'finish')"
+                      >
+                        <div
+                          class="color-dot"
+                          style="background: #dce1e9"
+                        ></div>
+                        <span class="finish-name">Silver</span>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div
+                        class="finish-card"
+                        onclick="selectCard(this, 'finish')"
+                      >
+                        <div
+                          class="color-dot"
+                          style="background: #ffffff; border: 1px solid #ddd"
+                        ></div>
+                        <span class="finish-name">White</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- القسم الثاني: بيانات التواصل -->
+              <div id="step-2" class="config-step d-none">
+                <h2 class="spec-title">Contact Details</h2>
+                <p class="spec-desc">
+                  Almost there! Please provide your information so we can send
+                  you the formal quotation.
+                </p>
+
+                <div class="mb-4">
+                  <label class="az-label text-uppercase small">FULL NAME</label>
+                  <input
+                    type="text"
+                    class="az-input shadow-none"
+                    placeholder="Enter your full name"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="az-label text-uppercase small"
+                    >EMAIL ADDRESS</label
+                  >
+                  <input
+                    type="email"
+                    class="az-input shadow-none"
+                    placeholder="example@mail.com"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="az-label text-uppercase small"
+                    >PHONE NUMBER</label
+                  >
+                  <input
+                    type="tel"
+                    class="az-input shadow-none"
+                    placeholder="+31 --- --- ---"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="az-label text-uppercase small"
+                    >PROJECT LOCATION (CITY)</label
+                  >
+                  <input
+                    type="text"
+                    class="az-input shadow-none"
+                    placeholder="Amsterdam, Berlin, etc."
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- العمود الأيمن الثابت للملاحظات -->
+            <div class="col-lg-5 ps-lg-5">
+              <div class="az-spec-sidebar">
+                <div class="sidebar-img-box mb-4">
+                  <img
+                    src="./images/quote.png"
+                    class="img-fluid rounded"
+                    alt="Preview Image"
+                  />
+                </div>
+                <div class="tech-note shadow-sm bg-white p-3 rounded-2 border">
+                  <h6
+                    class="tech-note-title text-uppercase"
+                    style="font-size: 12px; color: var(--cta-orange)"
+                  >
+                    Tech Standard
+                  </h6>
+                  <p class="tech-note-p small mb-0">
+                    Our structures meet ISO 9001 and CE requirements. Maximum
+                    wind resistance up to 120 km/h.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- الفوتر (الأزرار) -->
+            <div class="col-12 mt-5">
+              <div class="spec-footer py-4 border-top">
+                <button
+                  class="btn-back d-flex align-items-center gap-2 border-0 bg-transparent"
+                  id="prevBtn"
+                  style="display: none"
+                  onclick="showStep(1)"
+                >
+                  <i class="fas fa-arrow-left"></i> BACK TO PROJECT
+                </button>
+                <div class="ms-auto">
+                  <button
+                    class="btn btn-next px-5"
+                    id="mainBtn"
+                    onclick="handleFlow()"
+                  >
+                    NEXT: CONTACT DETAILS
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container px-lg-5">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="footer-logo mb-4">
+              <img
+                src="images/logo-white.png"
+                alt="AZ Aluminium Logo"
+                height="80"
+              />
+            </div>
+            <p class="footer-desc">
+              Precision engineering meeting architectural elegance for your
+              lifetime investment.
+            </p>
+          </div>
+
+          <div class="col-6 col-lg-2 ms-auto">
+            <div class="footer-title">Resources</div>
+            <a href="#" class="footer-link">Technical Specs</a>
+            <a href="#" class="footer-link">Installation Support</a>
+            <a href="#" class="footer-link">Maintenance Guide</a>
+            <a href="#" class="footer-link">Warranty</a>
+          </div>
+
+          <div class="col-6 col-lg-2">
+            <div class="footer-title">Support</div>
+            <a href="#" class="footer-link">Contact Support</a>
+            <a href="#" class="footer-link">FAQs</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+          </div>
+
+          <div class="col-lg-3">
+            <div class="footer-title">Office</div>
+            <p class="office-text">Precision Square 42</p>
+            <p class="office-text">Architectural District</p>
+            <p class="office-text">NL-1011 Amsterdam</p>
+            <div class="mt-4">
+              <i class="fa-solid fa-medal footer-social-icon"></i>
+              <i class="fa-solid fa-share-nodes footer-social-icon"></i>
+              <i class="fa-solid fa-globe footer-social-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="row align-items-center text-center text-md-start">
+            <div class="col-md-6 mb-3 mb-md-0">
+              © 2024 AZ Aluminium. Precision Engineering & Architectural
+              Elegance.
+            </div>
+            <div class="col-md-6 text-md-end">
+              <span class="mx-2 opacity-50 small">ISO 9001 CERTIFIED</span>
+              <span class="mx-2 opacity-50 small border-start ps-2"
+                >CE MARKED</span
+              >
+              <span class="ms-2 badge-eu"> MADE IN EU</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Mobile Bottom Navbar (UX Enhancement) -->
+    <nav class="mobile-bottom-nav">
+      <a href="index.html" class="m-nav-item active">
+        <i class="fa-solid fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="products.html" class="m-nav-item">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <span>Products</span>
+      </a>
+      <a href="quote.html" class="m-nav-cta text-decoration-none">
+        <i class="fa-solid fa-paper-plane"></i>
+      </a>
+      <a href="projects.html" class="m-nav-item">
+        <i class="fa-solid fa-hard-hat"></i>
+        <span>Projects</span>
+      </a>
+      <a href="gallery.html" class="m-nav-item">
+        <i class="fa-solid fa-images"></i>
+        <span>Gallery</span>
+      </a>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/quote.js"></script>
+  </body>
+</html>
