@@ -6,8 +6,8 @@
 }
 
 :root {
-  --primary-blue: #1a3652;
-  --footer-bg: #141b3d;
+  --primary-blue: #1b405e;
+  --footer-bg: #1b405e;
   --cta-orange: #a53d00;
   --header-gray: #647083; /* مطابقة للصورة تقريباً */
   --footer-orange: #f97316;
@@ -83,7 +83,7 @@ footer {
 
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #141b3d 0%, #0d122b 100%);
+  background: linear-gradient(180deg, #1b3e5e 0%, #1b405e 100%);
 }
 
 footer::before {

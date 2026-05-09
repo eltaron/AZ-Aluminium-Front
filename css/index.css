@@ -82,12 +82,12 @@
 
 @media (max-width: 991px) {
   .hero-content {
-    padding-left: 30px;
+    padding-left: 0;
     text-align: center;
-    padding-right: 30px;
+    padding-right: 0;
   }
   .hero-content h1 {
-    font-size: 40px;
+    font-size: 38px;
   }
 
   .hero-side-nav {
