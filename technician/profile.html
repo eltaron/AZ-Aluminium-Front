@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — Technician · AZ Aluminium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" href="../css/technician.css" />
+  <style>
+    .st-layout { display: grid; grid-template-columns: 300px 1fr; gap: 28px; align-items: start; }
+
+    /* ===== PROFILE SIDECARD ===== */
+    .st-sidecard { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+    .st-sidecard .st-cover { height: 80px; background: linear-gradient(135deg,var(--t-sidebar-bg),#1a2a4a); position: relative; }
+    .st-sidecard .st-cover .st-avatar-wrap { position: absolute; bottom: -36px; left: 50%; transform: translateX(-50%); }
+    .st-sidecard .st-cover .st-avatar-wrap .st-avatar { width: 80px; height: 80px; border-radius: 50%; border: 4px solid #fff; background: linear-gradient(135deg,var(--t-accent),#06b6d4); display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 700; color: #fff; box-shadow: 0 4px 16px rgba(8,145,178,.2); }
+    .st-sidecard .st-cover .st-avatar-wrap .st-edit { position: absolute; bottom: 2px; right: 2px; width: 28px; height: 28px; border-radius: 50%; background: var(--t-accent); color: #fff; border: 3px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; transition: .2s; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+    .st-sidecard .st-cover .st-avatar-wrap .st-edit:hover { background: var(--t-accent-hover); transform: scale(1.1); }
+    .st-sidecard .st-info { padding: 48px 24px 24px; text-align: center; }
+    .st-sidecard .st-info h3 { font-size: 18px; font-weight: 700; color: var(--t-primary); margin: 0; }
+    .st-sidecard .st-info .st-role { font-size: 12px; color: #64748b; margin: 2px 0 16px; }
+    .st-sidecard .st-info .st-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; background: #d1fae5; color: #059669; }
+    .st-sidecard .st-info .st-badge i { font-size: 8px; }
+    .st-sidecard .st-divider { height: 1px; background: #f1f5f9; margin: 0 24px; }
+    .st-sidecard .st-numbers { display: flex; justify-content: center; gap: 28px; padding: 20px 24px; }
+    .st-sidecard .st-numbers div { text-align: center; }
+    .st-sidecard .st-numbers .num { display: block; font-size: 20px; font-weight: 700; color: var(--t-primary); }
+    .st-sidecard .st-numbers .lbl { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; }
+
+    /* ===== MAIN CONTENT ===== */
+    .st-main { display: flex; flex-direction: column; gap: 24px; }
+    .st-card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,.04); transition: .25s; }
+    .st-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.06); }
+    .st-card .st-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; }
+    .st-card .st-card-header i { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg,var(--t-accent-light),#cffafe); color: var(--t-accent); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .st-card .st-card-header h4 { font-size: 15px; font-weight: 600; color: var(--t-primary); margin: 0; }
+
+    .st-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .st-field { display: flex; flex-direction: column; gap: 4px; }
+    .st-field label { font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .5px; }
+    .st-field input, .st-field select { padding: 11px 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 14px; font-family: inherit; transition: .25s; outline: none; background: #fff; color: var(--t-primary); }
+    .st-field input:focus, .st-field select:focus { border-color: var(--t-accent); box-shadow: 0 0 0 3px rgba(8,145,178,.1); }
+    .st-field input:disabled { background: #f8fafc; color: #94a3b8; }
+    .st-field .st-hint { font-size: 11px; color: #94a3b8; }
+
+    .st-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
+    .st-btn { padding: 11px 28px; border-radius: 10px; border: none; font-weight: 600; font-size: 13px; cursor: pointer; transition: .3s; display: flex; align-items: center; gap: 6px; }
+    .st-btn.primary { background: linear-gradient(135deg,var(--t-accent),#06b6d4); color: #fff; box-shadow: 0 3px 10px rgba(8,145,178,.2); }
+    .st-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(8,145,178,.3); }
+    .st-btn.ghost { background: transparent; color: #64748b; border: 1.5px solid #e2e8f0; }
+    .st-btn.ghost:hover { border-color: var(--t-accent); color: var(--t-accent); }
+
+    /* Checklist */
+    .st-checklist { display: flex; flex-direction: column; gap: 10px; }
+    .st-check { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: #f8fafc; transition: .2s; cursor: pointer; }
+    .st-check:hover { background: var(--t-accent-light); }
+    .st-check input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--t-accent); cursor: pointer; }
+    .st-check label { font-size: 13px; color: var(--t-primary); cursor: pointer; flex: 1; }
+
+    /* Token */
+    .st-token { display: flex; align-items: center; gap: 10px; padding: 14px 18px; background: #f8fafc; border-radius: 12px; border: 1px dashed #d1d9e6; font-family:'Courier New',monospace; font-size: 13px; }
+    .st-token .st-token-val { flex:1; overflow:hidden; text-overflow:ellipsis; color: var(--t-primary); }
+    .st-token .st-token-btn { padding: 6px 16px; border-radius: 8px; border: none; background: var(--t-accent); color: #fff; font-size: 11px; font-weight: 600; cursor: pointer; transition: .2s; display: flex; align-items: center; gap: 4px; }
+    .st-token .st-token-btn:hover { background: var(--t-accent-hover); }
+    .st-token .st-token-btn.alt { background: #64748b; }
+    .st-token .st-token-btn.alt:hover { background: #475569; }
+
+    @media (max-width:992px) { .st-layout { grid-template-columns: 1fr; } .st-sidecard { max-width: 360px; margin: 0 auto; } }
+    @media (max-width:576px) { .st-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <header class="mobile-header">
+    <div class="mh-left">
+      <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+      <div class="brand-icon-sm"><i class="fa-solid fa-hard-hat"></i></div>
+      <span class="mh-brand">AZ Aluminium</span>
+    </div>
+    <div class="mh-right">
+      <button class="mh-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications"><i class="fa-regular fa-bell"></i><span class="mh-badge">7</span></button>
+    </div>
+  </header>
+
+  <aside class="t-sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="brand-icon"><i class="fa-solid fa-hard-hat"></i></div>
+      <div class="sb-text"><span class="sb-title">AZ Aluminium</span><span class="sb-sub">Technician Portal</span></div>
+    </div>
+    <div class="sb-toolbar">
+      <button class="tb-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications"><i class="fa-regular fa-bell"></i><span class="tb-badge">7</span></button>
+    </div>
+    <nav>
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+      <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments</a>
+      <a href="projects.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+      <a href="messages.html" class="nav-item"><i class="fa-regular fa-envelope"></i> Messages</a>
+      <a href="notifications.html" class="nav-item"><i class="fa-regular fa-bell"></i> Notifications</a>
+      <a href="profile.html" class="nav-item active"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+    <div class="sb-footer">
+      <div class="user-card">
+        <div class="avatar">MD<span class="online-dot"></span></div>
+        <div><p class="u-name">Marco van Dijk</p><p class="u-role">Field Technician</p></div>
+        <i class="fa-solid fa-chevron-right u-arrow"></i>
+      </div>
+      <a href="../login.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </aside>
+
+  <div class="t-main">
+    <div class="main-content">
+
+      <div class="page-header">
+        <div class="ph-left">
+          <h2>Settings</h2>
+          <p>Manage your account, preferences, and notification settings.</p>
+        </div>
+        <div class="ph-badge"><i class="fa-solid fa-user-check"></i> Profile Active</div>
+      </div>
+
+      <div class="st-layout">
+        <!-- Left Profile Card -->
+        <div class="st-sidecard">
+          <div class="st-cover">
+            <div class="st-avatar-wrap">
+              <div class="st-avatar">MD</div>
+              <div class="st-edit" onclick="Swal.fire({title:'Change Photo',text:'Photo upload coming soon.',icon:'info',confirmButtonColor:'#0891b2'})"><i class="fa-solid fa-camera"></i></div>
+            </div>
+          </div>
+          <div class="st-info">
+            <h3>Marco van Dijk</h3>
+            <p class="st-role">Field Technician · Installation & Maintenance</p>
+            <span class="st-badge"><i class="fa-solid fa-circle"></i> Available for Tasks</span>
+          </div>
+          <div class="st-divider"></div>
+          <div class="st-numbers">
+            <div><span class="num">47</span><span class="lbl">Projects</span></div>
+            <div><span class="num">98%</span><span class="lbl">Satisfaction</span></div>
+            <div><span class="num">12</span><span class="lbl">Certs</span></div>
+          </div>
+        </div>
+
+        <!-- Right Content -->
+        <div class="st-main">
+          <!-- Personal Info -->
+          <div class="st-card">
+            <div class="st-card-header"><i class="fa-solid fa-user-pen"></i><h4>Personal Information</h4></div>
+            <div class="st-grid">
+              <div class="st-field"><label>Full Name</label><input type="text" value="Marco van Dijk" /></div>
+              <div class="st-field"><label>Email</label><input type="email" value="marco.vandijk@azaluminium.com" /></div>
+              <div class="st-field"><label>Phone</label><input type="tel" value="+31 6 1234 5678" /></div>
+              <div class="st-field"><label>Employee ID</label><input type="text" value="TECH-042" disabled /></div>
+              <div class="st-field"><label>Department</label><input type="text" value="Installation & Maintenance" disabled /></div>
+              <div class="st-field"><label>Vehicle Plate</label><input type="text" value="AZ-202-TC" /></div>
+            </div>
+            <div class="st-actions">
+              <button class="st-btn primary" onclick="Swal.fire({title:'Saved!',text:'Your information has been updated.',icon:'success',confirmButtonColor:'#0891b2'})"><i class="fa-regular fa-floppy-disk"></i> Save Changes</button>
+            </div>
+          </div>
+
+          <!-- Notifications -->
+          <div class="st-card">
+            <div class="st-card-header"><i class="fa-solid fa-bell"></i><h4>Notification Preferences</h4></div>
+            <div class="st-checklist">
+              <label class="st-check"><input type="checkbox" checked /><span>New appointment assignments</span></label>
+              <label class="st-check"><input type="checkbox" checked /><span>Schedule changes & rescheduling</span></label>
+              <label class="st-check"><input type="checkbox" checked /><span>Project milestone updates</span></label>
+              <label class="st-check"><input type="checkbox" /><span>Admin messages & announcements</span></label>
+              <label class="st-check"><input type="checkbox" checked /><span>Weather & safety alerts</span></label>
+            </div>
+            <div class="st-actions">
+              <button class="st-btn primary" onclick="Swal.fire({title:'Updated!',text:'Notification preferences saved.',icon:'success',confirmButtonColor:'#0891b2'})"><i class="fa-regular fa-floppy-disk"></i> Save Preferences</button>
+            </div>
+          </div>
+
+          <!-- Security -->
+          <div class="st-card">
+            <div class="st-card-header"><i class="fa-solid fa-lock"></i><h4>Security</h4></div>
+            <div class="st-grid">
+              <div class="st-field"><label>Current Password</label><input type="password" value="········" /></div>
+              <div class="st-field"><label>New Password</label><input type="password" placeholder="Enter new password" /></div>
+              <div class="st-field" style="grid-column:1/-1"><label>Confirm New Password</label><input type="password" placeholder="Confirm new password" /></div>
+            </div>
+            <div class="st-actions">
+              <button class="st-btn primary" onclick="Swal.fire({title:'Password Updated',text:'Password changed successfully.',icon:'success',confirmButtonColor:'#0891b2'})"><i class="fa-solid fa-key"></i> Update Password</button>
+            </div>
+          </div>
+
+          <!-- Token -->
+          <div class="st-card">
+            <div class="st-card-header"><i class="fa-solid fa-mobile-screen"></i><h4>App Access Token</h4></div>
+            <p style="font-size:13px;color:#64748b;margin:0 0 14px;">Use this token to authenticate your mobile app sessions.</p>
+            <div class="st-token">
+              <span class="st-token-val">az_tech_md_8a3f9c2e1b7d4f6a0c3e8b2d5f7a1c9e</span>
+              <button class="st-token-btn" onclick="navigator.clipboard.writeText('az_tech_md_8a3f9c2e1b7d4f6a0c3e8b2d5f7a1c9e');Swal.fire({title:'Copied!',text:'Token copied to clipboard.',icon:'success',timer:1500,showConfirmButton:false})"><i class="fa-regular fa-copy"></i> Copy</button>
+              <button class="st-token-btn alt" onclick="Swal.fire({title:'Token Regenerated',text:'New token generated successfully.',icon:'success',confirmButtonColor:'#0891b2'})"><i class="fa-solid fa-rotate"></i> New</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="t-footer">
+      <div class="footer-inner">
+        <div class="fi-copy"><i class="fa-solid fa-hard-hat"></i> &copy; 2026 AZ Aluminium</div>
+        <div class="fi-links"><a href="../privacy-policy.html">Privacy</a><span class="fi-dot"></span><a href="../terms.html">Terms</a><span class="fi-dot"></span><a href="../support-ticket.html">Support</a></div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay'),toggle=document.getElementById('sidebarToggle');
+    function openSidebar(){sidebar.classList.add('open');overlay.classList.add('show');document.body.style.overflow='hidden';}
+    function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');document.body.style.overflow='';}
+    if(toggle)toggle.addEventListener('click',()=>{sidebar.classList.contains('open')?closeSidebar():openSidebar();});
+
+    function switchLanguage(){const lang=localStorage.getItem('az-lang')||'en';Swal.fire({title:'Select Language',html:'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:340px;margin:0 auto">'+[['en','&#127468;&#127463;','English'],['nl','&#127475;&#127473;','Nederlands'],['de','&#127465;&#127466;','Deutsch'],['fr','&#127467;&#127479;','Fran&ccedil;ais'],['tr','&#127481;&#127479;','T&uuml;rk&ccedil;e'],['ar','&#127462;&#127465;','العربية']].map(([c,f,t])=>'<div onclick="setLang(\''+c+'\')" style="cursor:pointer;padding:12px 8px;border-radius:12px;border:2px solid '+(c===lang?'var(--t-accent)':'#e2e8f0')+';background:'+(c===lang?'var(--t-accent-light)':'#fff')+';transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:'+(c===lang?'600':'400')+';color:var(--t-primary)"><span style="font-size:28px">'+f+'</span>'+t+'</div>').join('')+'</div>',showConfirmButton:false,background:'#fff',borderRadius:'20px'});}
+    function setLang(c){localStorage.setItem('az-lang',c);Swal.close();location.reload();}
+  </script>
+</body>
+</html>

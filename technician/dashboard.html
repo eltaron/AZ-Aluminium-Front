@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Technician · AZ Aluminium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" href="../css/technician.css" />
+</head>
+<body>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="t-sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="brand-icon"><i class="fa-solid fa-hard-hat"></i></div>
+      <div class="sb-text">
+        <span class="sb-title">AZ Aluminium</span>
+        <span class="sb-sub">Technician Portal</span>
+      </div>
+    </div>
+    <div class="sb-toolbar">
+      <button class="tb-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+        <i class="fa-regular fa-bell"></i>
+        <span class="tb-badge">7</span>
+      </button>
+    </div>
+    <nav>
+      <a href="dashboard.html" class="nav-item active"><i class="fa-solid fa-border-all"></i> Overview</a>
+      <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments</a>
+      <a href="projects.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+      <a href="messages.html" class="nav-item"><i class="fa-regular fa-envelope"></i> Messages</a>
+      <a href="notifications.html" class="nav-item"><i class="fa-regular fa-bell"></i> Notifications</a>
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+    <div class="sb-footer">
+      <div class="user-card">
+        <div class="avatar">MD<span class="online-dot"></span></div>
+        <div>
+          <p class="u-name">Marco van Dijk</p>
+          <p class="u-role">Field Technician</p>
+        </div>
+        <i class="fa-solid fa-chevron-right u-arrow"></i>
+      </div>
+      <a href="../login.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </aside>
+
+  <!-- ===== MOBILE HEADER ===== -->
+  <header class="mobile-header">
+    <div class="mh-left">
+      <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+      <div class="brand-icon-sm"><i class="fa-solid fa-hard-hat"></i></div>
+      <span class="mh-brand">AZ Aluminium</span>
+    </div>
+    <div class="mh-right">
+      <button class="mh-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+        <i class="fa-regular fa-bell"></i>
+        <span class="mh-badge">7</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main class="t-main">
+    <div class="main-content">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="ph-left">
+          <h2>Welcome back, <span>Marco</span></h2>
+          <p>Your schedule and assigned tasks for today.</p>
+        </div>
+        <div class="ph-badge">
+          <i class="fa-solid fa-calendar-day"></i>
+          <span id="currentDate"></span>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <section class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon c1"><i class="fa-regular fa-calendar-check"></i></div>
+          <div class="stat-content">
+            <span class="stat-number">3</span>
+            <span class="stat-label">Today's Appointments</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon c2"><i class="fa-solid fa-hard-hat"></i></div>
+          <div class="stat-content">
+            <span class="stat-number">5</span>
+            <span class="stat-label">Active Projects</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon c3"><i class="fa-solid fa-list-check"></i></div>
+          <div class="stat-content">
+            <span class="stat-number">8</span>
+            <span class="stat-label">Pending Tasks</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon c4"><i class="fa-regular fa-envelope"></i></div>
+          <div class="stat-content">
+            <span class="stat-number">4</span>
+            <span class="stat-label">Unread Messages</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Today's Schedule -->
+      <section class="section-block">
+        <div class="section-header">
+          <h3 class="section-title"><i class="fa-regular fa-clock"></i> Today's Schedule</h3>
+          <a href="appointments.html" class="section-link">View All <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="schedule-timeline">
+          <div class="st-item">
+            <div class="st-dot"></div>
+            <div class="st-card">
+              <div class="st-time">08:00 – 10:00</div>
+              <div class="st-info">
+                <span class="st-project">Villa Park Installatie</span>
+                <div class="st-meta">
+                  <span><i class="fa-solid fa-location-dot"></i> Sloten</span>
+                  <span><i class="fa-solid fa-user"></i> De Jong Residence</span>
+                </div>
+              </div>
+              <div class="st-status"><span class="status-pill in-progress">In Progress</span></div>
+            </div>
+          </div>
+          <div class="st-item">
+            <div class="st-dot dot-warning"></div>
+            <div class="st-card">
+              <div class="st-time">10:30 – 12:30</div>
+              <div class="st-info">
+                <span class="st-project">Glasgevel Montage</span>
+                <div class="st-meta">
+                  <span><i class="fa-solid fa-location-dot"></i> Amsterdam</span>
+                  <span><i class="fa-solid fa-user"></i> Green Office B.V.</span>
+                </div>
+              </div>
+              <div class="st-status"><span class="status-pill pending">Pending</span></div>
+            </div>
+          </div>
+          <div class="st-item">
+            <div class="st-dot dot-success"></div>
+            <div class="st-card">
+              <div class="st-time">14:00 – 16:00</div>
+              <div class="st-info">
+                <span class="st-project">Pergola Onderhoud</span>
+                <div class="st-meta">
+                  <span><i class="fa-solid fa-location-dot"></i> Utrecht</span>
+                  <span><i class="fa-solid fa-user"></i> Van der Berg Family</span>
+                </div>
+              </div>
+              <div class="st-status"><span class="status-pill completed">Completed</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active Projects -->
+      <section class="section-block">
+        <div class="section-header">
+          <h3 class="section-title"><i class="fa-solid fa-hard-hat"></i> Active Projects</h3>
+          <a href="projects.html" class="section-link">View All <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="projects-mini">
+          <div class="project-mini-card" onclick="location.href='project-detail.html?id=1'">
+            <div class="pm-header" style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=600');background-size:cover;background-position:center">
+              <i class="fa-solid fa-hard-hat"></i>
+            </div>
+            <div class="pm-body">
+              <h4>Private Luxury Villa Pergola</h4>
+              <p class="pm-client">De Jong Residence · Amsterdam</p>
+              <div class="pm-progress">
+                <div class="pm-pbar"><div class="pm-pfill" style="width:65%"></div></div>
+                <div class="pm-plabel"><span>65%</span><span>12 days left</span></div>
+              </div>
+              <div class="pm-footer">
+                <span class="pm-status go">In Progress</span>
+                <span class="pm-days"><i class="fa-regular fa-clock"></i> 12d</span>
+              </div>
+            </div>
+          </div>
+          <div class="project-mini-card" onclick="location.href='project-detail.html?id=2'">
+            <div class="pm-header" style="background-image:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600');background-size:cover;background-position:center">
+              <i class="fa-solid fa-building"></i>
+            </div>
+            <div class="pm-body">
+              <h4>Modern Lakefront Winter Garden</h4>
+              <p class="pm-client">Green Office B.V. · Antwerp, BE</p>
+              <div class="pm-progress">
+                <div class="pm-pbar"><div class="pm-pfill" style="width:40%"></div></div>
+                <div class="pm-plabel"><span>40%</span><span>23 days left</span></div>
+              </div>
+              <div class="pm-footer">
+                <span class="pm-status go">In Progress</span>
+                <span class="pm-days"><i class="fa-regular fa-clock"></i> 23d</span>
+              </div>
+            </div>
+          </div>
+          <div class="project-mini-card" onclick="location.href='project-detail.html?id=3'">
+            <div class="pm-header" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=600');background-size:cover;background-position:center">
+              <i class="fa-solid fa-tree"></i>
+            </div>
+            <div class="pm-body">
+              <h4>Corporate Executive Garden</h4>
+              <p class="pm-client">Van der Berg Family · Berlin, DE</p>
+              <div class="pm-progress">
+                <div class="pm-pbar"><div class="pm-pfill" style="width:100%"></div></div>
+                <div class="pm-plabel"><span>100%</span><span>Completed</span></div>
+              </div>
+              <div class="pm-footer">
+                <span class="pm-status done">Completed</span>
+                <span class="pm-days"><i class="fa-regular fa-circle-check"></i> Done</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Actions -->
+      <section class="section-block">
+        <div class="section-header">
+          <h3 class="section-title"><i class="fa-solid fa-bolt"></i> Quick Actions</h3>
+        </div>
+        <div class="quick-actions">
+          <a href="appointments.html" class="quick-btn">
+            <i class="fa-solid fa-play"></i> Start New Visit
+          </a>
+          <a href="projects.html" class="quick-btn qb-alt">
+            <i class="fa-solid fa-pen"></i> Submit Progress Report
+          </a>
+          <a href="messages.html" class="quick-btn qb-amber">
+            <i class="fa-solid fa-headset"></i> Contact Admin
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="t-footer">
+      <div class="footer-inner">
+        <div class="fi-copy">
+          <i class="fa-solid fa-hard-hat"></i>
+          &copy; 2026 AZ Aluminium. All rights reserved.
+        </div>
+        <div class="fi-links">
+          <a href="../privacy-policy.html">Privacy</a>
+          <span class="fi-dot"></span>
+          <a href="../terms.html">Terms</a>
+          <span class="fi-dot"></span>
+          <a href="../support-ticket.html">Support</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    // --- Sidebar toggle ---
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggle = document.getElementById('sidebarToggle');
+    function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+    function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+    if (toggle) toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+
+    // --- Today's date ---
+    const now = new Date();
+    const opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-GB', opts);
+
+    // --- Language Switcher (SweetAlert2) ---
+    function switchLanguage() {
+      const lang = localStorage.getItem('az-lang') || 'en';
+      Swal.fire({
+        title: 'Select Language',
+        html: '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:340px;margin:0 auto">' +
+          [['en','&#127468;&#127463;','English'],['nl','&#127475;&#127473;','Nederlands'],['de','&#127465;&#127466;','Deutsch'],['fr','&#127467;&#127479;','Fran&ccedil;ais'],['tr','&#127481;&#127479;','T&uuml;rk&ccedil;e'],['ar','&#127462;&#127465;','العربية']]
+          .map(([c,f,t]) => '<div onclick="setLang(\''+c+'\')" style="cursor:pointer;padding:12px 8px;border-radius:12px;border:2px solid '+(c===lang?'var(--t-accent)':'#e2e8f0')+';background:'+(c===lang?'var(--t-accent-light)':'#fff')+';transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:'+(c===lang?'600':'400')+';color:var(--t-primary)"><span style="font-size:28px">'+f+'</span>'+t+'</div>').join('') +
+        '</div>',
+        showConfirmButton: false, background: '#fff', borderRadius: '20px'
+      });
+    }
+    function setLang(c) { localStorage.setItem('az-lang', c); Swal.close(); location.reload(); }
+  </script>
+</body>
+</html>

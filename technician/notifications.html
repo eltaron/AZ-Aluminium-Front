@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications — Technician · AZ Aluminium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" href="../css/technician.css" />
+  <style>
+    /* ===== MINI STATS ===== */
+    .nt-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+    .nt-stat { background: #fff; border-radius: 14px; padding: 16px 18px; box-shadow: 0 1px 3px rgba(0,0,0,.04); display: flex; align-items: center; gap: 14px; transition: .35s; }
+    .nt-stat:hover { box-shadow: 0 6px 24px rgba(0,0,0,.06); transform: translateY(-2px); }
+    .nt-stat .ns-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .nt-stat .ns-icon.c1 { background: linear-gradient(135deg,#ecfeff,#cffafe); color: var(--t-accent); }
+    .nt-stat .ns-icon.c2 { background: linear-gradient(135deg,#fef3c7,#fde68a); color: var(--t-warning); }
+    .nt-stat .ns-icon.c3 { background: linear-gradient(135deg,#d1fae5,#a7f3d0); color: var(--t-success); }
+    .nt-stat .ns-icon.c4 { background: linear-gradient(135deg,#fef2f2,#fecaca); color: var(--t-danger); }
+    .nt-stat .ns-num { font-size: 22px; font-weight: 700; color: var(--t-primary); line-height: 1; }
+    .nt-stat .ns-lbl { font-size: 10px; color: #64748b; }
+
+    /* ===== FILTER TABS ===== */
+    .nt-filters { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .nt-filters .nf-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .nt-filters .nf-btn { padding: 8px 18px; border-radius: 20px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: .3s; background: #f1f5f9; color: #64748b; display: flex; align-items: center; gap: 6px; }
+    .nt-filters .nf-btn i { font-size: 12px; }
+    .nt-filters .nf-btn:hover { background: #e2e8f0; }
+    .nt-filters .nf-btn.active { background: linear-gradient(135deg,var(--t-accent),#06b6d4); color: #fff; box-shadow: 0 3px 10px rgba(8,145,178,.25); }
+    .nt-filters .nf-mark { font-size: 12px; color: var(--t-accent); background: none; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: .2s; padding: 8px 14px; border-radius: 10px; }
+    .nt-filters .nf-mark:hover { background: var(--t-accent-light); }
+
+    /* ===== NOTIFICATION LIST ===== */
+    .nt-list { display: flex; flex-direction: column; gap: 12px; }
+    .nt-item { display: flex; gap: 16px; padding: 18px 22px; background: #fff; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.04); transition: all .35s cubic-bezier(.4,0,.2,1); cursor: pointer; align-items: flex-start; position: relative; overflow: hidden; }
+    .nt-item:hover { box-shadow: 0 6px 24px rgba(0,0,0,.06); transform: translateY(-2px); }
+    .nt-item.unread::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 4px; border-radius: 0 4px 4px 0; background: var(--t-accent); box-shadow: 0 0 12px rgba(8,145,178,.3); }
+    .nt-item .ni-dot { display: none; }
+    .nt-item.unread .ni-dot { display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--t-accent); flex-shrink: 0; margin-top: 6px; }
+    .nt-item .ni-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .nt-item .ni-icon.info { background: linear-gradient(135deg,#e0f2fe,#bae6fd); color: #0284c7; }
+    .nt-item .ni-icon.alert { background: linear-gradient(135deg,#fef3c7,#fde68a); color: #d97706; }
+    .nt-item .ni-icon.success { background: linear-gradient(135deg,#d1fae5,#a7f3d0); color: #059669; }
+    .nt-item .ni-icon.warning { background: linear-gradient(135deg,#fee2e2,#fecaca); color: #dc2626; }
+    .nt-item .ni-body { flex: 1; min-width: 0; }
+    .nt-item .ni-body .ni-title { font-weight: 600; font-size: 14px; color: var(--t-primary); margin: 0 0 2px; display: flex; align-items: center; gap: 8px; }
+    .nt-item .ni-body .ni-title .ni-badge { padding: 1px 10px; border-radius: 10px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+    .nt-item .ni-body .ni-title .ni-badge.b-schedule { background: #e0f2fe; color: #0284c7; }
+    .nt-item .ni-body .ni-title .ni-badge.b-project { background: #d1fae5; color: #059669; }
+    .nt-item .ni-body .ni-title .ni-badge.b-admin { background: #f3e8ff; color: #7c3aed; }
+    .nt-item .ni-body .ni-text { font-size: 13px; color: #64748b; margin: 0; line-height: 1.6; }
+    .nt-item .ni-time { font-size: 11px; color: #94a3b8; white-space: nowrap; flex-shrink: 0; padding: 2px 10px; background: #f8fafc; border-radius: 6px; align-self: flex-start; }
+    .nt-empty { text-align: center; padding: 60px 20px; color: #94a3b8; }
+    .nt-empty i { font-size: 48px; margin-bottom: 16px; color: #cbd5e1; }
+
+    @media (max-width:992px) { .nt-stats { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width:576px) {
+      .nt-stats { grid-template-columns: 1fr; }
+      .nt-item { flex-wrap: wrap; }
+      .nt-item .ni-time { width: 100%; text-align: right; margin-top: 4px; }
+      .nt-filters .nf-group { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <header class="mobile-header">
+    <div class="mh-left">
+      <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+      <div class="brand-icon-sm"><i class="fa-solid fa-hard-hat"></i></div>
+      <span class="mh-brand">AZ Aluminium</span>
+    </div>
+    <div class="mh-right">
+      <button class="mh-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications"><i class="fa-regular fa-bell"></i><span class="mh-badge">7</span></button>
+    </div>
+  </header>
+
+  <aside class="t-sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="brand-icon"><i class="fa-solid fa-hard-hat"></i></div>
+      <div class="sb-text"><span class="sb-title">AZ Aluminium</span><span class="sb-sub">Technician Portal</span></div>
+    </div>
+    <div class="sb-toolbar">
+      <button class="tb-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications"><i class="fa-regular fa-bell"></i><span class="tb-badge">7</span></button>
+    </div>
+    <nav>
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+      <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments</a>
+      <a href="projects.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+      <a href="messages.html" class="nav-item"><i class="fa-regular fa-envelope"></i> Messages</a>
+      <a href="notifications.html" class="nav-item active"><i class="fa-regular fa-bell"></i> Notifications</a>
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+    <div class="sb-footer">
+      <div class="user-card">
+        <div class="avatar">MD<span class="online-dot"></span></div>
+        <div><p class="u-name">Marco van Dijk</p><p class="u-role">Field Technician</p></div>
+        <i class="fa-solid fa-chevron-right u-arrow"></i>
+      </div>
+      <a href="../login.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </aside>
+
+  <div class="t-main">
+    <div class="main-content">
+
+      <div class="page-header">
+        <div class="ph-left">
+          <h2>Notifications</h2>
+          <p>Stay updated with project changes, schedule updates, and admin messages.</p>
+        </div>
+        <div class="ph-badge"><i class="fa-regular fa-bell"></i> 9 Total</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="nt-stats">
+        <div class="nt-stat">
+          <div class="ns-icon c1"><i class="fa-regular fa-calendar-check"></i></div>
+          <div><span class="ns-num">2</span><br><span class="ns-lbl">Schedule</span></div>
+        </div>
+        <div class="nt-stat">
+          <div class="ns-icon c2"><i class="fa-regular fa-clock"></i></div>
+          <div><span class="ns-num">3</span><br><span class="ns-lbl">Unread</span></div>
+        </div>
+        <div class="nt-stat">
+          <div class="ns-icon c3"><i class="fa-solid fa-hard-hat"></i></div>
+          <div><span class="ns-num">4</span><br><span class="ns-lbl">Projects</span></div>
+        </div>
+        <div class="nt-stat">
+          <div class="ns-icon c4"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div><span class="ns-num">3</span><br><span class="ns-lbl">Admin</span></div>
+        </div>
+      </div>
+
+      <!-- Filter + Actions -->
+      <div class="nt-filters">
+        <div class="nf-group">
+          <button class="nf-btn active" data-filter="all"><i class="fa-regular fa-list"></i> All</button>
+          <button class="nf-btn" data-filter="unread"><i class="fa-regular fa-circle"></i> Unread</button>
+          <button class="nf-btn" data-filter="schedule"><i class="fa-regular fa-calendar"></i> Schedule</button>
+          <button class="nf-btn" data-filter="project"><i class="fa-solid fa-hard-hat"></i> Projects</button>
+          <button class="nf-btn" data-filter="admin"><i class="fa-solid fa-user-tie"></i> Admin</button>
+        </div>
+        <button class="nf-mark" onclick="markAllRead()"><i class="fa-regular fa-check-circle"></i> Mark All Read</button>
+      </div>
+
+      <!-- List -->
+      <div class="nt-list" id="ntList"></div>
+
+    </div>
+
+    <footer class="t-footer">
+      <div class="footer-inner">
+        <div class="fi-copy"><i class="fa-solid fa-hard-hat"></i> &copy; 2026 AZ Aluminium</div>
+        <div class="fi-links"><a href="../privacy-policy.html">Privacy</a><span class="fi-dot"></span><a href="../terms.html">Terms</a><span class="fi-dot"></span><a href="../support-ticket.html">Support</a></div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay'),toggle=document.getElementById('sidebarToggle');
+    function openSidebar(){sidebar.classList.add('open');overlay.classList.add('show');document.body.style.overflow='hidden';}
+    function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');document.body.style.overflow='';}
+    if(toggle)toggle.addEventListener('click',()=>{sidebar.classList.contains('open')?closeSidebar():openSidebar();});
+
+    const notifications = [
+      { id:1, icon:'info', iconFa:'fa-calendar-check', title:'Appointment Rescheduled', text:'Villa Park installation moved to Thursday June 4th at 09:00.', type:'schedule', time:'12 min ago', unread:true },
+      { id:2, icon:'alert', iconFa:'fa-truck', title:'Delivery Delay Notice', text:'Glass panels for Green Office project delayed until Friday.', type:'project', time:'1 hr ago', unread:true },
+      { id:3, icon:'success', iconFa:'fa-check-circle', title:'Milestone Completed', text:'Materials delivered for Canal House Renovation — framework can proceed.', type:'project', time:'3 hr ago', unread:true },
+      { id:4, icon:'info', iconFa:'fa-message', title:'New Message from Sarah Chen', text:'Please review the updated installation plan for next week.', type:'admin', time:'5 hr ago', unread:false },
+      { id:5, icon:'success', iconFa:'fa-star', title:'5-Star Review Received', text:'Client Van der Berg left a 5-star review for the pergola maintenance.', type:'project', time:'1 day ago', unread:false },
+      { id:6, icon:'warning', iconFa:'fa-exclamation-triangle', title:'Safety Alert', text:'New safety protocols for glass handling — mandatory training video attached.', type:'admin', time:'2 days ago', unread:false },
+      { id:7, icon:'info', iconFa:'fa-file-pdf', title:'Timesheet Reminder', text:'Please submit your weekly timesheet by Friday 5 PM.', type:'admin', time:'2 days ago', unread:false },
+      { id:8, icon:'alert', iconFa:'fa-cloud-rain', title:'Weather Advisory', text:'Heavy rain expected Tuesday — outdoor installations may need rescheduling.', type:'schedule', time:'3 days ago', unread:false },
+      { id:9, icon:'success', iconFa:'fa-trophy', title:'Team Lead Recognition', text:'You have been recognized for outstanding work on the Shopfront project.', type:'admin', time:'5 days ago', unread:false }
+    ];
+    let currentFilter='all';
+    const badgeMap={schedule:'b-schedule',project:'b-project',admin:'b-admin'};
+    const iconLabels={schedule:'Schedule',project:'Project',admin:'Admin'};
+
+    function renderNotifications(filter){
+      const list=document.getElementById('ntList');
+      let filtered=filter==='all'?notifications:notifications.filter(n=>n.type===filter||(filter==='unread'&&n.unread));
+      if(!filtered.length){list.innerHTML='<div class="nt-empty"><i class="fa-regular fa-bell-slash"></i><p>No '+(filter==='all'?'':filter)+' notifications</p></div>';return;}
+      list.innerHTML=filtered.map(n=>`
+        <div class="nt-item${n.unread?' unread':''}" onclick="markRead(${n.id})">
+          <div class="ni-icon ${n.icon}"><i class="fa-regular ${n.iconFa}"></i></div>
+          <div class="ni-body">
+            <div class="ni-title">${n.title} <span class="ni-badge ${badgeMap[n.type]}">${iconLabels[n.type]}</span></div>
+            <p class="ni-text">${n.text}</p>
+          </div>
+          <span class="ni-time">${n.time}</span>
+        </div>`).join('');
+    }
+    function markRead(id){const n=notifications.find(x=>x.id===id);if(n)n.unread=false;renderNotifications(currentFilter);}
+    function markAllRead(){notifications.forEach(n=>n.unread=false);renderNotifications(currentFilter);}
+    document.querySelectorAll('.nf-btn').forEach(tab=>{tab.addEventListener('click',function(){document.querySelectorAll('.nf-btn').forEach(t=>t.classList.remove('active'));this.classList.add('active');currentFilter=this.dataset.filter;renderNotifications(currentFilter);});});
+    renderNotifications('all');
+
+    function switchLanguage(){const lang=localStorage.getItem('az-lang')||'en';Swal.fire({title:'Select Language',html:'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:340px;margin:0 auto">'+[['en','&#127468;&#127463;','English'],['nl','&#127475;&#127473;','Nederlands'],['de','&#127465;&#127466;','Deutsch'],['fr','&#127467;&#127479;','Fran&ccedil;ais'],['tr','&#127481;&#127479;','T&uuml;rk&ccedil;e'],['ar','&#127462;&#127465;','العربية']].map(([c,f,t])=>'<div onclick="setLang(\''+c+'\')" style="cursor:pointer;padding:12px 8px;border-radius:12px;border:2px solid '+(c===lang?'var(--t-accent)':'#e2e8f0')+';background:'+(c===lang?'var(--t-accent-light)':'#fff')+';transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:'+(c===lang?'600':'400')+';color:var(--t-primary)"><span style="font-size:28px">'+f+'</span>'+t+'</div>').join('')+'</div>',showConfirmButton:false,background:'#fff',borderRadius:'20px'});}
+    function setLang(c){localStorage.setItem('az-lang',c);Swal.close();location.reload();}
+  </script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Messages — Technician · AZ Aluminium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="../css/technician.css">
+  <style>
+    :root { --t-primary: #0f172a; --t-accent: #0891b2; --t-accent-hover: #0e7490; --t-success: #10b981; --t-warning: #f59e0b; --t-danger: #ef4444; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .messages-layout { display: flex; gap: 0; background: #fff; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,.06); overflow: hidden; min-height: 600px; }
+
+    .msg-sidebar { width: 35%; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; background: #fafbfc; }
+    .msg-sidebar-header { padding: 18px 16px; border-bottom: 1px solid #e2e8f0; }
+    .msg-sidebar-header h3 { font-size: 15px; font-weight: 600; color: var(--t-primary); margin: 0; }
+    .msg-sidebar-header p { font-size: 12px; color: #94a3b8; margin: 2px 0 0; }
+
+    .msg-list { flex: 1; overflow-y: auto; }
+    .msg-list-item { display: flex; align-items: flex-start; gap: 12px; padding: 16px; cursor: pointer; transition: .2s; border-left: 3px solid transparent; border-bottom: 1px solid #f1f5f9; }
+    .msg-list-item:hover { background: #f8fafc; }
+    .msg-list-item.selected { border-left-color: var(--t-accent); background: #f0fdfe; }
+
+    .msg-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--t-accent); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0; }
+    .msg-avatar.ops { background: var(--t-warning); }
+    .msg-avatar.admin { background: var(--t-success); }
+    .msg-avatar.hr { background: #8b5cf6; }
+
+    .msg-preview { flex: 1; min-width: 0; }
+    .msg-preview .mp-header { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+    .msg-preview .mp-header .mp-sender { font-size: 13px; font-weight: 600; color: var(--t-primary); }
+    .msg-preview .mp-header .mp-time { font-size: 11px; color: #94a3b8; margin-left: auto; white-space: nowrap; }
+    .msg-preview .mp-role { font-size: 11px; color: #94a3b8; }
+    .msg-preview .mp-text { font-size: 12px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+
+    .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--t-accent); flex-shrink: 0; margin-top: 4px; }
+
+    .msg-detail { flex: 1; display: flex; flex-direction: column; }
+    .msg-detail-header { padding: 20px 24px; border-bottom: 1px solid #e2e8f0; }
+    .msg-detail-header .md-sender { font-size: 16px; font-weight: 600; color: var(--t-primary); }
+    .msg-detail-header .md-role { font-size: 12px; color: #94a3b8; }
+    .msg-detail-header .md-date { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+
+    .msg-body { flex: 1; padding: 24px; overflow-y: auto; }
+    .msg-body p { font-size: 14px; color: #334155; line-height: 1.7; }
+
+    .msg-reply { padding: 16px 24px; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; align-items: flex-end; }
+    .msg-reply textarea { flex: 1; min-height: 44px; max-height: 100px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; font-family: 'Poppins', sans-serif; font-size: 13px; resize: vertical; outline: none; transition: .2s; }
+    .msg-reply textarea:focus { border-color: var(--t-accent); box-shadow: 0 0 0 3px rgba(8,145,178,.1); }
+    .msg-reply .btn-send { padding: 10px 20px; border-radius: 10px; border: none; background: var(--t-accent); color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; transition: .2s; white-space: nowrap; }
+    .msg-reply .btn-send:hover { background: var(--t-accent-hover); }
+
+    .msg-back-btn { display: none; padding: 8px 16px; border: none; background: transparent; color: var(--t-accent); font-size: 13px; font-weight: 500; cursor: pointer; }
+
+    @media (max-width: 992px) {
+      .msg-sidebar { width: 100%; }
+      .msg-detail { display: none; }
+      .msg-detail.show { display: flex; }
+      .msg-sidebar.hide { display: none; }
+      .msg-back-btn { display: inline-flex; align-items: center; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <header class="mobile-header">
+    <div class="mh-left">
+      <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+      <div class="brand-icon-sm"><i class="fa-solid fa-hard-hat"></i></div>
+      <span class="mh-brand">AZ Aluminium</span>
+    </div>
+    <div class="mh-right">
+      <button class="mh-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+        <i class="fa-regular fa-bell"></i>
+        <span class="mh-badge"></span>
+      </button>
+    </div>
+  </header>
+
+  <aside class="t-sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="brand-icon"><i class="fa-solid fa-hard-hat"></i></div>
+      <div class="sb-text">
+        <span class="sb-title">AZ Aluminium</span>
+        <span class="sb-sub">Technician Portal</span>
+      </div>
+    </div>
+    <div class="sb-toolbar">
+      <button class="tb-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+        <i class="fa-regular fa-bell"></i>
+        <span class="tb-badge"></span>
+      </button>
+    </div>
+    <nav>
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+      <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments</a>
+      <a href="projects.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+      <a href="messages.html" class="nav-item active"><i class="fa-regular fa-envelope"></i> Messages</a>
+      <a href="notifications.html" class="nav-item"><i class="fa-regular fa-bell"></i> Notifications</a>
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+    <div class="sb-footer">
+      <div class="user-card">
+        <div class="avatar">MD<span class="online-dot"></span></div>
+        <div>
+          <p class="u-name">Marco van Dijk</p>
+          <p class="u-role">Field Technician</p>
+        </div>
+        <i class="fa-solid fa-chevron-right u-arrow"></i>
+      </div>
+      <a href="../login.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </aside>
+
+  <main class="t-main">
+    <div class="main-content">
+      <div class="page-header">
+        <h2>Messages</h2>
+        <p>Read messages from your admin and project managers.</p>
+      </div>
+
+      <section class="messages-layout" id="messagesLayout">
+        <div class="msg-sidebar" id="msgSidebar">
+          <div class="msg-sidebar-header">
+            <h3>Inbox</h3>
+            <p id="unreadCount"></p>
+          </div>
+          <div class="msg-list" id="msgList"></div>
+        </div>
+        <div class="msg-detail" id="msgDetail">
+          <div class="msg-detail-header" id="detailHeader">
+            <button class="msg-back-btn" id="msgBackBtn" onclick="showSidebar()"><i class="fas fa-arrow-left"></i> Back</button>
+            <div class="md-sender" id="mdSender"></div>
+            <div class="md-role" id="mdRole"></div>
+            <div class="md-date" id="mdDate"></div>
+          </div>
+          <div class="msg-body" id="msgBody"></div>
+          <div class="msg-reply">
+            <textarea id="replyText" placeholder="Type your reply..." rows="1"></textarea>
+            <button class="btn-send" onclick="sendReply()"><i class="fas fa-paper-plane"></i> Send</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="t-footer">
+      <div class="footer-inner">
+        <div class="fi-copy">
+          <i class="fa-solid fa-hard-hat"></i>
+          &copy; 2026 AZ Aluminium. All rights reserved.
+        </div>
+        <div class="fi-links">
+          <a href="../privacy-policy.html">Privacy</a>
+          <span class="fi-dot"></span>
+          <a href="../terms.html">Terms</a>
+          <span class="fi-dot"></span>
+          <a href="../support-ticket.html">Support</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggle = document.getElementById('sidebarToggle');
+    function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+    function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+    if (toggle) toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+
+    function switchLanguage() {
+      const lang = localStorage.getItem('az-lang') || 'en';
+      Swal.fire({
+        title: 'Select Language',
+        html: '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:340px;margin:0 auto">' +
+          [['en','&#127468;&#127463;','English'],['nl','&#127475;&#127473;','Nederlands'],['de','&#127465;&#127466;','Deutsch'],['fr','&#127467;&#127479;','Fran&ccedil;ais'],['tr','&#127481;&#127479;','T&uuml;rk&ccedil;e'],['ar','&#127462;&#127465;','العربية']]
+          .map(([c,f,t]) => '<div onclick="setLang(\''+c+'\')" style="cursor:pointer;padding:12px 8px;border-radius:12px;border:2px solid '+(c===lang?'var(--t-accent)':'#e2e8f0')+';background:'+(c===lang?'var(--t-accent-light)':'#fff')+';transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:'+(c===lang?'600':'400')+';color:var(--t-primary)"><span style="font-size:28px">'+f+'</span>'+t+'</div>').join('') +
+        '</div>',
+        showConfirmButton: false, background: '#fff', borderRadius: '20px'
+      });
+    }
+    function setLang(c) { localStorage.setItem('az-lang', c); Swal.close(); location.reload(); }
+
+    const messages = [
+      { id: 1, sender: 'Sarah Chen', role: 'Project Manager', initials: 'SC', avatarClass: '', preview: 'New schedule for next week...', time: '2h ago', unread: true, date: 'May 22, 2026', body: "Hi Marco, I've updated the schedule for next week. You have two new installations on Tuesday at the Canal House project. Please check the appointments page and confirm your availability. Also, the client for the Green Office project wants to discuss some changes — I'll send more details later. Best, Sarah" },
+      { id: 2, sender: 'Mark Visser', role: 'Operations', initials: 'MV', avatarClass: 'ops', preview: 'Delivery rescheduled to...', time: 'Yesterday', unread: true, date: 'May 21, 2026', body: 'Hi Marco, the glass delivery for the Villa Park project has been rescheduled to Thursday morning. The supplier had a delay in production. Please adjust your installation schedule accordingly. The new delivery window is 08:00–10:00. Let me know if this causes any issues. Regards, Mark' },
+      { id: 3, sender: 'Laura Bakker', role: 'Admin', initials: 'LB', avatarClass: 'admin', preview: 'Please submit your timesheet...', time: '2 days ago', unread: false, date: 'May 20, 2026', body: 'Dear Marco, this is a reminder to submit your timesheet for last week. The payroll department needs it approved by Friday. You can submit it through the portal or send me the hours directly. Let me know if you have any questions. Best, Laura' },
+      { id: 4, sender: 'Sarah Chen', role: 'Project Manager', initials: 'SC', avatarClass: '', preview: 'Client requested changes...', time: '3 days ago', unread: false, date: 'May 19, 2026', body: "Hi Marco, the client for the Green Office project has requested some changes to the facade design. They want larger glass panels on the east side. I will send over the updated drawings once they are ready. In the meantime, please pause work on that section. I'll keep you posted. Thanks, Sarah" },
+      { id: 5, sender: 'Emma de Wit', role: 'HR', initials: 'ED', avatarClass: 'hr', preview: 'New training session on...', time: '5 days ago', unread: false, date: 'May 17, 2026', body: 'Hi Marco, we are organising a safety training session on advanced scaffolding and height work. It will take place on June 5th at the headquarters. Please confirm your attendance. The session runs from 09:00 to 16:00 and lunch will be provided. Best, Emma' },
+      { id: 6, sender: 'Laura Bakker', role: 'Admin', initials: 'LB', avatarClass: 'admin', preview: 'Year-end inventory notice', time: '1 week ago', unread: false, date: 'May 15, 2026', body: 'Dear Marco, we will be conducting the year-end inventory count on June 20th. Please ensure all tools and equipment assigned to you are returned to the warehouse by June 18th for auditing. A checklist will be provided. Let me know if any items are missing or damaged. Regards, Laura' },
+    ];
+
+    let selectedId = null;
+
+    function renderList() {
+      const container = document.getElementById('msgList');
+      const unread = messages.filter(m => m.unread).length;
+      document.getElementById('unreadCount').textContent = unread + ' unread';
+
+      container.innerHTML = messages.map(m => `
+        <div class="msg-list-item ${m.id === selectedId ? 'selected' : ''}" onclick="selectMessage(${m.id})">
+          <div class="msg-avatar ${m.avatarClass}">${m.initials}</div>
+          <div class="msg-preview">
+            <div class="mp-header">
+              <span class="mp-sender">${m.sender}</span>
+              <span class="mp-time">${m.time}</span>
+            </div>
+            <div class="mp-role">${m.role}</div>
+            <div class="mp-text">${m.preview}</div>
+          </div>
+          ${m.unread ? '<div class="unread-dot"></div>' : ''}
+        </div>
+      `).join('');
+    }
+
+    function selectMessage(id) {
+      selectedId = id;
+      const m = messages.find(msg => msg.id === id);
+      if (!m) return;
+      m.unread = false;
+
+      document.getElementById('mdSender').textContent = m.sender;
+      document.getElementById('mdRole').textContent = m.role;
+      document.getElementById('mdDate').textContent = m.date;
+      document.getElementById('msgBody').innerHTML = `<p>${m.body}</p>`;
+
+      renderList();
+
+      if (window.innerWidth <= 992) {
+        document.getElementById('msgSidebar').classList.add('hide');
+        document.getElementById('msgDetail').classList.add('show');
+      }
+    }
+
+    function showSidebar() {
+      document.getElementById('msgSidebar').classList.remove('hide');
+      document.getElementById('msgDetail').classList.remove('show');
+    }
+
+    function sendReply() {
+      const text = document.getElementById('replyText').value.trim();
+      if (!text) return;
+      Swal.fire({
+        icon: 'success',
+        title: 'Sent!',
+        text: 'Your reply has been sent.',
+        background: '#0f172a',
+        color: '#f1f5f9',
+        confirmButtonColor: '#0891b2',
+        timer: 2000,
+        showConfirmButton: true,
+      });
+      document.getElementById('replyText').value = '';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      selectMessage(1);
+    });
+  </script>
+</body>
+</html>

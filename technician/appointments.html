@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Appointments — Technician · AZ Aluminium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="../css/technician.css">
+  <style>
+    /* ===== PAGE STATS ===== */
+    .apt-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+    .apt-stat { background: #fff; border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,.04); display: flex; align-items: center; gap: 14px; transition: .35s; }
+    .apt-stat:hover { box-shadow: 0 6px 24px rgba(0,0,0,.06); transform: translateY(-2px); }
+    .apt-stat .as-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .apt-stat .as-icon.c1 { background: linear-gradient(135deg,#ecfeff,#cffafe); color: var(--t-accent); }
+    .apt-stat .as-icon.c2 { background: linear-gradient(135deg,#f0fdf4,#d1fae5); color: var(--t-success); }
+    .apt-stat .as-icon.c3 { background: linear-gradient(135deg,#fffbeb,#fef3c7); color: var(--t-warning); }
+    .apt-stat .as-icon.c4 { background: linear-gradient(135deg,#fef2f2,#fecaca); color: var(--t-danger); }
+    .apt-stat .as-num { font-size: 24px; font-weight: 700; color: var(--t-primary); line-height: 1; }
+    .apt-stat .as-lbl { font-size: 11px; color: #64748b; }
+
+    /* ===== FILTER TABS ===== */
+    .apt-filters { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .apt-filters .af-btn { padding: 9px 20px; border-radius: 20px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: .3s; background: #f1f5f9; color: #64748b; display: flex; align-items: center; gap: 6px; }
+    .apt-filters .af-btn i { font-size: 13px; }
+    .apt-filters .af-btn:hover { background: #e2e8f0; }
+    .apt-filters .af-btn.active { background: linear-gradient(135deg,var(--t-accent),#06b6d4); color: #fff; box-shadow: 0 3px 10px rgba(8,145,178,.25); }
+
+    /* ===== APPOINTMENT CARDS ===== */
+    .apt-list { display: flex; flex-direction: column; gap: 14px; }
+    .apt-card { display: flex; align-items: center; gap: 20px; background: #fff; border-radius: 18px; padding: 18px 22px; box-shadow: 0 1px 3px rgba(0,0,0,.04); transition: all .35s cubic-bezier(.4,0,.2,1); position: relative; overflow: hidden; }
+    .apt-card::before { content: ''; position: absolute; left: 0; top: 12px; bottom: 12px; width: 4px; border-radius: 0 4px 4px 0; }
+    .apt-card.go::before { background: var(--t-accent); box-shadow: 0 0 12px rgba(8,145,178,.3); }
+    .apt-card.warn::before { background: var(--t-warning); }
+    .apt-card.done::before { background: var(--t-success); }
+    .apt-card.wait::before { background: var(--t-blue); }
+    .apt-card.cancel::before { background: var(--t-danger); }
+    .apt-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.07); transform: translateY(-3px); }
+
+    /* Date badge */
+    .apt-card .ac-date { display: flex; flex-direction: column; align-items: center; min-width: 60px; padding: 10px 6px; background: #f8fafc; border-radius: 12px; }
+    .apt-card .ac-date .ac-day { font-size: 24px; font-weight: 700; color: var(--t-primary); line-height: 1; }
+    .apt-card .ac-date .ac-month { font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 600; letter-spacing: .5px; }
+    .apt-card .ac-date .ac-dow { font-size: 10px; color: var(--t-accent); font-weight: 600; margin-top: 2px; }
+
+    /* Info */
+    .apt-card .ac-body { flex: 1; min-width: 0; }
+    .apt-card .ac-body .ac-top { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; flex-wrap: wrap; }
+    .apt-card .ac-body .ac-top .ac-time { padding: 3px 12px; border-radius: 6px; background: var(--t-accent-light); color: var(--t-accent); font-weight: 700; font-size: 12px; }
+    .apt-card .ac-body .ac-top .ac-project { font-weight: 600; font-size: 15px; color: var(--t-primary); }
+    .apt-card .ac-body .ac-meta { display: flex; gap: 18px; font-size: 12px; color: #64748b; margin-top: 4px; flex-wrap: wrap; }
+    .apt-card .ac-body .ac-meta i { color: var(--t-accent); width: 14px; font-size: 10px; }
+    .apt-card .ac-body .ac-meta span { display: flex; align-items: center; gap: 4px; }
+
+    /* Actions */
+    .apt-card .ac-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .apt-card .ac-actions .ac-btn { padding: 9px 18px; border-radius: 10px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: .3s; display: flex; align-items: center; gap: 6px; }
+    .apt-card .ac-actions .ac-btn.primary { background: linear-gradient(135deg,var(--t-accent),#06b6d4); color: #fff; box-shadow: 0 3px 10px rgba(8,145,178,.2); }
+    .apt-card .ac-actions .ac-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(8,145,178,.3); }
+    .apt-card .ac-actions .ac-btn.ghost { background: transparent; color: #64748b; border: 1.5px solid #e2e8f0; }
+    .apt-card .ac-actions .ac-btn.ghost:hover { border-color: var(--t-accent); color: var(--t-accent); background: var(--t-accent-light); }
+
+    /* ===== WEEK CALENDAR ===== */
+    .week-section { background: #fff; border-radius: 18px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+    .week-section .ws-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .week-section .ws-header h3 { font-size: 16px; font-weight: 600; color: var(--t-primary); margin: 0; display: flex; align-items: center; gap: 8px; }
+    .week-section .ws-header h3 i { color: var(--t-accent); }
+    .week-section .ws-header .ws-nav { display: flex; gap: 4px; }
+    .week-section .ws-header .ws-nav button { width: 34px; height: 34px; border-radius: 10px; border: none; background: #f1f5f9; color: #64748b; cursor: pointer; transition: .2s; display: flex; align-items: center; justify-content: center; }
+    .week-section .ws-header .ws-nav button:hover { background: var(--t-accent); color: #fff; }
+    .week-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 8px; }
+    .week-grid .wg-day { text-align: center; padding: 12px 4px; border-radius: 12px; transition: .25s; cursor: pointer; }
+    .week-grid .wg-day:hover { background: #f8fafc; }
+    .week-grid .wg-day.today { background: var(--t-accent-light); border: 2px solid var(--t-accent); }
+    .week-grid .wg-day .wg-dow { font-size: 11px; color: #94a3b8; font-weight: 500; }
+    .week-grid .wg-day .wg-num { font-size: 20px; font-weight: 700; color: var(--t-primary); margin: 2px 0; }
+    .week-grid .wg-day .wg-dots { display: flex; justify-content: center; gap: 3px; min-height: 8px; }
+    .week-grid .wg-day .wg-dots span { width: 6px; height: 6px; border-radius: 50%; }
+    .week-grid .wg-day .wg-dots span.go { background: var(--t-accent); }
+    .week-grid .wg-day .wg-dots span.warn { background: var(--t-warning); }
+    .week-grid .wg-day .wg-dots span.done { background: var(--t-success); }
+    .week-grid .wg-day .wg-dots span.cancel { background: var(--t-danger); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width:992px) {
+      .apt-stats { grid-template-columns: repeat(2,1fr); }
+      .apt-card { flex-wrap: wrap; }
+      .apt-card .ac-actions { width: 100%; justify-content: flex-end; padding-top: 10px; border-top: 1px solid #f1f5f9; }
+    }
+    @media (max-width:768px) {
+      .week-grid { grid-template-columns: repeat(4,1fr); }
+      .week-grid .wg-day:nth-child(n+5) { display: none; }
+    }
+    @media (max-width:576px) {
+      .apt-stats { grid-template-columns: 1fr; }
+      .apt-card { flex-direction: column; align-items: flex-start; }
+      .apt-card .ac-date { flex-direction: row; gap: 8px; min-width: auto; width: 100%; justify-content: flex-start; }
+      .apt-card .ac-actions { flex-direction: column; }
+      .apt-card .ac-actions .ac-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <header class="mobile-header">
+    <div class="mh-left">
+      <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+      <div class="brand-icon-sm"><i class="fa-solid fa-hard-hat"></i></div>
+      <span class="mh-brand">AZ Aluminium</span>
+    </div>
+    <div class="mh-right">
+      <button class="mh-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications"><i class="fa-regular fa-bell"></i><span class="mh-badge"></span></button>
+    </div>
+  </header>
+
+  <aside class="t-sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="brand-icon"><i class="fa-solid fa-hard-hat"></i></div>
+      <div class="sb-text"><span class="sb-title">AZ Aluminium</span><span class="sb-sub">Technician Portal</span></div>
+    </div>
+    <div class="sb-toolbar">
+      <button class="tb-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications"><i class="fa-regular fa-bell"></i><span class="tb-badge"></span></button>
+    </div>
+    <nav>
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+      <a href="appointments.html" class="nav-item active"><i class="fa-regular fa-calendar-check"></i> Appointments</a>
+      <a href="projects.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+      <a href="messages.html" class="nav-item"><i class="fa-regular fa-envelope"></i> Messages</a>
+      <a href="notifications.html" class="nav-item"><i class="fa-regular fa-bell"></i> Notifications</a>
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+    <div class="sb-footer">
+      <div class="user-card">
+        <div class="avatar">MD<span class="online-dot"></span></div>
+        <div><p class="u-name">Marco van Dijk</p><p class="u-role">Field Technician</p></div>
+        <i class="fa-solid fa-chevron-right u-arrow"></i>
+      </div>
+      <a href="../login.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </aside>
+
+  <main class="t-main">
+    <div class="main-content">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="ph-left">
+          <h2>My Schedule</h2>
+          <p>Manage your installation and service appointments.</p>
+        </div>
+        <div class="ph-badge"><i class="fa-regular fa-calendar"></i> <span id="aptDate"></span></div>
+      </div>
+
+      <!-- Mini Stats -->
+      <div class="apt-stats">
+        <div class="apt-stat">
+          <div class="as-icon c1"><i class="fa-regular fa-calendar-check"></i></div>
+          <div><span class="as-num">3</span><br><span class="as-lbl">Today</span></div>
+        </div>
+        <div class="apt-stat">
+          <div class="as-icon c2"><i class="fa-solid fa-check"></i></div>
+          <div><span class="as-num">1</span><br><span class="as-lbl">Completed</span></div>
+        </div>
+        <div class="apt-stat">
+          <div class="as-icon c3"><i class="fa-regular fa-clock"></i></div>
+          <div><span class="as-num">2</span><br><span class="as-lbl">Pending</span></div>
+        </div>
+        <div class="apt-stat">
+          <div class="as-icon c4"><i class="fa-solid fa-ban"></i></div>
+          <div><span class="as-num">1</span><br><span class="as-lbl">Cancelled</span></div>
+        </div>
+      </div>
+
+      <!-- Filter Pills -->
+      <div class="apt-filters">
+        <button class="af-btn active"><i class="fa-regular fa-list"></i> All</button>
+        <button class="af-btn"><i class="fa-solid fa-sun"></i> Today</button>
+        <button class="af-btn"><i class="fa-regular fa-calendar"></i> This Week</button>
+        <button class="af-btn"><i class="fa-regular fa-clock"></i> Pending</button>
+      </div>
+
+      <!-- Appointment List -->
+      <div class="apt-list">
+        <div class="apt-card go">
+          <div class="ac-date"><span class="ac-day">22</span><span class="ac-month">May</span><span class="ac-dow">Thu</span></div>
+          <div class="ac-body">
+            <div class="ac-top"><span class="ac-time">08:00 – 10:00</span><span class="ac-project">Private Luxury Villa Pergola</span></div>
+            <div class="ac-meta"><span><i class="fa-solid fa-location-dot"></i> Sloten</span><span><i class="fa-solid fa-user"></i> De Jong Residence</span></div>
+          </div>
+          <div class="ac-actions">
+            <button class="ac-btn primary"><i class="fa-solid fa-play"></i> Start</button>
+            <button class="ac-btn ghost"><i class="fa-solid fa-flag"></i> Issue</button>
+          </div>
+        </div>
+
+        <div class="apt-card warn">
+          <div class="ac-date"><span class="ac-day">22</span><span class="ac-month">May</span><span class="ac-dow">Thu</span></div>
+          <div class="ac-body">
+            <div class="ac-top"><span class="ac-time">10:30 – 12:30</span><span class="ac-project">Modern Lakefront Winter Garden</span></div>
+            <div class="ac-meta"><span><i class="fa-solid fa-location-dot"></i> Amsterdam</span><span><i class="fa-solid fa-user"></i> Green Office B.V.</span></div>
+          </div>
+          <div class="ac-actions">
+            <button class="ac-btn primary"><i class="fa-solid fa-play"></i> Start</button>
+            <button class="ac-btn ghost"><i class="fa-solid fa-flag"></i> Issue</button>
+          </div>
+        </div>
+
+        <div class="apt-card done">
+          <div class="ac-date"><span class="ac-day">22</span><span class="ac-month">May</span><span class="ac-dow">Thu</span></div>
+          <div class="ac-body">
+            <div class="ac-top"><span class="ac-time">14:00 – 16:00</span><span class="ac-project">Corporate Executive Garden</span></div>
+            <div class="ac-meta"><span><i class="fa-solid fa-location-dot"></i> Utrecht</span><span><i class="fa-solid fa-user"></i> Van der Berg Family</span></div>
+          </div>
+          <div class="ac-actions">
+            <span class="status-pill completed">Completed</span>
+          </div>
+        </div>
+
+        <div class="apt-card wait">
+          <div class="ac-date"><span class="ac-day">25</span><span class="ac-month">May</span><span class="ac-dow">Mon</span></div>
+          <div class="ac-body">
+            <div class="ac-top"><span class="ac-time">09:00 – 11:00</span><span class="ac-project">Sustainable Home Garage Set</span></div>
+            <div class="ac-meta"><span><i class="fa-solid fa-location-dot"></i> Amsterdam</span><span><i class="fa-solid fa-user"></i> Gemeente Amsterdam</span></div>
+          </div>
+          <div class="ac-actions">
+            <button class="ac-btn primary"><i class="fa-solid fa-play"></i> Start</button>
+            <button class="ac-btn ghost"><i class="fa-solid fa-flag"></i> Issue</button>
+          </div>
+        </div>
+
+        <div class="apt-card wait">
+          <div class="ac-date"><span class="ac-day">27</span><span class="ac-month">May</span><span class="ac-dow">Wed</span></div>
+          <div class="ac-body">
+            <div class="ac-top"><span class="ac-time">13:00 – 15:00</span><span class="ac-project">Smart Zonwering Pergola</span></div>
+            <div class="ac-meta"><span><i class="fa-solid fa-location-dot"></i> Haarlem</span><span><i class="fa-solid fa-user"></i> Bakkerij Centrum</span></div>
+          </div>
+          <div class="ac-actions">
+            <button class="ac-btn primary"><i class="fa-solid fa-play"></i> Start</button>
+            <button class="ac-btn ghost"><i class="fa-solid fa-flag"></i> Issue</button>
+          </div>
+        </div>
+
+        <div class="apt-card cancel">
+          <div class="ac-date"><span class="ac-day">30</span><span class="ac-month">May</span><span class="ac-dow">Sat</span></div>
+          <div class="ac-body">
+            <div class="ac-top"><span class="ac-time">08:00 – 12:00</span><span class="ac-project">Family Garden Veranda</span></div>
+            <div class="ac-meta"><span><i class="fa-solid fa-location-dot"></i> Amsterdam</span><span><i class="fa-solid fa-user"></i> Rijksmuseum</span></div>
+          </div>
+          <div class="ac-actions">
+            <span class="status-pill cancelled">Cancelled</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Week Calendar -->
+      <div class="week-section" style="margin-top:32px">
+        <div class="ws-header">
+          <h3><i class="fa-regular fa-calendar"></i> Week 21</h3>
+          <div class="ws-nav">
+            <button><i class="fa-solid fa-chevron-left"></i></button>
+            <button><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+        <div class="week-grid">
+          <div class="wg-day"><span class="wg-dow">Mon</span><div class="wg-num">19</div><div class="wg-dots"></div></div>
+          <div class="wg-day"><span class="wg-dow">Tue</span><div class="wg-num">20</div><div class="wg-dots"></div></div>
+          <div class="wg-day"><span class="wg-dow">Wed</span><div class="wg-num">21</div><div class="wg-dots"></div></div>
+          <div class="wg-day today"><span class="wg-dow">Thu</span><div class="wg-num">22</div><div class="wg-dots"><span class="go"></span><span class="warn"></span><span class="done"></span></div></div>
+          <div class="wg-day"><span class="wg-dow">Fri</span><div class="wg-num">23</div><div class="wg-dots"></div></div>
+          <div class="wg-day"><span class="wg-dow">Sat</span><div class="wg-num">24</div><div class="wg-dots"></div></div>
+          <div class="wg-day"><span class="wg-dow">Sun</span><div class="wg-num">25</div><div class="wg-dots"><span class="wait"></span></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="t-footer">
+      <div class="footer-inner">
+        <div class="fi-copy"><i class="fa-solid fa-hard-hat"></i> &copy; 2026 AZ Aluminium</div>
+        <div class="fi-links"><a href="../privacy-policy.html">Privacy</a><span class="fi-dot"></span><a href="../terms.html">Terms</a><span class="fi-dot"></span><a href="../support-ticket.html">Support</a></div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay'),toggle=document.getElementById('sidebarToggle');
+    function openSidebar(){sidebar.classList.add('open');overlay.classList.add('show');document.body.style.overflow='hidden';}
+    function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');document.body.style.overflow='';}
+    if(toggle)toggle.addEventListener('click',()=>{sidebar.classList.contains('open')?closeSidebar():openSidebar();});
+
+    const d=new Date();document.getElementById('aptDate').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+
+    document.querySelectorAll('.af-btn').forEach(b=>{b.addEventListener('click',function(){document.querySelectorAll('.af-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');});});
+
+    function switchLanguage(){const lang=localStorage.getItem('az-lang')||'en';Swal.fire({title:'Select Language',html:'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:340px;margin:0 auto">'+[['en','&#127468;&#127463;','English'],['nl','&#127475;&#127473;','Nederlands'],['de','&#127465;&#127466;','Deutsch'],['fr','&#127467;&#127479;','Fran&ccedil;ais'],['tr','&#127481;&#127479;','T&uuml;rk&ccedil;e'],['ar','&#127462;&#127465;','العربية']].map(([c,f,t])=>'<div onclick="setLang(\''+c+'\')" style="cursor:pointer;padding:12px 8px;border-radius:12px;border:2px solid '+(c===lang?'var(--t-accent)':'#e2e8f0')+';background:'+(c===lang?'var(--t-accent-light)':'#fff')+';transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:'+(c===lang?'600':'400')+';color:var(--t-primary)"><span style="font-size:28px">'+f+'</span>'+t+'</div>').join('')+'</div>',showConfirmButton:false,background:'#fff',borderRadius:'20px'});}
+    function setLang(c){localStorage.setItem('az-lang',c);Swal.close();location.reload();}
+  </script>
+</body>
+</html>

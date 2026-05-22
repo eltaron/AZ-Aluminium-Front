@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Detail — Technician · AZ Aluminium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="../css/technician.css">
+  <style>
+    :root { --t-primary: #0f172a; --t-accent: #0891b2; --t-accent-hover: #0e7490; --t-success: #10b981; --t-warning: #f59e0b; --t-danger: #ef4444; --t-blue: #3b82f6; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .top-row { display: flex; gap: 24px; margin-bottom: 24px; }
+    .top-row > * { flex: 1; min-width: 0; }
+    .card-white { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .card-white h3 { font-size: 16px; font-weight: 600; color: var(--t-primary); margin-bottom: 16px; }
+    .card-white h4 { font-size: 14px; font-weight: 600; color: var(--t-primary); margin-bottom: 8px; }
+
+    .project-title { font-size: 22px; font-weight: 700; color: var(--t-primary); margin-bottom: 4px; }
+    .project-client { color: #64748b; font-size: 14px; margin-bottom: 4px; }
+    .project-client i { width: 18px; color: var(--t-accent); }
+    .project-location { color: #64748b; font-size: 13px; margin-bottom: 16px; }
+    .project-location i { width: 18px; color: var(--t-accent); }
+
+    .status-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .status-badge.in-progress { background: rgba(8,145,178,.12); color: var(--t-accent); }
+    .status-badge.completed { background: rgba(16,185,129,.12); color: var(--t-success); }
+    .status-badge.on-hold { background: rgba(245,158,11,.12); color: var(--t-warning); }
+    .status-badge.scheduled { background: rgba(59,130,246,.12); color: var(--t-blue); }
+
+    .priority-badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .priority-badge.high { background: rgba(239,68,68,.12); color: var(--t-danger); }
+    .priority-badge.medium { background: rgba(245,158,11,.12); color: var(--t-warning); }
+    .priority-badge.low { background: rgba(16,185,129,.12); color: var(--t-success); }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+    .info-item label { display: block; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; margin-bottom: 2px; }
+    .info-item span { font-size: 13px; font-weight: 500; color: var(--t-primary); }
+
+    .progress-circle { width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; position: relative; }
+    .progress-circle-inner { width: 90px; height: 90px; border-radius: 50%; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .progress-circle-inner .pct-num { font-size: 28px; font-weight: 700; color: var(--t-primary); line-height: 1; }
+    .progress-circle-inner .pct-label { font-size: 11px; color: #94a3b8; }
+
+    .progress-section { text-align: center; }
+    .progress-bar-wrap { height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin: 16px 0; }
+    .progress-bar-fill { height: 100%; border-radius: 10px; background: var(--t-accent); transition: width .5s ease; }
+    .quick-btns { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap; }
+    .quick-btn { padding: 8px 18px; border-radius: 8px; border: 1px solid #e2e8f0; background: #fff; color: var(--t-primary); font-size: 12px; font-weight: 500; cursor: pointer; transition: .2s; }
+    .quick-btn:hover { border-color: var(--t-accent); color: var(--t-accent); background: var(--t-accent-light); }
+    .btn-complete { padding: 10px 24px; border-radius: 8px; border: none; background: var(--t-success); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: .2s; }
+    .btn-complete:hover { background: #059669; }
+    .btn-complete:disabled { opacity: .5; cursor: not-allowed; }
+
+    .middle-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+
+    .checklist-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+    .checklist-item:last-child { border-bottom: none; }
+    .checklist-item label { flex: 1; font-size: 13px; color: var(--t-primary); cursor: pointer; }
+    .checklist-item input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; border: 2px solid #cbd5e1; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: .2s; }
+    .checklist-item input[type="checkbox"]:checked { background: var(--t-accent); border-color: var(--t-accent); }
+    .checklist-item input[type="checkbox"]:checked::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: #fff; font-size: 10px; }
+    .checklist-item.done label { text-decoration: line-through; color: #94a3b8; }
+    .btn-add-task { margin-top: 12px; padding: 8px 16px; border-radius: 8px; border: 1px dashed #cbd5e1; background: transparent; color: #64748b; font-size: 12px; font-weight: 500; cursor: pointer; width: 100%; transition: .2s; }
+    .btn-add-task:hover { border-color: var(--t-accent); color: var(--t-accent); }
+
+    .notes-textarea { width: 100%; min-height: 80px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; font-family: 'Poppins', sans-serif; font-size: 13px; resize: vertical; outline: none; transition: .2s; }
+    .notes-textarea:focus { border-color: var(--t-accent); box-shadow: 0 0 0 3px rgba(8,145,178,.1); }
+    .btn-save-note { margin-top: 8px; padding: 8px 20px; border-radius: 8px; border: none; background: var(--t-accent); color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; transition: .2s; }
+    .btn-save-note:hover { background: var(--t-accent-hover); }
+
+    .timeline { margin-top: 16px; }
+    .timeline-item { position: relative; padding-left: 20px; padding-bottom: 14px; border-left: 2px solid #e2e8f0; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-item::before { content: ''; position: absolute; left: -5px; top: 4px; width: 8px; height: 8px; border-radius: 50%; background: var(--t-accent); }
+    .timeline-item .tl-time { font-size: 11px; color: #94a3b8; }
+    .timeline-item .tl-text { font-size: 12px; color: var(--t-primary); margin-top: 2px; }
+
+    .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .photo-placeholder { aspect-ratio: 4/3; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 28px; color: rgba(255,255,255,.7); }
+    .btn-upload { margin-top: 12px; padding: 8px 20px; border-radius: 8px; border: none; background: var(--t-accent); color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; transition: .2s; }
+    .btn-upload:hover { background: var(--t-accent-hover); }
+    .btn-upload i { margin-right: 6px; }
+
+    .timeline-milestones { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .milestone-card { background: #fff; border-radius: 12px; padding: 18px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .milestone-card .ms-name { font-size: 13px; font-weight: 600; color: var(--t-primary); }
+    .milestone-card .ms-date { font-size: 11px; color: #94a3b8; margin: 4px 0 8px; }
+    .milestone-card .ms-status { font-size: 20px; }
+
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--t-accent); text-decoration: none; margin-bottom: 16px; font-weight: 500; }
+    .back-link:hover { color: var(--t-accent-hover); }
+
+    @media (max-width: 1100px) {
+      .middle-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .top-row { flex-direction: column; }
+      .middle-grid { grid-template-columns: 1fr; }
+      .timeline-milestones { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .timeline-milestones { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <header class="mobile-header">
+    <div class="mh-left">
+      <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+      <div class="brand-icon-sm"><i class="fa-solid fa-hard-hat"></i></div>
+      <span class="mh-brand">AZ Aluminium</span>
+    </div>
+    <div class="mh-right">
+      <button class="mh-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+        <i class="fa-regular fa-bell"></i>
+        <span class="mh-badge"></span>
+      </button>
+    </div>
+  </header>
+
+  <aside class="t-sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="brand-icon"><i class="fa-solid fa-hard-hat"></i></div>
+      <div class="sb-text">
+        <span class="sb-title">AZ Aluminium</span>
+        <span class="sb-sub">Technician Portal</span>
+      </div>
+    </div>
+    <div class="sb-toolbar">
+      <button class="tb-btn" onclick="switchLanguage()" title="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+        <i class="fa-regular fa-bell"></i>
+        <span class="tb-badge"></span>
+      </button>
+    </div>
+    <nav>
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+      <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments</a>
+      <a href="projects.html" class="nav-item active"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+      <a href="messages.html" class="nav-item"><i class="fa-regular fa-envelope"></i> Messages</a>
+      <a href="notifications.html" class="nav-item"><i class="fa-regular fa-bell"></i> Notifications</a>
+      <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+    <div class="sb-footer">
+      <div class="user-card">
+        <div class="avatar">MD<span class="online-dot"></span></div>
+        <div>
+          <p class="u-name">Marco van Dijk</p>
+          <p class="u-role">Field Technician</p>
+        </div>
+        <i class="fa-solid fa-chevron-right u-arrow"></i>
+      </div>
+      <a href="../login.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </aside>
+
+  <main class="t-main">
+    <div class="main-content">
+      <div class="page-header">
+        <a href="projects.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+        <h2>Project Overview</h2>
+        <p>Update progress, add notes, and manage tasks for this project.</p>
+      </div>
+
+      <div class="top-row" id="topRow"></div>
+
+      <div class="middle-grid" id="middleGrid"></div>
+
+      <section class="section-block">
+        <h3 class="section-title" style="font-size:16px;font-weight:600;color:var(--t-primary);margin-bottom:14px;">Project Timeline</h3>
+        <div class="timeline-milestones" id="milestones"></div>
+      </section>
+    </div>
+
+    <footer class="t-footer">
+      <div class="footer-inner">
+        <div class="fi-copy">
+          <i class="fa-solid fa-hard-hat"></i>
+          &copy; 2026 AZ Aluminium. All rights reserved.
+        </div>
+        <div class="fi-links">
+          <a href="../privacy-policy.html">Privacy</a>
+          <span class="fi-dot"></span>
+          <a href="../terms.html">Terms</a>
+          <span class="fi-dot"></span>
+          <a href="../support-ticket.html">Support</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggle = document.getElementById('sidebarToggle');
+    function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+    function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+    if (toggle) toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+
+    function switchLanguage() {
+      const lang = localStorage.getItem('az-lang') || 'en';
+      Swal.fire({
+        title: 'Select Language',
+        html: '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:340px;margin:0 auto">' +
+          [['en','&#127468;&#127463;','English'],['nl','&#127475;&#127473;','Nederlands'],['de','&#127465;&#127466;','Deutsch'],['fr','&#127467;&#127479;','Fran&ccedil;ais'],['tr','&#127481;&#127479;','T&uuml;rk&ccedil;e'],['ar','&#127462;&#127465;','العربية']]
+          .map(([c,f,t]) => '<div onclick="setLang(\''+c+'\')" style="cursor:pointer;padding:12px 8px;border-radius:12px;border:2px solid '+(c===lang?'var(--t-accent)':'#e2e8f0')+';background:'+(c===lang?'var(--t-accent-light)':'#fff')+';transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:'+(c===lang?'600':'400')+';color:var(--t-primary)"><span style="font-size:28px">'+f+'</span>'+t+'</div>').join('') +
+        '</div>',
+        showConfirmButton: false, background: '#fff', borderRadius: '20px'
+      });
+    }
+    function setLang(c) { localStorage.setItem('az-lang', c); Swal.close(); location.reload(); }
+
+    const projects = [
+      { id: 1, title: 'Private Luxury Villa Pergola', client: 'De Jong Residence', location: 'Amsterdam', hero: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=600', progress: 65, daysLeft: '12 days left', daysNum: 12, status: 'In Progress', statusClass: 'in-progress', priority: 'High', started: '2026-03-01', completed: '2026-06-15', tasks: [
+        { text: 'Site inspection completed', done: true },
+        { text: 'Materials delivered', done: true },
+        { text: 'Framework installed', done: false },
+        { text: 'Glass panels mounted', done: false },
+        { text: 'Sealant applied', done: false },
+        { text: 'Final quality check', done: false }
+      ], notes: [
+        { time: '2026-05-20 14:30', text: 'Client requested additional soundproofing for the glass panels.' },
+        { time: '2026-05-18 10:15', text: 'Site inspection completed. Foundation is ready for installation.' },
+        { time: '2026-05-15 08:00', text: 'All materials delivered to site.' },
+      ] },
+      { id: 2, title: 'Modern Lakefront Winter Garden', client: 'Green Office B.V.', location: 'Antwerp, BE', hero: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600', progress: 40, daysLeft: '23 days left', daysNum: 23, status: 'In Progress', statusClass: 'in-progress', priority: 'High', started: '2026-02-15', completed: '2026-07-01', tasks: [
+        { text: 'Site inspection completed', done: true },
+        { text: 'Materials delivered', done: true },
+        { text: 'Framework installed', done: true },
+        { text: 'Glass panels mounted', done: false },
+        { text: 'Sealant applied', done: false },
+        { text: 'Final quality check', done: false }
+      ], notes: [
+        { time: '2026-05-19 16:45', text: 'Client wants to discuss design changes for the east facade.' },
+        { time: '2026-05-16 09:30', text: 'Framework installation progressing well. 3 out of 8 sections done.' },
+        { time: '2026-05-10 11:00', text: 'Materials inspected and approved for installation.' },
+      ] },
+      { id: 3, title: 'Corporate Executive Garden', client: 'Van der Berg Family', location: 'Berlin, DE', hero: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=600', progress: 100, daysLeft: 'Done', daysNum: 0, status: 'Completed', statusClass: 'completed', priority: 'Low', started: '2026-04-01', completed: '2026-05-15', tasks: [
+        { text: 'Site inspection completed', done: true },
+        { text: 'Materials delivered', done: true },
+        { text: 'Framework installed', done: true },
+        { text: 'Glass panels mounted', done: true },
+        { text: 'Sealant applied', done: true },
+        { text: 'Final quality check', done: true }
+      ], notes: [
+        { time: '2026-05-14 16:00', text: 'Project completed. Client signed off.' },
+        { time: '2026-05-12 14:20', text: 'Applied final coat of sealant. Looks great.' },
+        { time: '2026-05-08 10:00', text: 'Replaced 2 damaged glass panels.' },
+      ] },
+      { id: 4, title: 'Sustainable Home Garage Set', client: 'Gemeente Amsterdam', location: 'Rotterdam, NL', hero: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=600', progress: 15, daysLeft: 'Pending', daysNum: 0, status: 'On Hold', statusClass: 'on-hold', priority: 'Medium', started: '2026-05-01', completed: '2026-08-30', tasks: [
+        { text: 'Site inspection completed', done: true },
+        { text: 'Materials delivered', done: false },
+        { text: 'Framework installed', done: false },
+        { text: 'Glass panels mounted', done: false },
+        { text: 'Sealant applied', done: false },
+        { text: 'Final quality check', done: false }
+      ], notes: [
+        { time: '2026-05-22 09:00', text: 'Project put on hold pending permit approval from municipality.' },
+        { time: '2026-05-20 13:10', text: 'Initial site survey completed. Building permits required.' },
+        { time: '2026-05-01 08:00', text: 'Project kickoff meeting with Gemeente Amsterdam.' },
+      ] },
+      { id: 5, title: 'Smart Zonwering Pergola', client: 'Bakkerij Centrum', location: 'Utrecht, NL', hero: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=600', progress: 80, daysLeft: '5 days left', daysNum: 5, status: 'In Progress', statusClass: 'in-progress', priority: 'High', started: '2026-04-20', completed: '2026-06-01', tasks: [
+        { text: 'Site inspection completed', done: true },
+        { text: 'Materials delivered', done: true },
+        { text: 'Framework installed', done: true },
+        { text: 'Glass panels mounted', done: true },
+        { text: 'Sealant applied', done: false },
+        { text: 'Final quality check', done: false }
+      ], notes: [
+        { time: '2026-05-21 15:30', text: 'Glass panels installed. Waiting for sealant to cure.' },
+        { time: '2026-05-19 10:00', text: 'Framework installed and aligned perfectly.' },
+        { time: '2026-05-12 08:45', text: 'Materials delivered. Starting framework assembly.' },
+      ] },
+      { id: 6, title: 'Family Garden Veranda', client: 'Rijksmuseum', location: 'Eindhoven, NL', hero: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=600', progress: 0, daysLeft: '30 days left', daysNum: 30, status: 'Scheduled', statusClass: 'scheduled', priority: 'Medium', started: '2026-06-01', completed: '2026-07-15', tasks: [
+        { text: 'Site inspection completed', done: false },
+        { text: 'Materials delivered', done: false },
+        { text: 'Framework installed', done: false },
+        { text: 'Glass panels mounted', done: false },
+        { text: 'Sealant applied', done: false },
+        { text: 'Final quality check', done: false }
+      ], notes: [
+        { time: '2026-05-20 11:00', text: 'Scheduled start date confirmed with Rijksmuseum curator.' },
+        { time: '2026-05-15 14:30', text: 'Initial assessment done. Need 12 custom glass panels.' },
+      ] },
+    ];
+
+    const milestones = [
+      { name: 'Site Survey', date: 'Mar 10', done: true },
+      { name: 'Materials Ordered', date: 'Apr 5', done: true },
+      { name: 'Installation Start', date: 'May 1', done: true },
+      { name: 'Final Inspection', date: 'Jun 15', done: false },
+    ];
+
+    function getProject() {
+      const params = new URLSearchParams(window.location.search);
+      const id = parseInt(params.get('id'), 10);
+      return projects.find(p => p.id === id) || projects[0];
+    }
+
+    function render() {
+      const p = getProject();
+      document.title = p.title + ' — Technician · AZ Aluminium';
+
+      const topRow = document.getElementById('topRow');
+
+      topRow.innerHTML = `
+        <div class="card-white">
+          <img src="${p.hero}" alt="${p.title}" style="width:100%;height:120px;object-fit:cover;border-radius:10px;margin-bottom:12px;">
+          <div class="project-title">${p.title}</div>
+          <div class="project-client"><i class="fas fa-user"></i> ${p.client}</div>
+          <div class="project-location"><i class="fas fa-location-dot"></i> ${p.location}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+            <span class="status-badge ${p.statusClass}">${p.status}</span>
+            <span class="priority-badge ${p.priority.toLowerCase()}">${p.priority} Priority</span>
+          </div>
+          <div class="info-grid">
+            <div class="info-item"><label>Started</label><span>${p.started}</span></div>
+            <div class="info-item"><label>Expected Completion</label><span>${p.completed}</span></div>
+            <div class="info-item"><label>Days Remaining</label><span>${p.daysLeft}</span></div>
+            <div class="info-item"><label>Progress</label><span>${p.progress}%</span></div>
+          </div>
+        </div>
+        <div class="card-white progress-section" id="progressSection">
+          <h3>Progress</h3>
+          <div class="progress-circle" style="background: conic-gradient(var(--t-accent) ${p.progress}%, #e2e8f0 ${p.progress}%);">
+            <div class="progress-circle-inner">
+              <span class="pct-num" id="pctNum">${p.progress}</span>
+              <span class="pct-label">%</span>
+            </div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="progressFill" style="width:${p.progress}%;"></div>
+          </div>
+          <div class="quick-btns">
+            <button class="quick-btn" onclick="updateProgress(5)">+5%</button>
+            <button class="quick-btn" onclick="updateProgress(10)">+10%</button>
+            <button class="quick-btn" onclick="updateProgress(25)">+25%</button>
+          </div>
+          <button class="btn-complete" id="btnComplete" onclick="markComplete()" ${p.progress >= 100 ? 'disabled' : ''}>
+            <i class="fas fa-check-circle"></i> Mark as Complete
+          </button>
+        </div>
+      `;
+
+      const middleGrid = document.getElementById('middleGrid');
+
+      let checklistHtml = p.tasks.map((t, i) => `
+        <div class="checklist-item ${t.done ? 'done' : ''}">
+          <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${i}, this)">
+          <label>${t.text}</label>
+        </div>
+      `).join('');
+
+      let notesHtml = p.notes.map(n => `
+        <div class="timeline-item">
+          <div class="tl-time">${n.time}</div>
+          <div class="tl-text">${n.text}</div>
+        </div>
+      `).join('');
+
+      middleGrid.innerHTML = `
+        <div class="card-white">
+          <h3><i class="fas fa-list-check" style="color:var(--t-accent);margin-right:8px;"></i> Tasks / Checklist</h3>
+          <div id="checklist">${checklistHtml}</div>
+          <button class="btn-add-task" onclick="addTask()"><i class="fas fa-plus"></i> Add Task</button>
+        </div>
+        <div class="card-white">
+          <h3><i class="fas fa-pen" style="color:var(--t-accent);margin-right:8px;"></i> Site Notes</h3>
+          <textarea class="notes-textarea" id="siteNote" placeholder="Write a note about today's work..."></textarea>
+          <button class="btn-save-note" onclick="saveNote()"><i class="fas fa-save"></i> Save Note</button>
+          <div class="timeline" id="notesTimeline">${notesHtml}</div>
+        </div>
+        <div class="card-white">
+          <h3><i class="fas fa-camera" style="color:var(--t-accent);margin-right:8px;"></i> Site Photos</h3>
+          <div class="photo-grid">
+            <div class="photo-placeholder" style="background:linear-gradient(135deg,#0891b2,#0e7490);"><i class="fas fa-camera"></i></div>
+            <div class="photo-placeholder" style="background:linear-gradient(135deg,#0e7490,#155e75);"><i class="fas fa-camera"></i></div>
+            <div class="photo-placeholder" style="background:linear-gradient(135deg,#155e75,#0891b2);"><i class="fas fa-camera"></i></div>
+            <div class="photo-placeholder" style="background:linear-gradient(135deg,#0891b2,#0e7490);"><i class="fas fa-camera"></i></div>
+          </div>
+          <button class="btn-upload"><i class="fas fa-upload"></i> Upload Photos</button>
+        </div>
+      `;
+
+      const msDiv = document.getElementById('milestones');
+      msDiv.innerHTML = milestones.map(m => `
+        <div class="milestone-card">
+          <div class="ms-name">${m.name}</div>
+          <div class="ms-date">${m.date}</div>
+          <div class="ms-status">${m.done ? '✅' : '⏳'}</div>
+        </div>
+      `).join('');
+    }
+
+    let currentProgress = null;
+    function updateProgress(amount) {
+      const p = getProject();
+      if (currentProgress === null) currentProgress = p.progress;
+      currentProgress = Math.min(100, currentProgress + amount);
+      document.getElementById('pctNum').textContent = currentProgress;
+      document.getElementById('progressFill').style.width = currentProgress + '%';
+      document.querySelector('.progress-circle').style.background = `conic-gradient(var(--t-accent) ${currentProgress}%, #e2e8f0 ${currentProgress}%)`;
+      if (currentProgress >= 100) {
+        document.getElementById('btnComplete').disabled = false;
+      }
+    }
+
+    function markComplete() {
+      const val = currentProgress !== null ? currentProgress : getProject().progress;
+      if (val < 100) {
+        Swal.fire({ icon: 'warning', title: 'Progress incomplete', text: 'Progress must be 100% before marking complete.', background: '#0f172a', color: '#f1f5f9', confirmButtonColor: '#0891b2' });
+        return;
+      }
+      Swal.fire({ icon: 'success', title: 'Completed!', text: 'Project has been marked as complete.', background: '#0f172a', color: '#f1f5f9', confirmButtonColor: '#0891b2' });
+      document.getElementById('btnComplete').disabled = true;
+    }
+
+    function toggleTask(idx, el) {
+      const p = getProject();
+      p.tasks[idx].done = el.checked;
+      el.closest('.checklist-item').classList.toggle('done', el.checked);
+    }
+
+    function addTask() {
+      Swal.fire({
+        title: 'Add Task',
+        input: 'text',
+        inputPlaceholder: 'Task description',
+        background: '#0f172a',
+        color: '#f1f5f9',
+        confirmButtonColor: '#0891b2',
+        showCancelButton: true,
+        preConfirm: (v) => {
+          if (!v) { Swal.showValidationMessage('Please enter a task'); }
+        }
+      }).then(r => {
+        if (r.isConfirmed) {
+          const p = getProject();
+          p.tasks.push({ text: r.value, done: false });
+          render();
+        }
+      });
+    }
+
+    function saveNote() {
+      const text = document.getElementById('siteNote').value.trim();
+      if (!text) return;
+      const p = getProject();
+      const now = new Date();
+      const ts = now.toISOString().slice(0,10) + ' ' + now.toTimeString().slice(0,5);
+      p.notes.unshift({ time: ts, text });
+      document.getElementById('siteNote').value = '';
+      render();
+    }
+
+    document.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>
