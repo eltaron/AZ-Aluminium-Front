@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Support Tickets — AZ Aluminium</title>
+    <meta name="description" content="Support tickets for AZ Aluminium Vendor Portal" />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/vendor.css" />
+    <style>
+      /* --- Page Specific --- */
+      .toolbar-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+      .search-wrap { position: relative; flex: 1; min-width: 220px; max-width: 380px; }
+      .search-wrap input {
+        width: 100%; padding: 10px 16px 10px 40px; border-radius: 12px;
+        border: 2px solid #e2e8f0; background: #fff; font-size: 13px; font-weight: 500;
+        transition: .25s; outline: none; font-family: 'Poppins', sans-serif;
+      }
+      .search-wrap input:focus { border-color: var(--v-accent); box-shadow: 0 0 0 3px rgba(16,185,129,.1); }
+      .search-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 15px; }
+
+      .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+      .filter-btn {
+        padding: 8px 18px; border-radius: 50px; border: 2px solid #e2e8f0;
+        background: #fff; font-size: 12px; font-weight: 600; color: var(--v-primary);
+        transition: .25s; cursor: pointer; font-family: 'Poppins', sans-serif;
+      }
+      .filter-btn:hover { border-color: var(--v-accent); color: var(--v-accent); }
+      .filter-btn.active { background: var(--v-accent); border-color: var(--v-accent); color: #fff; }
+
+      .btn-emerald {
+        background: var(--v-accent); color: #fff; border: none; padding: 10px 24px;
+        border-radius: 12px; font-size: 13px; font-weight: 600; transition: .25s;
+        font-family: 'Poppins', sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+      }
+      .btn-emerald:hover { background: var(--v-accent-hover); color: #fff; }
+      .btn-emerald-sm { padding: 7px 16px; font-size: 11px; border-radius: 8px; }
+
+      .ticket-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+        padding: 20px 22px; transition: .3s; cursor: pointer; margin-bottom: 12px;
+      }
+      .ticket-card:hover { border-color: var(--v-accent); box-shadow: 0 4px 20px rgba(0,0,0,.04); }
+      .tc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+      .tc-ref { font-weight: 700; font-size: 14px; color: var(--v-primary); }
+      .tc-date { font-size: 11px; color: #94a3b8; font-weight: 500; }
+      .tc-subject { font-weight: 600; font-size: 15px; color: var(--v-primary); margin-bottom: 4px; }
+      .tc-customer { font-size: 12px; color: #64748b; margin-bottom: 10px; }
+      .tc-customer i { margin-right: 4px; }
+      .tc-bottom { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+      .tc-msgs { font-size: 11px; color: #94a3b8; margin-left: auto; }
+      .tc-msgs i { margin-right: 3px; }
+      .tc-preview { font-size: 12px; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+      .prio-low { background: #f1f5f9; color: #475569; }
+      .prio-medium { background: #fef3c7; color: #92400e; }
+      .prio-high { background: #fee2e2; color: #991b1b; }
+      .prio-urgent { background: #fce7f3; color: #9d174d; }
+      .prio-badge {
+        font-size: 10px; font-weight: 700; padding: 3px 12px; border-radius: 50px;
+        text-transform: uppercase; letter-spacing: .5px;
+      }
+
+      .status-badge { font-size: 11px; font-weight: 600; padding: 4px 14px; border-radius: 50px; }
+      .status-badge.open { background: #dbeafe; color: #1e40af; }
+      .status-badge.in-progress { background: #fef3c7; color: #92400e; }
+      .status-badge.resolved { background: #d1fae5; color: #065f46; }
+
+      .modal-content { border-radius: 18px; border: none; box-shadow: 0 20px 60px rgba(0,0,0,.1); }
+      .modal-header { border-bottom: 1px solid #f1f5f9; padding: 20px 24px; }
+      .modal-header .modal-title { font-weight: 700; color: var(--v-primary); font-size: 17px; }
+      .modal-body { padding: 24px; }
+      .modal-footer { border-top: 1px solid #f1f5f9; padding: 16px 24px; gap: 8px; }
+
+      .ticket-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9; font-size: 12px; color: #64748b; }
+      .ticket-meta span { display: flex; align-items: center; gap: 6px; }
+
+      .chat-conversation { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 4px 0; }
+      .chat-conversation::-webkit-scrollbar { width: 4px; }
+      .chat-conversation::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+      .chat-msg { display: flex; gap: 10px; max-width: 85%; }
+      .chat-msg.customer { align-self: flex-start; }
+      .chat-msg.vendor { align-self: flex-end; flex-direction: row-reverse; }
+      .chat-msg .msg-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 11px; color: #fff; }
+      .chat-msg .msg-body { background: #f1f5f9; padding: 12px 16px; border-radius: 14px; }
+      .chat-msg.vendor .msg-body { background: var(--v-accent); color: #fff; }
+      .chat-msg .msg-body .msg-name { font-size: 11px; font-weight: 600; margin-bottom: 2px; }
+      .chat-msg.customer .msg-body .msg-name { color: var(--v-primary); }
+      .chat-msg.vendor .msg-body .msg-name { color: rgba(255,255,255,.8); }
+      .chat-msg .msg-body .msg-text { font-size: 13px; line-height: 1.5; }
+      .chat-msg .msg-body .msg-time { font-size: 10px; color: #94a3b8; margin-top: 4px; display: block; }
+      .chat-msg.vendor .msg-body .msg-time { color: rgba(255,255,255,.6); }
+
+      .modal-footer .reply-area { display: flex; gap: 8px; width: 100%; align-items: flex-end; }
+      .modal-footer .reply-area textarea {
+        flex: 1; border-radius: 12px; border: 2px solid #e2e8f0; padding: 10px 14px;
+        font-size: 13px; resize: none; outline: none; transition: .25s; font-family: 'Poppins', sans-serif;
+      }
+      .modal-footer .reply-area textarea:focus { border-color: var(--v-accent); box-shadow: 0 0 0 3px rgba(16,185,129,.1); }
+      .modal-footer .reply-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+      .form-custom { border-radius: 12px; border: 2px solid #e2e8f0; padding: 10px 14px; font-size: 13px; font-weight: 500; transition: .25s; outline: none; font-family: 'Poppins', sans-serif; }
+      .form-custom:focus { border-color: var(--v-accent); box-shadow: 0 0 0 3px rgba(16,185,129,.1); }
+
+      @media (max-width: 576px) {
+        .ticket-card { padding: 16px; }
+        .toolbar-row { flex-direction: column; align-items: stretch; }
+        .search-wrap { max-width: none; }
+        .chat-msg { max-width: 95%; }
+        .modal-footer .reply-area { flex-direction: column; }
+        .modal-footer .reply-actions { align-self: flex-end; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo-white.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">5</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="v-sidebar" id="sidebar">
+      <div class="sb-brand">
+        <img src="../images/logo-white.png" alt="AZ Aluminium" onerror="this.src='../images/logo.png'" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Vendor Portal</span>
+        </div>
+      </div>
+      <div class="sb-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">5</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="quote-requests.html" class="nav-item"><i class="fa-regular fa-file-lines"></i> Quote Requests</a>
+        <a href="orders.html" class="nav-item"><i class="fa-solid fa-truck"></i> Orders</a>
+        <a href="tickets.html" class="nav-item active"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sb-footer">
+        <div class="user-card">
+          <div class="avatar">SC</div>
+          <div>
+            <p class="u-name">SteelCraft Supplies</p>
+            <p class="u-role">Premium Vendor</p>
+          </div>
+          <i class="fa-solid fa-chevron-right u-arrow"></i>
+        </div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="v-main">
+      <div class="main-content">
+        <div class="page-header">
+          <h2>Support Tickets</h2>
+          <p>Respond to customer inquiries and resolve issues.</p>
+        </div>
+
+        <div class="toolbar-row">
+          <div class="search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search by ref, customer, or subject..." oninput="renderTickets()" />
+          </div>
+          <div class="filter-group">
+            <button class="filter-btn active" data-filter="all" onclick="setFilter(this,'all')">All</button>
+            <button class="filter-btn" data-filter="open" onclick="setFilter(this,'open')">Open</button>
+            <button class="filter-btn" data-filter="in-progress" onclick="setFilter(this,'in-progress')">In Progress</button>
+            <button class="filter-btn" data-filter="resolved" onclick="setFilter(this,'resolved')">Resolved</button>
+          </div>
+          <button class="btn-emerald" onclick="openNewTicketModal()"><i class="fa-solid fa-plus"></i> New Ticket</button>
+        </div>
+
+        <div id="ticketList"></div>
+      </div>
+
+      <footer class="v-footer">
+        <span>&copy; 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Vendor Portal <i class="fa-solid fa-circle" style="font-size:6px;color:var(--v-accent);margin:0 6px;"></i> Powered by AZ Platform</span>
+      </footer>
+    </main>
+
+    <!-- Ticket Detail Modal -->
+    <div class="modal fade" id="ticketDetailModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="detailTitle">Ticket</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="ticket-meta" id="ticketMeta"></div>
+            <div class="chat-conversation" id="chatConversation"></div>
+          </div>
+          <div class="modal-footer" id="detailFooter">
+            <div class="reply-area">
+              <textarea id="replyText" placeholder="Type your reply..." rows="2"></textarea>
+              <div class="reply-actions">
+                <button class="btn-emerald btn-emerald-sm" onclick="sendReply()"><i class="fa-regular fa-paper-plane"></i> Send</button>
+                <button class="btn btn-outline-secondary btn-sm" style="border-radius:8px;font-weight:600;font-size:11px;padding:7px 16px;" onclick="closeTicket()">Close Ticket</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- New Ticket Modal -->
+    <div class="modal fade" id="newTicketModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">New Support Ticket</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="newTicketForm" onsubmit="createNewTicket(event)">
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:12px;color:var(--v-primary);">Subject</label>
+                <select class="form-select form-custom" id="ntSubject" required>
+                  <option value="">Select a subject...</option>
+                  <option value="Product Issue">Product Issue</option>
+                  <option value="Installation Problem">Installation Problem</option>
+                  <option value="Billing / Invoice">Billing / Invoice</option>
+                  <option value="Delivery Issue">Delivery Issue</option>
+                  <option value="Documentation Request">Documentation Request</option>
+                  <option value="General Inquiry">General Inquiry</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:12px;color:var(--v-primary);">Priority</label>
+                <select class="form-select form-custom" id="ntPriority" required>
+                  <option value="low">Low</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="high">High</option>
+                  <option value="urgent">Urgent</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:12px;color:var(--v-primary);">Customer Name</label>
+                <input type="text" class="form-control form-custom" id="ntCustomer" placeholder="e.g. John Doe" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:12px;color:var(--v-primary);">Order Reference</label>
+                <input type="text" class="form-control form-custom" id="ntOrderRef" placeholder="e.g. ORD-0000" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:12px;color:var(--v-primary);">Message</label>
+                <textarea class="form-control form-custom" id="ntMessage" rows="4" placeholder="Describe the issue..." required></textarea>
+              </div>
+              <div class="d-flex gap-2 justify-content-end">
+                <button type="button" class="btn btn-outline-secondary" style="border-radius:12px;font-weight:600;font-size:12px;padding:10px 20px;" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn-emerald">Create Ticket</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--v-accent);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--v-accent);background:#f0fdf4;box-shadow:0 4px 16px rgba(16,185,129,.15)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--v-accent)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+
+      const tickets = [
+        { ref: 'TKT-8491', customer: 'Alex Harrison', subject: 'Roller shutter motor not responding \u2014 RS-2500', status: 'in-progress', badge: 'In Progress', badgeClass: 'in-progress', priority: 'high', priorityLabel: 'High', prioClass: 'prio-high', date: '22 May 2026', orderRef: 'ORD-0071',
+          messages: [
+            { from: 'customer', name: 'Alex Harrison', text: 'The motor on my roller shutter stopped working yesterday. It makes a humming sound but the slats don\'t move.', time: '22 May 2026, 09:14' },
+            { from: 'vendor', name: 'SteelCraft Support', text: 'Thank you for reporting this, Alex. We\'ll dispatch a technician to inspect the motor coupling. Can you confirm the model number?', time: '22 May 2026, 11:32' },
+            { from: 'customer', name: 'Alex Harrison', text: 'It\'s the RS-2500 model, installed in April.', time: '22 May 2026, 12:05' },
+          ]
+        },
+        { ref: 'TKT-8461', customer: 'Sarah Mitchell', subject: 'Glass panel arrived with minor edge chip', status: 'open', badge: 'Open', badgeClass: 'open', priority: 'medium', priorityLabel: 'Medium', prioClass: 'prio-medium', date: '21 May 2026', orderRef: 'ORD-0065',
+          messages: [
+            { from: 'customer', name: 'Sarah Mitchell', text: 'One of the glass panels for the sliding wall has a small chip on the edge. It\'s about 2mm. Can this be repaired or do we need a replacement?', time: '21 May 2026, 15:40' },
+          ]
+        },
+        { ref: 'TKT-8449', customer: 'David Miller', subject: 'Installation documentation request', status: 'resolved', badge: 'Resolved', badgeClass: 'resolved', priority: 'low', priorityLabel: 'Low', prioClass: 'prio-low', date: '15 May 2026', orderRef: 'ORD-0058',
+          messages: [
+            { from: 'customer', name: 'David Miller', text: 'We need the full installation manual and maintenance guide for the Winter Garden before the installation team arrives.', time: '15 May 2026, 10:22' },
+            { from: 'vendor', name: 'SteelCraft Support', text: 'The documentation package has been emailed to you. Please check your inbox.', time: '15 May 2026, 14:05' },
+            { from: 'customer', name: 'David Miller', text: 'Received, thank you!', time: '16 May 2026, 08:30' },
+            { from: 'vendor', name: 'SteelCraft Support', text: 'Great! We\'re marking this as resolved.', time: '16 May 2026, 09:00' },
+          ]
+        },
+        { ref: 'TKT-8422', customer: 'Linda Park', subject: 'Billing discrepancy on invoice INV-2024-0033', status: 'open', badge: 'Open', badgeClass: 'open', priority: 'urgent', priorityLabel: 'Urgent', prioClass: 'prio-urgent', date: '20 May 2026', orderRef: 'ORD-0042',
+          messages: [
+            { from: 'customer', name: 'Linda Park', text: 'The invoice shows 21% VAT but our agreement was 10.5% for this project. Please review urgently.', time: '20 May 2026, 11:00' },
+          ]
+        },
+        { ref: 'TKT-8485', customer: 'James Wilson', subject: 'Delay in pergola production \u2014 status update?', status: 'in-progress', badge: 'In Progress', badgeClass: 'in-progress', priority: 'medium', priorityLabel: 'Medium', prioClass: 'prio-medium', date: '19 May 2026', orderRef: 'ORD-0033',
+          messages: [
+            { from: 'customer', name: 'James Wilson', text: 'Our pergola was supposed to be in production this week. Can you provide an update on the timeline?', time: '19 May 2026, 09:05' },
+            { from: 'vendor', name: 'SteelCraft Support', text: 'There\'s a slight delay due to material supply. We expect production to start on Monday. We\'ll keep you posted.', time: '19 May 2026, 11:20' },
+          ]
+        },
+      ];
+
+      let currentFilter = 'all';
+      let currentTicketIndex = -1;
+
+      function setFilter(el, filter) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        currentFilter = filter;
+        renderTickets();
+      }
+
+      function renderTickets() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = tickets.filter((t, i) => {
+          t._idx = i;
+          if (currentFilter !== 'all' && t.status !== currentFilter) return false;
+          if (q && !t.ref.toLowerCase().includes(q) && !t.customer.toLowerCase().includes(q) && !t.subject.toLowerCase().includes(q)) return false;
+          return true;
+        });
+        const container = document.getElementById('ticketList');
+        if (!filtered.length) {
+          container.innerHTML = '<div class="text-center py-5" style="color:#94a3b8;"><i class="fa-regular fa-inbox" style="font-size:48px;display:block;margin-bottom:12px;"></i>No tickets found</div>';
+          return;
+        }
+        container.innerHTML = filtered.map(t => {
+          const lastMsg = t.messages[t.messages.length - 1];
+          const preview = lastMsg.text.length > 60 ? lastMsg.text.slice(0, 60) + '...' : lastMsg.text;
+          return `<div class="ticket-card" onclick="openTicketDetail(${t._idx})">
+            <div class="tc-top">
+              <span class="tc-ref">${t.ref}</span>
+              <span class="tc-date">${t.date}</span>
+            </div>
+            <div class="tc-subject">${t.subject}</div>
+            <div class="tc-customer"><i class="fa-regular fa-user"></i>${t.customer} <span style="color:#94a3b8;">\u00b7 ${t.orderRef}</span></div>
+            <div class="tc-bottom">
+              <span class="prio-badge ${t.prioClass}">${t.priorityLabel}</span>
+              <span class="status-badge ${t.badgeClass}">${t.badge}</span>
+              <span class="tc-msgs"><i class="fa-regular fa-comment"></i>${t.messages.length}</span>
+            </div>
+            <div class="tc-preview">${preview}</div>
+          </div>`;
+        }).join('');
+      }
+
+      function openTicketDetail(idx) {
+        const t = tickets[idx];
+        currentTicketIndex = idx;
+        document.getElementById('detailTitle').textContent = t.ref;
+        document.getElementById('ticketMeta').innerHTML =
+          `<span><i class="fa-regular fa-user"></i> Customer: <strong>${t.customer}</strong></span>
+           <span><i class="fa-regular fa-file-lines"></i> Subject: <strong>${t.subject}</strong></span>
+           <span><i class="fa-solid fa-box"></i> Order: <strong>${t.orderRef}</strong></span>
+           <span><i class="fa-regular fa-calendar"></i> ${t.date}</span>`;
+        const chat = document.getElementById('chatConversation');
+        chat.innerHTML = t.messages.map(m => {
+          const initials = m.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+          const bg = m.from === 'vendor' ? 'var(--v-accent)' : '#64748b';
+          return `<div class="chat-msg ${m.from}">
+            <div class="msg-avatar" style="background:${bg};">${initials}</div>
+            <div class="msg-body">
+              <div class="msg-name">${m.name}</div>
+              <div class="msg-text">${m.text}</div>
+              <span class="msg-time">${m.time}</span>
+            </div>
+          </div>`;
+        }).join('');
+        document.getElementById('detailFooter').style.display = t.status === 'resolved' ? 'none' : '';
+        const modal = new bootstrap.Modal(document.getElementById('ticketDetailModal'));
+        modal.show();
+        setTimeout(() => { chat.scrollTop = chat.scrollHeight; }, 100);
+      }
+
+      function sendReply() {
+        const text = document.getElementById('replyText').value.trim();
+        if (!text) { Swal.fire({ title: 'Empty Reply', text: 'Please type a message.', icon: 'warning', timer: 1500, showConfirmButton: false }); return; }
+        const t = tickets[currentTicketIndex];
+        if (!t) return;
+        t.messages.push({ from: 'vendor', name: 'SteelCraft Support', text, time: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) });
+        if (t.status === 'open') { t.status = 'in-progress'; t.badge = 'In Progress'; t.badgeClass = 'in-progress'; }
+        document.getElementById('replyText').value = '';
+        openTicketDetail(currentTicketIndex);
+        Swal.fire({ title: 'Reply Sent', text: 'Your response has been added to the conversation.', icon: 'success', timer: 1500, showConfirmButton: false });
+        renderTickets();
+      }
+
+      function closeTicket() {
+        Swal.fire({
+          title: 'Close this ticket?',
+          text: 'Mark ' + tickets[currentTicketIndex].ref + ' as resolved.',
+          icon: 'question', showCancelButton: true, confirmButtonColor: 'var(--v-accent)', cancelButtonColor: '#64748b',
+          confirmButtonText: 'Yes, Close', cancelButtonText: 'Cancel'
+        }).then(r => {
+          if (r.isConfirmed) {
+            const t = tickets[currentTicketIndex];
+            t.status = 'resolved'; t.badge = 'Resolved'; t.badgeClass = 'resolved';
+            bootstrap.Modal.getInstance(document.getElementById('ticketDetailModal')).hide();
+            renderTickets();
+            Swal.fire({ title: 'Ticket Closed', text: t.ref + ' has been resolved.', icon: 'success', timer: 1500, showConfirmButton: false });
+          }
+        });
+      }
+
+      function openNewTicketModal() { new bootstrap.Modal(document.getElementById('newTicketModal')).show(); }
+
+      function createNewTicket(e) {
+        e.preventDefault();
+        const subject = document.getElementById('ntSubject').value;
+        const priority = document.getElementById('ntPriority').value;
+        const customer = document.getElementById('ntCustomer').value.trim();
+        const orderRef = document.getElementById('ntOrderRef').value.trim() || 'N/A';
+        const message = document.getElementById('ntMessage').value.trim();
+        if (!subject || !customer || !message) { Swal.fire({ title: 'Missing Fields', text: 'Please fill in all required fields.', icon: 'warning', timer: 1500, showConfirmButton: false }); return; }
+        const prioMap = { low: { label: 'Low', cls: 'prio-low' }, medium: { label: 'Medium', cls: 'prio-medium' }, high: { label: 'High', cls: 'prio-high' }, urgent: { label: 'Urgent', cls: 'prio-urgent' } };
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        const refNum = 8500 + tickets.length + Math.floor(Math.random() * 100);
+        tickets.unshift({
+          ref: 'TKT-' + refNum, customer, subject, status: 'open', badge: 'Open', badgeClass: 'open',
+          priority, priorityLabel: prioMap[priority].label, prioClass: prioMap[priority].cls,
+          date: dateStr, orderRef,
+          messages: [{ from: 'customer', name: customer, text: message, time: dateStr + ', ' + timeStr }]
+        });
+        bootstrap.Modal.getInstance(document.getElementById('newTicketModal')).hide();
+        document.getElementById('newTicketForm').reset();
+        renderTickets();
+        Swal.fire({ title: 'Ticket Created', text: 'TKT-' + refNum + ' has been opened.', icon: 'success', timer: 1500, showConfirmButton: false });
+      }
+
+      renderTickets();
+    </script>
+  </body>
+</html>

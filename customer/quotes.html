@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Quotes | Customer Portal — AZ Aluminium</title>
+    <meta name="description" content="View and manage your AZ Aluminium price quotes — configure products, see live pricing, accept or negotiate." />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/customer.css" />
+    <style>
+      .quotes-hero {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, #15304a 100%);
+        border-radius: 20px; padding: 32px 36px; margin-bottom: 28px;
+        position: relative; overflow: hidden;
+      }
+      .quotes-hero::before {
+        content: ''; position: absolute; top: -50%; right: -5%;
+        width: 350px; height: 350px; border-radius: 50%;
+        background: rgba(255,255,255,.04);
+      }
+      .quotes-hero .qh-content { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
+      .quotes-hero .qh-left { flex: 1; min-width: 200px; }
+      .quotes-hero .qh-left h2 { color: #fff; font-weight: 700; font-size: 28px; margin: 0 0 4px; }
+      .quotes-hero .qh-left p { color: rgba(255,255,255,.7); margin: 0 0 16px; font-size: 14px; }
+      .quotes-hero .qh-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+      .quotes-hero .qh-stats .qh-stat {
+        background: rgba(255,255,255,.1); backdrop-filter: blur(4px);
+        padding: 7px 16px; border-radius: 50px; font-size: 12px;
+        display: flex; align-items: center; gap: 7px; color: #fff; font-weight: 500;
+      }
+      .quotes-hero .qh-stats .qh-stat i { font-size: 12px; opacity: .8; }
+      .quotes-hero .qh-stats .qh-stat strong { font-size: 15px; }
+
+      .controls-bar {
+        display: flex; justify-content: space-between; align-items: center;
+        flex-wrap: wrap; gap: 14px; margin-bottom: 24px;
+      }
+      .controls-bar .search-box { position: relative; max-width: 320px; width: 100%; }
+      .controls-bar .search-box input {
+        width: 100%; padding: 11px 16px 11px 42px; border-radius: 12px;
+        border: 2px solid #e2e8f0; font-size: 13px; background: #fff; transition: .3s;
+        font-family: inherit;
+      }
+      .controls-bar .search-box input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(10,25,41,0.08); outline: none; }
+      .controls-bar .search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+      .controls-bar .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+      .controls-bar .filter-group .fil-btn {
+        padding: 8px 18px; border-radius: 50px; border: 2px solid #e2e8f0;
+        background: #fff; font-size: 12px; font-weight: 600; color: #64748b;
+        cursor: pointer; transition: .25s; font-family: inherit;
+      }
+      .controls-bar .filter-group .fil-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+      .controls-bar .filter-group .fil-btn.active { background: var(--primary-blue); border-color: var(--primary-blue); color: #fff; }
+
+      .config-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 20px;
+        overflow: hidden; margin-bottom: 28px;
+      }
+      .config-card .cc-inner { display: grid; grid-template-columns: 1fr 1fr; }
+      .config-card .cc-visual {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        padding: 32px; display: flex; flex-direction: column; align-items: center;
+        justify-content: center; position: relative; min-height: 380px;
+      }
+      .config-card .cc-visual .cc-badge {
+        position: absolute; top: 20px; left: 20px;
+        padding: 6px 18px; border-radius: 50px; background: var(--primary-blue);
+        color: #fff; font-size: 11px; font-weight: 600; letter-spacing: .5px;
+      }
+      .config-card .cc-visual .cc-image-wrap {
+        position: relative; width: 100%; max-width: 320px;
+        transform: perspective(800px) rotateY(-6deg) rotateX(4deg);
+        transition: transform .5s ease;
+      }
+      .config-card .cc-visual .cc-image-wrap:hover { transform: perspective(800px) rotateY(0deg) rotateX(0deg); }
+      .config-card .cc-visual .cc-image-wrap img {
+        width: 100%; height: auto; border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0,0,0,.12), 0 8px 24px rgba(0,0,0,.06);
+        display: block;
+      }
+      .config-card .cc-visual .cc-image-wrap .cc-glow {
+        position: absolute; inset: 0; border-radius: 16px;
+        background: linear-gradient(135deg, rgba(255,255,255,.3) 0%, transparent 50%);
+        pointer-events: none;
+      }
+      .config-card .cc-visual .cc-product-name { font-weight: 700; color: var(--primary-blue); font-size: 18px; margin-top: 20px; text-align: center; }
+      .config-card .cc-visual .cc-product-ref { font-size: 12px; color: #94a3b8; }
+      .config-card .cc-visual .cc-3d-hint {
+        position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+        font-size: 10px; color: #cbd5e1; display: flex; align-items: center; gap: 5px;
+      }
+      .config-card .cc-form {
+        padding: 32px; display: flex; flex-direction: column;
+      }
+      .config-card .cc-form .cc-header { margin-bottom: 24px; }
+      .config-card .cc-form .cc-header h5 { font-weight: 700; color: var(--primary-blue); font-size: 17px; margin: 0; }
+      .config-card .cc-form .cc-header p { font-size: 12px; color: #94a3b8; margin: 2px 0 0; }
+      .config-card .cc-form .cc-options { flex: 1; }
+      .config-card .cc-form .cc-options .opt-group { margin-bottom: 18px; }
+      .config-card .cc-form .cc-options .opt-group label { font-size: 12px; font-weight: 600; color: var(--primary-blue); display: block; margin-bottom: 6px; }
+      .config-card .cc-form .cc-options .opt-group .opt-row { display: flex; gap: 6px; flex-wrap: wrap; }
+      .config-card .cc-form .cc-options .opt-group .opt-btn {
+        padding: 8px 16px; border-radius: 10px; border: 2px solid #e2e8f0;
+        background: #fff; font-size: 12px; font-weight: 500; color: #64748b;
+        cursor: pointer; transition: .25s; font-family: inherit;
+      }
+      .config-card .cc-form .cc-options .opt-group .opt-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+      .config-card .cc-form .cc-options .opt-group .opt-btn.active { background: var(--primary-blue); border-color: var(--primary-blue); color: #fff; }
+      .config-card .cc-form .cc-options .opt-group .opt-check { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+      .config-card .cc-form .cc-options .opt-group .opt-check input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--primary-blue); cursor: pointer; }
+      .config-card .cc-form .cc-options .opt-group .opt-check label { margin: 0; cursor: pointer; font-size: 13px; color: var(--primary-blue); }
+      .config-card .cc-form .cc-options .opt-group .opt-check .opt-addon-price { margin-left: auto; font-size: 12px; font-weight: 600; color: #64748b; }
+
+      .config-card .cc-form .cc-total-box {
+        background: linear-gradient(135deg, var(--primary-blue), #15304a);
+        border-radius: 14px; padding: 18px 22px; margin-top: 16px;
+        display: flex; justify-content: space-between; align-items: center;
+        flex-wrap: wrap; gap: 12px;
+      }
+      .config-card .cc-form .cc-total-box .ctb-label { font-size: 11px; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: .5px; }
+      .config-card .cc-form .cc-total-box .ctb-price { font-size: 28px; font-weight: 800; color: #fff; }
+      .config-card .cc-form .cc-total-box .ctb-price small { font-size: 16px; font-weight: 400; opacity: .7; }
+      .config-card .cc-form .cc-total-box .ctb-actions { display: flex; gap: 8px; }
+      .config-card .cc-form .cc-total-box .ctb-actions button {
+        padding: 10px 22px; border-radius: 10px; border: none;
+        font-size: 12px; font-weight: 600; transition: .25s; font-family: inherit;
+      }
+      .config-card .cc-form .cc-total-box .ctb-actions .btn-accept { background: var(--cta-orange); color: #fff; }
+      .config-card .cc-form .cc-total-box .ctb-actions .btn-accept:hover { background: #d45d1a; box-shadow: 0 4px 16px rgba(224,100,40,.3); }
+      .config-card .cc-form .cc-total-box .ctb-actions .btn-inquire { background: rgba(255,255,255,.15); color: #fff; }
+      .config-card .cc-form .cc-total-box .ctb-actions .btn-inquire:hover { background: rgba(255,255,255,.25); }
+
+      .quote-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+        padding: 22px 26px; transition: .3s; cursor: pointer;
+      }
+      .quote-card:hover { border-color: var(--primary-blue); box-shadow: 0 6px 24px rgba(0,0,0,.04); }
+      .quote-card .qc-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+      .quote-card .qc-top .qc-ref { font-weight: 700; color: var(--primary-blue); font-size: 15px; }
+      .quote-card .qc-top .qc-date { font-size: 12px; color: #94a3b8; }
+      .quote-card .qc-badge { padding: 4px 14px; border-radius: 50px; font-size: 11px; font-weight: 600; }
+      .qc-badge.sent { background: #cce5ff; color: #004085; }
+      .qc-badge.viewed { background: #e8daef; color: #6c3483; }
+      .qc-badge.accepted { background: #d4edda; color: #155724; }
+      .qc-badge.rejected { background: #f8d7da; color: #721c24; }
+      .qc-badge.negotiating { background: #fff3cd; color: #856404; }
+      .qc-badge.expired { background: #e2e8f0; color: #64748b; }
+      .quote-card .qc-items { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+      .quote-card .qc-items .qi-tag { padding: 3px 12px; border-radius: 50px; background: #f1f5f9; font-size: 11px; color: var(--primary-blue); font-weight: 500; }
+      .quote-card .qc-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 12px; border-top: 1px solid #f1f5f9; }
+      .quote-card .qc-bottom .qc-total { font-size: 20px; font-weight: 700; color: var(--primary-blue); }
+      .quote-card .qc-bottom .qc-total small { font-size: 12px; font-weight: 400; color: #94a3b8; }
+      .quote-card .qc-bottom .qc-actions { display: flex; gap: 6px; }
+      .quote-card .qc-bottom .qc-actions button { padding: 7px 16px; border-radius: 8px; font-size: 11px; font-weight: 600; border: none; transition: .2s; font-family: inherit; }
+      .quote-card .qc-bottom .qc-actions .btn-accept { background: #d4edda; color: #155724; }
+      .quote-card .qc-bottom .qc-actions .btn-accept:hover { background: #c3e6cb; }
+      .quote-card .qc-bottom .qc-actions .btn-view { background: #eef2f7; color: var(--primary-blue); }
+      .quote-card .qc-bottom .qc-actions .btn-view:hover { background: #e2e8f0; }
+
+      .empty-state { text-align: center; padding: 50px 20px; background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; }
+      .empty-state i { font-size: 44px; color: #e2e8f0; margin-bottom: 12px; display: block; }
+      .empty-state h6 { color: var(--primary-blue); font-weight: 600; }
+      .empty-state p { font-size: 13px; color: #94a3b8; margin: 0; }
+
+      .modal-content { border-radius: 20px; border: none; overflow: hidden; }
+      .modal-header { border-bottom: 1px solid #f1f5f9; padding: 20px 28px; }
+      .modal-header .modal-title { font-weight: 700; color: var(--primary-blue); font-size: 17px; }
+      .modal-body { padding: 28px; }
+      .modal-footer { border-top: 1px solid #f1f5f9; padding: 16px 28px; gap: 8px; }
+      .modal-footer .btn-modal { padding: 12px 28px; border-radius: 12px; font-weight: 600; font-size: 14px; border: none; transition: .25s; }
+      .q-detail-table { width: 100%; border-collapse: collapse; }
+      .q-detail-table th { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; padding: 10px 0; border-bottom: 2px solid #f1f5f9; }
+      .q-detail-table td { padding: 12px 0; font-size: 14px; color: var(--primary-blue); border-bottom: 1px solid #f8fafc; }
+      .q-detail-table .qdt-total td { font-weight: 700; font-size: 18px; border-bottom: none; padding-top: 16px; }
+
+      @media (max-width: 992px) {
+        .config-card .cc-inner { grid-template-columns: 1fr; }
+        .config-card .cc-visual { min-height: 280px; padding: 24px; }
+        .config-card .cc-visual .cc-image-wrap { max-width: 240px; transform: none; }
+        .config-card .cc-visual .cc-image-wrap:hover { transform: none; }
+        .quotes-hero { padding: 28px 24px; }
+        .quotes-hero .qh-left h2 { font-size: 24px; }
+      }
+      @media (max-width: 576px) {
+        .quotes-hero { padding: 24px 18px; }
+        .quotes-hero .qh-left h2 { font-size: 21px; }
+        .config-card .cc-form { padding: 24px 20px; }
+        .config-card .cc-visual { min-height: 220px; padding: 20px; }
+        .config-card .cc-visual .cc-image-wrap { max-width: 180px; }
+        .config-card .cc-form .cc-total-box { flex-direction: column; align-items: stretch; text-align: center; }
+        .config-card .cc-form .cc-total-box .ctb-actions { justify-content: center; }
+        .controls-bar { flex-direction: column; align-items: stretch; }
+        .controls-bar .search-box { max-width: 100%; }
+        .quote-card { padding: 18px 20px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">3</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="c-sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../images/logo.png" alt="AZ Aluminium" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Customer Portal</span>
+        </div>
+      </div>
+      <div class="sidebar-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">3</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="projects.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+        <a href="quotes.html" class="nav-item active"><i class="fa-regular fa-file-lines"></i> Quotes</a>
+        <a href="orders.html" class="nav-item"><i class="fa-solid fa-truck"></i> Orders</a>
+        <a href="invoices.html" class="nav-item"><i class="fa-solid fa-file-invoice"></i> Invoices</a>
+        <a href="tickets.html" class="nav-item"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Appointments</a>
+        <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="avatar">AH</div>
+          <div>
+            <p class="u-name">Alex Harrison</p>
+            <p class="u-role">Premium Member</p>
+          </div>
+          <i class="fa-solid fa-chevron-right u-arrow"></i>
+        </div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="c-main">
+      <div class="quotes-hero">
+        <div class="qh-content">
+          <div class="qh-left">
+            <h2>My Quotes</h2>
+            <p>Configure your product, see live pricing, and manage all your quotes.</p>
+            <div class="qh-stats">
+              <span class="qh-stat"><strong id="statTotal">6</strong> Total</span>
+              <span class="qh-stat"><i class="fa-regular fa-paper-plane"></i> <strong id="statSent">2</strong> Pending</span>
+              <span class="qh-stat"><i class="fa-regular fa-thumbs-up"></i> <strong id="statAccepted">2</strong> Accepted</span>
+              <span class="qh-stat"><i class="fa-regular fa-handshake"></i> <strong id="statNegotiating">1</strong> Negotiating</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="config-card">
+        <div class="cc-inner">
+          <div class="cc-visual">
+            <span class="cc-badge"><i class="fa-regular fa-star me-1"></i> Featured Quote</span>
+            <div class="cc-image-wrap">
+              <img src="../images/quote.png" alt="Bioclimatic Pergola" onerror="this.style.display='none'" />
+              <div class="cc-glow"></div>
+            </div>
+            <div class="cc-product-name">Bioclimatic Pergola 4×3m</div>
+            <div class="cc-product-ref" id="configRef">Q-2024-0183</div>
+            <div class="cc-3d-hint"><i class="fa-solid fa-cube"></i> 3D preview — hover to rotate</div>
+          </div>
+          <div class="cc-form">
+            <div class="cc-header">
+              <h5>Configure Your Product</h5>
+              <p>Adjust options below to see real-time pricing</p>
+            </div>
+            <div class="cc-options">
+              <div class="opt-group">
+                <label>Dimensions</label>
+                <div class="opt-row">
+                  <button class="opt-btn" data-opt="size" data-val="3x2" onclick="selectOption(this,'size')">3×2m</button>
+                  <button class="opt-btn active" data-opt="size" data-val="4x3" onclick="selectOption(this,'size')">4×3m</button>
+                  <button class="opt-btn" data-opt="size" data-val="5x4" onclick="selectOption(this,'size')">5×4m</button>
+                  <button class="opt-btn" data-opt="size" data-val="6x5" onclick="selectOption(this,'size')">6×5m</button>
+                </div>
+              </div>
+              <div class="opt-group">
+                <label>Material</label>
+                <div class="opt-row">
+                  <button class="opt-btn active" data-opt="material" data-val="standard" onclick="selectOption(this,'material')">Standard Aluminium</button>
+                  <button class="opt-btn" data-opt="material" data-val="premium" onclick="selectOption(this,'material')">Premium Thermal</button>
+                  <button class="opt-btn" data-opt="material" data-val="marine" onclick="selectOption(this,'material')">Marine Grade</button>
+                </div>
+              </div>
+              <div class="opt-group">
+                <label>Finish</label>
+                <div class="opt-row">
+                  <button class="opt-btn active" data-opt="finish" data-val="white" onclick="selectOption(this,'finish')">White</button>
+                  <button class="opt-btn" data-opt="finish" data-val="black" onclick="selectOption(this,'finish')">Black</button>
+                  <button class="opt-btn" data-opt="finish" data-val="grey" onclick="selectOption(this,'finish')">Grey</button>
+                  <button class="opt-btn" data-opt="finish" data-val="wood" onclick="selectOption(this,'finish')">Wood Effect</button>
+                  <button class="opt-btn" data-opt="finish" data-val="custom" onclick="selectOption(this,'finish')">Custom RAL</button>
+                </div>
+              </div>
+              <div class="opt-group">
+                <label>Add-ons</label>
+                <div class="opt-check">
+                  <input type="checkbox" id="addonLed" data-addon="led" onchange="updateConfigPrice()" />
+                  <label for="addonLed">LED Integration Kit</label>
+                  <span class="opt-addon-price">+€1,800</span>
+                </div>
+                <div class="opt-check">
+                  <input type="checkbox" id="addonScreens" data-addon="screens" onchange="updateConfigPrice()" />
+                  <label for="addonScreens">Motorised Screens (x4)</label>
+                  <span class="opt-addon-price">+€4,200</span>
+                </div>
+                <div class="opt-check">
+                  <input type="checkbox" id="addonHeating" data-addon="heating" onchange="updateConfigPrice()" />
+                  <label for="addonHeating">Infrared Heating System</label>
+                  <span class="opt-addon-price">+€2,950</span>
+                </div>
+                <div class="opt-check">
+                  <input type="checkbox" id="addonRain" data-addon="rain" onchange="updateConfigPrice()" />
+                  <label for="addonRain">Rain Sensor + Auto-Close</label>
+                  <span class="opt-addon-price">+€680</span>
+                </div>
+              </div>
+            </div>
+            <div class="cc-total-box">
+              <div>
+                <div class="ctb-label">Estimated Total</div>
+                <div class="ctb-price" id="configPrice">€19,095 <small>incl. VAT</small></div>
+              </div>
+              <div class="ctb-actions">
+                <button class="btn-inquire" onclick="requestRevision()"><i class="fa-regular fa-pen-to-square me-1"></i> Adjust</button>
+                <button class="btn-accept" onclick="acceptQuote(document.getElementById('configRef').textContent)"><i class="fa-regular fa-thumbs-up me-1"></i> Accept</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls-bar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Search by reference or item..." oninput="filterQuotes()" />
+        </div>
+        <div class="filter-group">
+          <span class="fil-btn active" data-filter="all" onclick="setFilter(this,'all')">All</span>
+          <span class="fil-btn" data-filter="sent" onclick="setFilter(this,'sent')">Pending</span>
+          <span class="fil-btn" data-filter="negotiating" onclick="setFilter(this,'negotiating')">Negotiating</span>
+          <span class="fil-btn" data-filter="accepted" onclick="setFilter(this,'accepted')">Accepted</span>
+          <span class="fil-btn" data-filter="rejected" onclick="setFilter(this,'rejected')">Rejected</span>
+        </div>
+      </div>
+
+      <div id="quotesContainer" class="d-flex flex-column gap-3"></div>
+      <footer class="c-footer">
+        <span>&copy; 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Made with <i class="fa-solid fa-heart" style="color:var(--cta-orange);"></i> for architectural excellence</span>
+      </footer>
+    </main>
+
+    <div class="modal fade" id="quoteModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="quoteModalContent"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      const quotes = [
+        { ref: 'Q-2024-0183', date: '15 May 2026', validUntil: '14 Jun 2026', status: 'sent', badge: 'Pending', badgeClass: 'sent', items: [{ name: 'Bioclimatic Pergola 4×3m', qty: 1, price: '€12,500' }, { name: 'Motorised Roller Shutter 2.5×2m', qty: 2, price: '€3,800' }], total: '€20,100', discount: '€19,095' },
+        { ref: 'Q-2024-0192', date: '02 May 2026', validUntil: '01 Jun 2026', status: 'accepted', badge: 'Accepted', badgeClass: 'accepted', items: [{ name: 'Sliding Glass Wall 6m', qty: 1, price: '€15,800' }, { name: 'Aluminium Entrance Door', qty: 1, price: '€4,200' }], total: '€20,000', discount: null },
+        { ref: 'Q-2024-0170', date: '20 Apr 2026', validUntil: '20 May 2026', status: 'negotiating', badge: 'Negotiating', badgeClass: 'negotiating', items: [{ name: 'Winter Garden 5×4m', qty: 1, price: '€28,000' }, { name: 'Installation Service', qty: 1, price: '€3,500' }], total: '€31,500', discount: null },
+        { ref: 'Q-2024-0205', date: '25 Mar 2026', validUntil: '24 Apr 2026', status: 'rejected', badge: 'Rejected', badgeClass: 'rejected', items: [{ name: 'Aluminium Sliding Doors 3×2.5m', qty: 3, price: '€7,200' }], total: '€7,200', discount: null },
+        { ref: 'Q-2024-0158', date: '10 Mar 2026', validUntil: '09 Apr 2026', status: 'expired', badge: 'Expired', badgeClass: 'expired', items: [{ name: 'Glass Railing System 12m', qty: 1, price: '€9,800' }, { name: 'Aluminium Corner Profile Set', qty: 4, price: '€1,200' }], total: '€14,600', discount: null },
+        { ref: 'Q-2024-0211', date: '28 Feb 2026', validUntil: '29 Mar 2026', status: 'accepted', badge: 'Accepted', badgeClass: 'accepted', items: [{ name: 'Bioclimatic Pergola 5×4m', qty: 1, price: '€16,000' }, { name: 'LED Integration Kit', qty: 1, price: '€2,100' }, { name: 'Motorised Screens (x4)', qty: 4, price: '€5,600' }], total: '€23,700', discount: '€22,515' },
+      ];
+
+      // ── Pricing Configurator ──
+      const pricing = {
+        size: { '3x2': { base: 9800, label: '3×2m' }, '4x3': { base: 12500, label: '4×3m' }, '5x4': { base: 16500, label: '5×4m' }, '6x5': { base: 21000, label: '6×5m' } },
+        material: { standard: { mult: 1.0, label: 'Standard' }, premium: { mult: 1.25, label: 'Premium Thermal' }, marine: { mult: 1.45, label: 'Marine Grade' } },
+        finish: { white: { add: 0, label: 'White' }, black: { add: 350, label: 'Black' }, grey: { add: 350, label: 'Grey' }, wood: { add: 800, label: 'Wood Effect' }, custom: { add: 1200, label: 'Custom RAL' } },
+        addons: { led: 1800, screens: 4200, heating: 2950, rain: 680 }
+      };
+
+      let config = { size: '4x3', material: 'standard', finish: 'white', addons: [] };
+
+      function selectOption(btn, group) {
+        document.querySelectorAll(`.opt-btn[data-opt="${group}"]`).forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        config[group] = btn.dataset.val;
+        updateConfigPrice();
+      }
+
+      function updateConfigPrice() {
+        const sizeData = pricing.size[config.size];
+        const matMult = pricing.material[config.material].mult;
+        const finishAdd = pricing.finish[config.finish].add;
+        const checkboxes = document.querySelectorAll('#addonLed, #addonScreens, #addonHeating, #addonRain');
+        let addonTotal = 0;
+        checkboxes.forEach(cb => {
+          if (cb.checked) addonTotal += pricing.addons[cb.dataset.addon];
+        });
+        const base = sizeData.base * matMult + finishAdd;
+        const total = base + addonTotal;
+        const discount = total > 15000 ? Math.round(total * 0.95) : total;
+        document.getElementById('configPrice').innerHTML = (discount !== total ? `€${discount.toLocaleString()}` : `€${total.toLocaleString()}`) + ' <small>incl. VAT</small>';
+        if (discount !== total) {
+          document.getElementById('configPrice').innerHTML = `€${discount.toLocaleString()} <small style="text-decoration:line-through;opacity:.5;">€${total.toLocaleString()}</small> <small>incl. VAT</small>`;
+        }
+      }
+
+      // ── Stats ──
+      function updateStats() {
+        document.getElementById('statTotal').textContent = quotes.length;
+        document.getElementById('statSent').textContent = quotes.filter(q => q.status === 'sent').length;
+        document.getElementById('statAccepted').textContent = quotes.filter(q => q.status === 'accepted').length;
+        document.getElementById('statNegotiating').textContent = quotes.filter(q => q.status === 'negotiating').length;
+      }
+
+      let currentFilter = 'all';
+      let currentSearch = '';
+
+      function renderQuotes(data) {
+        const container = document.getElementById('quotesContainer');
+        if (!data.length) {
+          container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-file-lines"></i><h6>No quotes found</h6><p>Try a different filter or search term.</p></div>`;
+          return;
+        }
+        container.innerHTML = data.map(q => {
+          const tags = q.items.map(i => `<span class="qi-tag">${i.qty}× ${i.name}</span>`).join('');
+          const discountHtml = q.discount ? `<span style="font-size:12px;color:var(--cta-orange);font-weight:600;display:block;">Discounted: ${q.discount}</span>` : '';
+          let actions = (q.status === 'sent' || q.status === 'negotiating')
+            ? `<button class="btn-accept" onclick="event.stopPropagation();acceptQuote('${q.ref}')"><i class="fa-regular fa-thumbs-up me-1"></i> Accept</button><button class="btn-view" onclick="event.stopPropagation();openQuoteDetail('${q.ref}')"><i class="fa-regular fa-eye me-1"></i> View</button>`
+            : `<button class="btn-view" onclick="event.stopPropagation();openQuoteDetail('${q.ref}')"><i class="fa-regular fa-eye me-1"></i> View</button>`;
+          return `<div class="quote-card" onclick="openQuoteDetail('${q.ref}')">
+            <div class="qc-top">
+              <div>
+                <div class="qc-ref">${q.ref}</div>
+                <div class="qc-date">Issued: ${q.date} &middot; Valid until: ${q.validUntil}</div>
+              </div>
+              <span class="qc-badge ${q.badgeClass}">${q.badge}</span>
+            </div>
+            <div class="qc-items">${tags}</div>
+            <div class="qc-bottom">
+              <div>
+                <div class="qc-total">${q.total}</div>
+                ${discountHtml}
+              </div>
+              <div class="qc-actions">${actions}</div>
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      function filterQuotes() { currentSearch = document.getElementById('searchInput').value.toLowerCase().trim(); applyFilters(); }
+      function setFilter(el, f) {
+        document.querySelectorAll('.fil-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active'); currentFilter = f; applyFilters();
+      }
+      function applyFilters() {
+        let filtered = quotes;
+        if (currentFilter !== 'all') filtered = filtered.filter(q => q.status === currentFilter);
+        if (currentSearch) filtered = filtered.filter(q => q.ref.toLowerCase().includes(currentSearch) || q.items.some(i => i.name.toLowerCase().includes(currentSearch)));
+        renderQuotes(filtered);
+      }
+
+      function acceptQuote(ref) {
+        Swal.fire({ title: 'Accept Quote?', text: `You are about to accept ${ref}. This will move forward to order processing.`, icon: 'question', showCancelButton: true, confirmButtonColor: '#155724', cancelButtonColor: '#64748b', confirmButtonText: '<i class="fa-regular fa-thumbs-up me-1"></i> Yes, Accept', cancelButtonText: 'Cancel' })
+          .then(r => { if (r.isConfirmed) Swal.fire({ title: 'Quote Accepted!', text: `${ref} has been accepted. We will contact you to confirm the next steps.`, icon: 'success', confirmButtonColor: 'var(--primary-blue)' }); });
+      }
+
+      function requestRevision() {
+        Swal.fire({ title: 'Request Adjustment', text: 'Our team will contact you to discuss modifications.', icon: 'info', confirmButtonColor: 'var(--primary-blue)' });
+      }
+
+      function openQuoteDetail(ref) {
+        const q = quotes.find(x => x.ref === ref);
+        if (!q) return;
+        const itemsHtml = q.items.map(i => `<tr><td>${i.name}</td><td style="text-align:center;">${i.qty}</td><td style="text-align:right;">${i.price}</td></tr>`).join('');
+        const totalRow = q.discount ? `<tr class="qdt-total"><td colspan="2">After Discount</td><td style="text-align:right;color:var(--cta-orange);">${q.discount}</td></tr>` : '';
+        document.getElementById('quoteModalContent').innerHTML = `
+          <div class="modal-header"><h5 class="modal-title">${q.ref}</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+          <div class="modal-body">
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+              <span style="font-size:13px;color:#94a3b8;">Issued: ${q.date} &middot; Valid: ${q.validUntil}</span>
+              <span class="qc-badge ${q.badgeClass}" style="padding:5px 18px;">${q.badge}</span>
+            </div>
+            <table class="q-detail-table">
+              <thead><tr><th>Item</th><th style="text-align:center;">Qty</th><th style="text-align:right;">Price</th></tr></thead>
+              <tbody>${itemsHtml}${totalRow}<tr class="qdt-total"><td colspan="2">Total</td><td style="text-align:right;">${q.total}</td></tr></tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-modal" style="background:#e2e8f0;color:var(--primary-blue);" data-bs-dismiss="modal">Close</button>
+            ${q.status === 'sent' || q.status === 'negotiating' ? `<button class="btn-modal" style="background:#d4edda;color:#155724;" onclick="acceptQuote('${q.ref}');bootstrap.Modal.getInstance(document.getElementById('quoteModal')).hide();"><i class="fa-regular fa-thumbs-up me-1"></i> Accept Quote</button><button class="btn-modal" style="background:var(--primary-blue);color:#fff;" onclick="Swal.fire({title:'Request Revision',text:'Our team will contact you to discuss adjustments.',icon:'info',confirmButtonColor:'var(--primary-blue)'});bootstrap.Modal.getInstance(document.getElementById('quoteModal')).hide();"><i class="fa-regular fa-pen-to-square me-1"></i> Request Revision</button>` : ''}
+          </div>`;
+        new bootstrap.Modal(document.getElementById('quoteModal')).show();
+      }
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#f8faff;box-shadow:0 4px 16px rgba(10,25,41,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+
+      updateStats();
+      renderQuotes(quotes);
+      updateConfigPrice();
+    </script>
+  </body>
+</html>

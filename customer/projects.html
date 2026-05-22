@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Projects | Customer Portal — AZ Aluminium</title>
+    <meta name="description" content="View and manage your AZ Aluminium projects — track progress, view details, and stay updated." />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/customer.css" />
+    <style>
+      .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 28px; }
+      .summary-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px 22px; transition: .3s; }
+      .summary-card .sc-label { font-size: 12px; color: #64748b; font-weight: 500; }
+      .summary-card .sc-value { font-size: 22px; font-weight: 700; color: var(--primary-blue); margin-top: 4px; }
+      .summary-card .sc-icon { float: right; font-size: 22px; color: #e2e8f0; }
+
+      .controls-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+      .controls-bar .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
+      .controls-bar .filter-group .fil-btn { padding: 10px 20px; border-radius: 50px; border: 2px solid #e2e8f0; background: #fff; font-size: 13px; font-weight: 500; color: #64748b; cursor: pointer; transition: .25s; }
+      .controls-bar .filter-group .fil-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+      .controls-bar .filter-group .fil-btn.active { background: var(--primary-blue); border-color: var(--primary-blue); color: #fff; }
+
+      .project-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; overflow: hidden; transition: .3s; cursor: pointer; }
+      .project-card:hover { border-color: var(--primary-blue); box-shadow: 0 6px 24px rgba(0,0,0,0.04); }
+      .project-card .pc-img { height: 180px; background: #e2e8f0; position: relative; overflow: hidden; }
+      .project-card .pc-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+      .project-card:hover .pc-img img { transform: scale(1.05); }
+      .project-card .pc-img .pc-badge { position: absolute; top: 12px; right: 12px; padding: 5px 14px; border-radius: 50px; font-size: 11px; font-weight: 600; }
+      .pc-badge.active { background: #cce5ff; color: #004085; }
+      .pc-badge.completed { background: #d4edda; color: #155724; }
+      .pc-badge.pending { background: #fff3cd; color: #856404; }
+      .pc-badge.on-hold { background: #e2e8f0; color: #64748b; }
+      .project-card .pc-body { padding: 20px 24px 24px; }
+      .project-card .pc-body .pc-ref { font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
+      .project-card .pc-body h5 { font-weight: 600; color: var(--primary-blue); margin: 0 0 6px; font-size: 17px; }
+      .project-card .pc-body .pc-location { font-size: 13px; color: #64748b; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+      .project-card .pc-body .pc-progress { margin-bottom: 14px; }
+      .project-card .pc-body .pc-progress .pcp-bar { height: 5px; border-radius: 50px; background: #e2e8f0; overflow: hidden; }
+      .project-card .pc-body .pc-progress .pcp-bar .pcp-fill { height: 100%; border-radius: 50px; background: var(--primary-blue); transition: width .6s; }
+      .project-card .pc-body .pc-progress .pcp-label { display: flex; justify-content: space-between; font-size: 12px; color: #64748b; margin-top: 4px; }
+      .project-card .pc-body .pc-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #f1f5f9; font-size: 12px; color: #64748b; }
+      .project-card .pc-body .pc-footer .pc-view { color: var(--primary-blue); font-weight: 600; text-decoration: none; }
+      .project-card .pc-body .pc-footer .pc-view i { font-size: 10px; margin-left: 4px; transition: .2s; }
+      .project-card:hover .pc-footer .pc-view i { transform: translateX(3px); }
+
+      @media (max-width: 576px) {
+        .controls-bar { flex-direction: column; align-items: stretch; }
+        .project-card .pc-img { height: 150px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">3</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="c-sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../images/logo.png" alt="AZ Aluminium" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Customer Portal</span>
+        </div>
+      </div>
+      <div class="sidebar-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">3</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="projects.html" class="nav-item active"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+        <a href="quotes.html" class="nav-item"><i class="fa-regular fa-file-lines"></i> Quotes</a>
+        <a href="orders.html" class="nav-item"><i class="fa-solid fa-truck"></i> Orders</a>
+        <a href="invoices.html" class="nav-item"><i class="fa-solid fa-file-invoice"></i> Invoices</a>
+        <a href="tickets.html" class="nav-item"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Appointments</a>
+        <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card"><div class="avatar">DM</div><div><p class="u-name">David Miller</p><p class="u-role">Premium Client</p></div><i class="fa-solid fa-chevron-right u-arrow"></i></div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="c-main">
+      <div class="page-header">
+        <h2>My Projects</h2>
+        <p>Track progress and view details for all your projects.</p>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-card"><i class="fa-solid fa-hard-hat sc-icon"></i><div class="sc-label">Total</div><div class="sc-value">04</div></div>
+        <div class="summary-card"><i class="fa-regular fa-clock sc-icon" style="color:#cce5ff;"></i><div class="sc-label">Active</div><div class="sc-value">02</div></div>
+        <div class="summary-card"><i class="fa-regular fa-circle-check sc-icon" style="color:#d4edda;"></i><div class="sc-label">Completed</div><div class="sc-value">01</div></div>
+        <div class="summary-card"><i class="fa-regular fa-pause-circle sc-icon" style="color:#e2e8f0;"></i><div class="sc-label">On Hold</div><div class="sc-value">01</div></div>
+      </div>
+
+      <div class="controls-bar">
+        <div class="filter-group">
+          <span class="fil-btn active" data-filter="all" onclick="setFilter(this,'all')">All</span>
+          <span class="fil-btn" data-filter="active" onclick="setFilter(this,'active')">Active</span>
+          <span class="fil-btn" data-filter="completed" onclick="setFilter(this,'completed')">Completed</span>
+          <span class="fil-btn" data-filter="on-hold" onclick="setFilter(this,'on-hold')">On Hold</span>
+        </div>
+      </div>
+
+      <div id="projectsContainer" class="row g-4"></div>
+      <footer class="c-footer">
+        <span>© 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Made with <i class="fa-solid fa-heart" style="color:var(--cta-orange);"></i> for architectural excellence</span>
+      </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      const projects = [
+        { ref: 'AZ-4822', title: 'Riverside Premium Veranda', location: '422 West Riverbank, London', status: 'active', badge: 'Active', badgeClass: 'active', progress: 60, eta: 'Nov 06, 2026', img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80' },
+        { ref: 'AZ-4791', title: 'Hillside Residence Pergo-Tech', location: 'Hillside Residence, Amsterdam', status: 'active', badge: 'Active', badgeClass: 'active', progress: 40, eta: 'Nov 12, 2026', img: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=600&q=80' },
+        { ref: 'AZ-4756', title: 'Seaside Winter Garden', location: '12 Coast Road, Brighton', status: 'completed', badge: 'Completed', badgeClass: 'completed', progress: 100, eta: 'Completed', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80' },
+        { ref: 'AZ-4702', title: 'City Centre Glass Façade', location: '88 Business District, Berlin', status: 'on-hold', badge: 'On Hold', badgeClass: 'on-hold', progress: 25, eta: 'Pending', img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80' },
+      ];
+
+      let currentFilter = 'all';
+
+      function renderProjects(data) {
+        const container = document.getElementById('projectsContainer');
+        if (!data.length) {
+          container.innerHTML = `<div class="col-12 text-center py-5" style="color:#94a3b8;"><i class="fa-solid fa-hard-hat" style="font-size:48px;margin-bottom:16px;display:block;"></i><h5 style="color:var(--primary-blue);">No projects found</h5></div>`;
+          return;
+        }
+        container.innerHTML = data.map(p => `
+          <div class="col-12 col-md-6 col-xl-4">
+            <div class="project-card" onclick="location.href='project-detail.html?ref=${p.ref}'">
+              <div class="pc-img">
+                <img src="${p.img}" alt="${p.title}" />
+                <span class="pc-badge ${p.badgeClass}">${p.badge}</span>
+              </div>
+              <div class="pc-body">
+                <div class="pc-ref">${p.ref}</div>
+                <h5>${p.title}</h5>
+                <div class="pc-location"><i class="fa-regular fa-location-dot"></i> ${p.location}</div>
+                <div class="pc-progress">
+                  <div class="pcp-bar"><div class="pcp-fill" style="width:${p.progress}%"></div></div>
+                  <div class="pcp-label"><span>${p.progress}% complete</span><span>ETA: ${p.eta}</span></div>
+                </div>
+                <div class="pc-footer">
+                  <span>${p.badge}</span>
+                  <a class="pc-view" onclick="event.stopPropagation();location.href='project-detail.html?ref=${p.ref}'">View Details <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function setFilter(el, f) {
+        document.querySelectorAll('.fil-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active'); currentFilter = f;
+        const filtered = currentFilter === 'all' ? projects : projects.filter(p => p.status === currentFilter);
+        renderProjects(filtered);
+      }
+
+      renderProjects(projects);
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#f8faff;box-shadow:0 4px 16px rgba(10,25,41,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+    </script>
+  </body>
+</html>

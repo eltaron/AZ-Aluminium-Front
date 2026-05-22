@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointments | Customer Portal — AZ Aluminium</title>
+    <meta name="description" content="Manage your AZ Aluminium appointments — schedule, reschedule, and track measurement and installation visits." />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/customer.css" />
+    <style>
+      .appt-hero {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, #15304a 100%);
+        border-radius: 20px; padding: 36px 40px; margin-bottom: 28px;
+        position: relative; overflow: hidden;
+      }
+      .appt-hero::before {
+        content: ''; position: absolute; top: -60%; right: -10%;
+        width: 400px; height: 400px; border-radius: 50%;
+        background: rgba(255,255,255,.04);
+      }
+      .appt-hero::after {
+        content: ''; position: absolute; bottom: -40%; left: 20%;
+        width: 300px; height: 300px; border-radius: 50%;
+        background: rgba(255,255,255,.03);
+      }
+      .appt-hero .ah-content { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
+      .appt-hero .ah-left { flex: 1; min-width: 200px; }
+      .appt-hero .ah-left h2 { color: #fff; font-weight: 700; font-size: 28px; margin: 0 0 4px; }
+      .appt-hero .ah-left p { color: rgba(255,255,255,.7); margin: 0 0 16px; font-size: 14px; }
+      .appt-hero .ah-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+      .appt-hero .ah-stats .ah-stat {
+        background: rgba(255,255,255,.1); backdrop-filter: blur(4px);
+        padding: 8px 18px; border-radius: 50px; font-size: 13px;
+        display: flex; align-items: center; gap: 8px; color: #fff; font-weight: 500;
+      }
+      .appt-hero .ah-stats .ah-stat i { font-size: 14px; opacity: .8; }
+      .appt-hero .ah-stats .ah-stat strong { font-size: 16px; }
+      .appt-hero .ah-right { flex-shrink: 0; }
+      .appt-hero .ah-right .btn-book {
+        background: var(--cta-orange); color: #fff; border: none;
+        padding: 14px 28px; border-radius: 14px; font-weight: 600; font-size: 14px;
+        transition: .25s; display: inline-flex; align-items: center; gap: 10px;
+      }
+      .appt-hero .ah-right .btn-book:hover { background: #d45d1a; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(224,100,40,0.3); }
+
+      .appt-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+
+      .cal-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 18px;
+        padding: 24px; height: fit-content;
+      }
+      .cal-card .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+      .cal-card .cal-header h6 { font-weight: 600; color: var(--primary-blue); margin: 0; font-size: 16px; }
+      .cal-card .cal-header .cal-nav { display: flex; gap: 4px; }
+      .cal-card .cal-header .cal-nav button {
+        width: 36px; height: 36px; border-radius: 10px; border: none;
+        background: #f8fafc; color: #64748b; transition: .25s;
+      }
+      .cal-card .cal-header .cal-nav button:hover { background: #eef2f7; color: var(--primary-blue); }
+      .cal-card .cal-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-bottom: 6px; }
+      .cal-card .cal-days .cal-dow { text-align: center; font-size: 11px; font-weight: 600; color: #94a3b8; padding: 6px 0; text-transform: uppercase; }
+      .cal-card .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; }
+      .cal-card .cal-grid .cal-cell {
+        aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+        border-radius: 10px; font-size: 13px; font-weight: 500; cursor: pointer;
+        transition: .2s; border: none; background: transparent; color: var(--primary-blue);
+      }
+      .cal-card .cal-grid .cal-cell:hover { background: #eef2f7; }
+      .cal-card .cal-grid .cal-cell.other { color: #cbd5e1; cursor: default; }
+      .cal-card .cal-grid .cal-cell.other:hover { background: transparent; }
+      .cal-card .cal-grid .cal-cell.past { color: #cbd5e1; cursor: not-allowed; }
+      .cal-card .cal-grid .cal-cell.past:hover { background: transparent; }
+      .cal-card .cal-grid .cal-cell.available { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+      .cal-card .cal-grid .cal-cell.available:hover { background: #dcfce7; }
+      .cal-card .cal-grid .cal-cell.selected { background: var(--primary-blue); color: #fff; font-weight: 700; box-shadow: 0 4px 14px rgba(10,25,41,0.2); }
+      .cal-card .cal-grid .cal-cell.selected:hover { background: #15304a; }
+      .cal-card .cal-grid .cal-cell.today { border: 2px solid var(--primary-blue); font-weight: 700; }
+      .cal-card .cal-grid .cal-cell.has-appt { position: relative; }
+      .cal-card .cal-grid .cal-cell.has-appt::after {
+        content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+        width: 5px; height: 5px; border-radius: 50%; background: var(--cta-orange);
+      }
+      .cal-card .cal-legend { display: flex; gap: 16px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #f1f5f9; font-size: 11px; color: #64748b; flex-wrap: wrap; }
+      .cal-card .cal-legend span { display: flex; align-items: center; gap: 6px; }
+      .cal-card .cal-legend .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+      .appt-list { display: flex; flex-direction: column; gap: 0; }
+      .appt-list .al-header {
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
+      }
+      .appt-list .al-header .al-title h5 { font-weight: 700; color: var(--primary-blue); margin: 0; font-size: 17px; }
+      .appt-list .al-header .al-title p { margin: 2px 0 0; font-size: 12px; color: #94a3b8; }
+      .appt-list .al-header .al-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+      .appt-list .al-header .al-filters .al-fil {
+        padding: 7px 16px; border-radius: 50px; border: 2px solid #e2e8f0;
+        background: #fff; font-size: 12px; font-weight: 600; color: #64748b;
+        cursor: pointer; transition: .25s; font-family: inherit;
+      }
+      .appt-list .al-header .al-filters .al-fil:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+      .appt-list .al-header .al-filters .al-fil.active { background: var(--primary-blue); border-color: var(--primary-blue); color: #fff; }
+
+      .appt-timeline { position: relative; padding-left: 32px; }
+      .appt-timeline::before {
+        content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px;
+        width: 2px; background: #e2e8f0;
+      }
+      .tl-item {
+        position: relative; padding: 16px 20px; margin-bottom: 8px;
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+        transition: .3s; cursor: pointer;
+      }
+      .tl-item:hover { border-color: var(--primary-blue); box-shadow: 0 6px 24px rgba(0,0,0,.04); }
+      .tl-item::before {
+        content: ''; position: absolute; left: -25px; top: 22px;
+        width: 14px; height: 14px; border-radius: 50%;
+        background: #fff; border: 3px solid var(--primary-blue);
+      }
+      .tl-item.status-completed::before { border-color: #22c55e; }
+      .tl-item.status-cancelled::before { border-color: #ef4444; }
+      .tl-item .tl-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+      .tl-item .tl-left { flex: 1; min-width: 0; }
+      .tl-item .tl-left .tl-title { font-weight: 600; color: var(--primary-blue); font-size: 15px; margin-bottom: 2px; }
+      .tl-item .tl-left .tl-meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: #64748b; }
+      .tl-item .tl-left .tl-meta span { display: flex; align-items: center; gap: 5px; }
+      .tl-item .tl-left .tl-meta i { color: #94a3b8; width: 14px; font-size: 11px; }
+      .tl-item .tl-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+      .tl-item .tl-right .tl-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+      .tl-item .tl-right .tl-tags .tl-badge { padding: 3px 12px; border-radius: 50px; font-size: 10px; font-weight: 600; }
+      .tl-badge.type-measurement { background: #e8daef; color: #6c3483; }
+      .tl-badge.type-installation { background: #d1ecf1; color: #0c5460; }
+      .tl-badge.type-service { background: #fef5ed; color: #c05621; }
+      .tl-badge.status-scheduled { background: #cce5ff; color: #004085; }
+      .tl-badge.status-completed { background: #d4edda; color: #155724; }
+      .tl-badge.status-cancelled { background: #f8d7da; color: #721c24; }
+      .tl-item .tl-right .tl-tech { font-size: 11px; color: #94a3b8; display: flex; align-items: center; gap: 5px; }
+      .tl-item .tl-right .tl-tech .tl-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--primary-blue); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; }
+      .tl-item .tl-bottom { margin-top: 10px; padding-top: 10px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+      .tl-item .tl-bottom .tl-actions { display: flex; gap: 6px; }
+      .tl-item .tl-bottom .tl-actions button { padding: 5px 12px; border-radius: 8px; font-size: 10px; font-weight: 600; border: none; transition: .2s; font-family: inherit; }
+      .tl-item .tl-bottom .tl-actions .tl-reschedule { background: #eef2f7; color: var(--primary-blue); }
+      .tl-item .tl-bottom .tl-actions .tl-reschedule:hover { background: #e2e8f0; }
+      .tl-item .tl-bottom .tl-actions .tl-cancel { background: #fef2f2; color: #e53e3e; }
+      .tl-item .tl-bottom .tl-actions .tl-cancel:hover { background: #f8d7da; }
+      .tl-item .tl-bottom .tl-address { font-size: 11px; color: #94a3b8; }
+      .tl-item .tl-bottom .tl-address i { margin-right: 4px; }
+
+      .map-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 18px;
+        overflow: hidden; margin-bottom: 28px;
+      }
+      .map-card .map-search { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px; }
+      .map-card .map-search i { color: #94a3b8; }
+      .map-card .map-search input { flex: 1; border: none; font-size: 14px; outline: none; padding: 4px 0; font-family: inherit; }
+      .map-card .map-search input::placeholder { color: #94a3b8; }
+      .map-card .map-body { height: 220px; background: #f1f5f9; position: relative; display: flex; align-items: center; justify-content: center; }
+      .map-card .map-body img { width: 100%; height: 100%; object-fit: cover; }
+      .map-card .map-body .map-pin { position: absolute; width: 44px; height: 44px; background: var(--primary-blue); color: #fff; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(10,25,41,0.3); }
+      .map-card .map-body .map-pin i { transform: rotate(45deg); font-size: 18px; }
+
+      .modal-content { border-radius: 20px; border: none; overflow: hidden; }
+      .modal-header { border-bottom: 1px solid #f1f5f9; padding: 20px 28px; }
+      .modal-header .modal-title { font-weight: 700; color: var(--primary-blue); font-size: 18px; }
+      .modal-body { padding: 28px; }
+      .modal-footer { border-top: 1px solid #f1f5f9; padding: 16px 28px; gap: 8px; }
+      .modal-footer .btn-modal { padding: 12px 28px; border-radius: 12px; font-weight: 600; font-size: 14px; border: none; transition: .25s; }
+
+      .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+      .detail-grid .dg-item label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; display: block; margin-bottom: 4px; }
+      .detail-grid .dg-item p { font-size: 15px; color: var(--primary-blue); font-weight: 500; margin: 0; }
+      .detail-notes { padding: 18px 22px; background: #f8fafc; border-radius: 14px; font-size: 14px; color: #64748b; line-height: 1.7; border-left: 3px solid var(--primary-blue); }
+
+      .new-appt-form .form-label { font-weight: 600; color: var(--primary-blue); font-size: 13px; margin-bottom: 4px; }
+      .new-appt-form .form-control, .new-appt-form .form-select { border-radius: 12px; padding: 11px 16px; border: 2px solid #e2e8f0; font-size: 14px; transition: .3s; }
+      .new-appt-form .form-control:focus, .new-appt-form .form-select:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(10,25,41,0.08); outline: none; }
+      .new-appt-form textarea.form-control { min-height: 90px; resize: vertical; }
+
+      .empty-state { text-align: center; padding: 50px 20px; background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; }
+      .empty-state i { font-size: 44px; color: #e2e8f0; margin-bottom: 12px; display: block; }
+      .empty-state h6 { color: var(--primary-blue); font-weight: 600; }
+      .empty-state p { font-size: 13px; color: #94a3b8; margin: 0; }
+
+      @media (max-width: 992px) {
+        .appt-layout { grid-template-columns: 1fr; }
+        .appt-hero { padding: 28px 24px; }
+        .appt-hero .ah-left h2 { font-size: 24px; }
+      }
+      @media (max-width: 576px) {
+        .appt-hero { padding: 24px 18px; }
+        .appt-hero .ah-content { flex-direction: column; }
+        .appt-hero .ah-right { width: 100%; }
+        .appt-hero .ah-right .btn-book { width: 100%; justify-content: center; }
+        .appt-hero .ah-left h2 { font-size: 21px; }
+        .tl-item { padding: 14px 16px; }
+        .tl-item .tl-top { flex-direction: column; }
+        .tl-item .tl-right { align-items: flex-start; width: 100%; }
+        .detail-grid { grid-template-columns: 1fr; }
+        .modal-body { padding: 20px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">3</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="c-sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../images/logo.png" alt="AZ Aluminium" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Customer Portal</span>
+        </div>
+      </div>
+      <div class="sidebar-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">3</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="projects.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+        <a href="quotes.html" class="nav-item"><i class="fa-regular fa-file-lines"></i> Quotes</a>
+        <a href="invoices.html" class="nav-item"><i class="fa-solid fa-file-invoice"></i> Invoices</a>
+        <a href="tickets.html" class="nav-item"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="appointments.html" class="nav-item active"><i class="fa-regular fa-calendar"></i> Appointments</a>
+        <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="avatar">AH</div>
+          <div>
+            <p class="u-name">Alex Harrison</p>
+            <p class="u-role">Premium Member</p>
+          </div>
+          <i class="fa-solid fa-chevron-right u-arrow"></i>
+        </div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="c-main">
+      <div class="appt-hero">
+        <div class="ah-content">
+          <div class="ah-left">
+            <h2>My Appointments</h2>
+            <p>Schedule, view, and manage your measurement and installation visits.</p>
+            <div class="ah-stats">
+              <span class="ah-stat"><strong>6</strong> Total</span>
+              <span class="ah-stat"><i class="fa-regular fa-clock"></i> <strong>3</strong> Upcoming</span>
+              <span class="ah-stat"><i class="fa-regular fa-circle-check"></i> <strong>2</strong> Completed</span>
+              <span class="ah-stat"><i class="fa-regular fa-circle-xmark"></i> <strong>1</strong> Cancelled</span>
+            </div>
+          </div>
+          <div class="ah-right">
+            <button class="btn-book" onclick="openNewAppt()"><i class="fa-regular fa-plus"></i> Book Appointment</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="appt-layout">
+        <div class="cal-card" id="calendarWidget">
+          <div class="cal-header">
+            <h6 id="calMonthLabel">May 2026</h6>
+            <div class="cal-nav">
+              <button onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+              <button onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+          </div>
+          <div class="cal-days" id="calDayHeaders"></div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <span><span class="legend-dot" style="background:var(--primary-blue);"></span> Selected</span>
+            <span><span class="legend-dot" style="background:#bbf7d0;"></span> Available</span>
+            <span><span class="legend-dot" style="border:2px solid var(--primary-blue);background:#fff;"></span> Today</span>
+            <span><span class="legend-dot" style="background:var(--cta-orange);"></span> Has Appt</span>
+          </div>
+        </div>
+
+        <div class="appt-list">
+          <div class="al-header">
+            <div class="al-title">
+              <h5>Scheduled Visits</h5>
+              <p id="apptCountLabel">3 upcoming · 2 completed · 1 cancelled</p>
+            </div>
+            <div class="al-filters">
+              <span class="al-fil active" data-filter="all" onclick="setFilter(this,'all')">All</span>
+              <span class="al-fil" data-filter="upcoming" onclick="setFilter(this,'upcoming')">Upcoming</span>
+              <span class="al-fil" data-filter="completed" onclick="setFilter(this,'completed')">Completed</span>
+              <span class="al-fil" data-filter="cancelled" onclick="setFilter(this,'cancelled')">Cancelled</span>
+            </div>
+          </div>
+          <div class="appt-timeline" id="apptsContainer"></div>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div class="map-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="mapSearchInput" placeholder="Search address or drop a pin..." oninput="updateMapAddress(this.value)" />
+        </div>
+        <div class="map-body" id="mapContainer">
+          <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f18cdb3?w=600&q=80" alt="Map" />
+          <div class="map-pin"><i class="fa-solid fa-location-dot"></i></div>
+        </div>
+      </div>
+
+      <footer class="c-footer">
+        <span>&copy; 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Made with <i class="fa-solid fa-heart" style="color:var(--cta-orange);"></i> for architectural excellence</span>
+      </footer>
+    </main>
+
+    <div class="modal fade" id="apptModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="apptModalContent"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      let calDate = new Date(2026, 4, 1);
+      let selectedDate = null;
+
+      const appointments = [
+        { id: 1, title: 'Site Measurement — Bioclimatic Pergola', type: 'measurement', typeLabel: 'Measurement', date: '2026-05-28', time: '10:00 – 12:00', status: 'scheduled', badge: 'Scheduled', orderRef: 'AZ-2024-0042', technician: { name: 'Markus Weber', initials: 'MW' }, notes: 'Customer requested morning slot. Bring laser measuring tools and drone for roof assessment.', address: 'Hillside Residence, Amsterdam' },
+        { id: 2, title: 'Installation — Winter Garden', type: 'installation', typeLabel: 'Installation', date: '2026-06-02', time: '08:00 – 16:00', status: 'scheduled', badge: 'Scheduled', orderRef: 'AZ-2024-0058', technician: { name: 'Marcus Vane', initials: 'MV' }, notes: 'Full day installation. Crew of 4. Crane booked for glass panels.', address: 'Hillside Residence, Amsterdam' },
+        { id: 3, title: 'Follow-up Measurement — Veranda', type: 'measurement', typeLabel: 'Measurement', date: '2026-05-24', time: '14:00 – 15:30', status: 'scheduled', badge: 'Scheduled', orderRef: '—', technician: { name: 'Unassigned', initials: '?' }, notes: 'Customer requested follow-up after initial walkthrough.', address: 'Hillside Residence, Amsterdam' },
+        { id: 4, title: 'Initial Measurement — Sliding Doors', type: 'measurement', typeLabel: 'Measurement', date: '2026-05-10', time: '09:00 – 10:30', status: 'completed', badge: 'Completed', orderRef: 'Q-2024-0192', technician: { name: 'Markus Weber', initials: 'MW' }, notes: 'Measurements completed. Sent to production.', address: 'Hillside Residence, Amsterdam' },
+        { id: 5, title: 'Installation — Roller Shutters', type: 'installation', typeLabel: 'Installation', date: '2026-04-18', time: '08:30 – 14:00', status: 'completed', badge: 'Completed', orderRef: 'AZ-2024-0042', technician: { name: 'Marcus Vane', initials: 'MV' }, notes: '2x RS-2500 installed and tested.', address: 'Hillside Residence, Amsterdam' },
+        { id: 6, title: 'Service Call — Pergola Motor Issue', type: 'service', typeLabel: 'Service', date: '2026-03-15', time: '11:00 – 12:00', status: 'cancelled', badge: 'Cancelled', orderRef: 'AZ-2024-0042', technician: { name: '—', initials: '—' }, notes: 'Cancelled by customer.', address: 'Hillside Residence, Amsterdam' },
+      ];
+
+      let currentFilter = 'all';
+      const statusMap = { scheduled: 'upcoming', completed: 'completed', cancelled: 'cancelled' };
+
+      function renderCalendar() {
+        const year = calDate.getFullYear();
+        const month = calDate.getMonth();
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        document.getElementById('calMonthLabel').textContent =
+          new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        document.getElementById('calDayHeaders').innerHTML = weekDays.map(d => `<div class="cal-dow">${d}</div>`).join('');
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const prevMonthDays = new Date(year, month, 0).getDate();
+        const apptDates = new Set(appointments.filter(a => a.status !== 'cancelled').map(a => a.date));
+        let grid = [];
+        for (let i = firstDay - 1; i >= 0; i--) grid.push({ day: prevMonthDays - i, other: true });
+        for (let d = 1; d <= daysInMonth; d++) {
+          const date = new Date(year, month, d);
+          const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+          const isPast = date < today && date.toDateString() !== today.toDateString();
+          const isToday = date.toDateString() === today.toDateString();
+          const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
+          const isAvailable = !isPast && date.getDay() !== 0 && date.getDay() !== 6;
+          const hasAppt = apptDates.has(dateStr);
+          let cls = '';
+          if (isSelected) cls = 'selected';
+          else if (isToday) cls = 'today' + (isAvailable ? ' available' : '');
+          else if (isPast) cls = 'past';
+          else if (isAvailable) cls = 'available';
+          if (hasAppt && cls !== 'past' && !cls.includes('selected')) cls += ' has-appt';
+          grid.push({ day: d, cls: cls.trim(), date });
+        }
+        while (grid.length % 7 !== 0) grid.push({ day: (grid[grid.length-1].day || 0) + 1, other: true });
+
+        document.getElementById('calGrid').innerHTML = grid.map(c => {
+          if (c.other) return `<button class="cal-cell other" disabled>${c.day}</button>`;
+          return `<button class="cal-cell ${c.cls}" ${c.cls.includes('past') ? 'disabled' : ''} onclick="${!c.cls.includes('past') ? `selectDate('${c.date.toISOString()}')` : ''}">${c.day}</button>`;
+        }).join('');
+      }
+
+      function changeMonth(delta) { calDate.setMonth(calDate.getMonth() + delta); renderCalendar(); }
+      function selectDate(isoStr) {
+        selectedDate = new Date(isoStr);
+        renderCalendar();
+        Swal.fire({ icon: 'success', title: 'Date Selected', text: selectedDate.toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long', year:'numeric' }), timer: 1500, showConfirmButton: false });
+      }
+      renderCalendar();
+
+      function updateMapAddress(val) {
+        if (val.length > 3) {
+          const el = document.getElementById('mapContainer');
+          el.style.opacity = '0.6'; setTimeout(() => el.style.opacity = '1', 300);
+        }
+      }
+
+      function renderAppts(data) {
+        const container = document.getElementById('apptsContainer');
+        document.getElementById('apptCountLabel').textContent =
+          `${appointments.filter(a => statusMap[a.status]==='upcoming'||a.status==='scheduled').length} upcoming · ${appointments.filter(a => a.status==='completed').length} completed · ${appointments.filter(a => a.status==='cancelled').length} cancelled`;
+        if (!data.length) {
+          container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-calendar"></i><h6>No appointments found</h6><p>Try a different filter or book a new appointment.</p></div>`;
+          return;
+        }
+        container.innerHTML = data.map(a => {
+          const d = new Date(a.date);
+          const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          const actions = a.status === 'scheduled'
+            ? `<button class="tl-reschedule" onclick="event.stopPropagation();rescheduleAppt(${a.id})"><i class="fa-regular fa-pen-to-square me-1"></i> Reschedule</button><button class="tl-cancel" onclick="event.stopPropagation();cancelAppt(${a.id})"><i class="fa-regular fa-circle-xmark me-1"></i> Cancel</button>`
+            : '';
+          return `<div class="tl-item status-${a.status}" onclick="viewAppt(${a.id})">
+            <div class="tl-top">
+              <div class="tl-left">
+                <div class="tl-title">${a.title}</div>
+                <div class="tl-meta">
+                  <span><i class="fa-regular fa-calendar"></i> ${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}</span>
+                  <span><i class="fa-regular fa-clock"></i> ${a.time}</span>
+                  ${a.orderRef !== '—' ? `<span><i class="fa-regular fa-file-lines"></i> ${a.orderRef}</span>` : ''}
+                </div>
+              </div>
+              <div class="tl-right">
+                <div class="tl-tags">
+                  <span class="tl-badge type-${a.type}">${a.typeLabel}</span>
+                  <span class="tl-badge status-${a.status}">${a.badge}</span>
+                </div>
+                <div class="tl-tech">
+                  ${a.technician.initials !== '—' ? `<span class="tl-avatar">${a.technician.initials}</span>` : ''}
+                  ${a.technician.name}
+                </div>
+              </div>
+            </div>
+            <div class="tl-bottom">
+              <div class="tl-address"><i class="fa-regular fa-location-dot"></i> ${a.address}</div>
+              <div class="tl-actions">${actions}</div>
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      function setFilter(el, f) {
+        document.querySelectorAll('.al-fil').forEach(b => b.classList.remove('active'));
+        el.classList.add('active'); currentFilter = f; applyFilters();
+      }
+      function applyFilters() {
+        let filtered = appointments;
+        if (currentFilter !== 'all') filtered = filtered.filter(a => statusMap[a.status] === currentFilter);
+        renderAppts(filtered);
+      }
+
+      function viewAppt(id) {
+        const a = appointments.find(x => x.id === id);
+        if (!a) return;
+        const canModify = a.status === 'scheduled';
+        const techInfo = a.technician.initials !== '—'
+          ? `<div style="display:flex;align-items:center;gap:10px;margin-top:4px;"><div style="width:36px;height:36px;border-radius:50%;background:var(--primary-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;">${a.technician.initials}</div><span style="font-weight:500;">${a.technician.name}</span></div>`
+          : '<p style="color:#94a3b8;margin:4px 0 0;">Not yet assigned</p>';
+        document.getElementById('apptModalContent').innerHTML = `
+          <div class="modal-header"><h5 class="modal-title">${a.title}</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+          <div class="modal-body">
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+              <span style="font-size:13px;color:#94a3b8;"><i class="fa-regular fa-location-dot me-1"></i> ${a.address}</span>
+              <div style="display:flex;gap:8px;">
+                <span class="tl-badge type-${a.type}" style="padding:4px 14px;border-radius:50px;font-size:11px;font-weight:600;">${a.typeLabel}</span>
+                <span class="tl-badge status-${a.status}" style="padding:4px 14px;border-radius:50px;font-size:11px;font-weight:600;">${a.badge}</span>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div class="dg-item"><label>Date</label><p>${new Date(a.date).toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long', year:'numeric' })}</p></div>
+              <div class="dg-item"><label>Time</label><p>${a.time}</p></div>
+              <div class="dg-item"><label>Order Reference</label><p>${a.orderRef}</p></div>
+              <div class="dg-item"><label>Technician</label>${techInfo}</div>
+            </div>
+            <div class="detail-notes"><strong style="color:var(--primary-blue);">Notes:</strong> ${a.notes}</div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-modal" style="background:#e2e8f0;color:var(--primary-blue);" data-bs-dismiss="modal">Close</button>
+            ${canModify ? `<button class="btn-modal" style="background:#eef2f7;color:var(--primary-blue);" onclick="rescheduleAppt(${a.id});bootstrap.Modal.getInstance(document.getElementById('apptModal')).hide();"><i class="fa-regular fa-pen-to-square me-1"></i> Reschedule</button><button class="btn-modal" style="background:#fef2f2;color:#e53e3e;" onclick="cancelAppt(${a.id});bootstrap.Modal.getInstance(document.getElementById('apptModal')).hide();"><i class="fa-regular fa-circle-xmark me-1"></i> Cancel</button>` : ''}
+          </div>`;
+        new bootstrap.Modal(document.getElementById('apptModal')).show();
+      }
+
+      function rescheduleAppt(id) {
+        Swal.fire({
+          title: 'Reschedule Appointment',
+          html: '<div class="d-flex flex-column gap-3"><p style="color:#64748b;text-align:left;">Select a new date and time.</p><input type="date" class="form-control" id="swalDate" style="border-radius:10px;border:2px solid #e2e8f0;padding:10px;"><input type="time" class="form-control" id="swalTime" value="10:00" style="border-radius:10px;border:2px solid #e2e8f0;padding:10px;"></div>',
+          showCancelButton: true, confirmButtonColor: 'var(--primary-blue)', cancelButtonColor: '#64748b',
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Confirm', cancelButtonText: 'Cancel',
+          preConfirm: () => { const d = document.getElementById('swalDate').value; const t = document.getElementById('swalTime').value; if (!d || !t) { Swal.showValidationMessage('Please select both.'); } return { date: d, time: t }; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Rescheduled!', text: `Moved to ${new Date(r.value.date).toLocaleDateString('en-GB')} at ${r.value.time}.`, icon: 'success', confirmButtonColor: 'var(--primary-blue)' }); });
+      }
+
+      function cancelAppt(id) {
+        Swal.fire({
+          title: 'Cancel Appointment?', text: 'Are you sure? You can rebook later.',
+          icon: 'question', showCancelButton: true,
+          confirmButtonColor: '#e53e3e', cancelButtonColor: '#64748b',
+          confirmButtonText: '<i class="fa-regular fa-circle-xmark me-1"></i> Yes, Cancel', cancelButtonText: 'Keep',
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Cancelled', icon: 'info', confirmButtonColor: 'var(--primary-blue)' }); });
+      }
+
+      function openNewAppt() {
+        const existing = document.getElementById('newApptModal');
+        if (existing) existing.remove();
+        const modal = document.createElement('div');
+        modal.className = 'modal fade'; modal.id = 'newApptModal'; modal.tabIndex = '-1';
+        modal.innerHTML = `<div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title"><i class="fa-regular fa-calendar-plus me-2" style="color:var(--cta-orange);"></i>Book Appointment</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+              <form class="new-appt-form" id="newApptForm">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Appointment Type <span style="color:#e53e3e;">*</span></label>
+                    <select class="form-select" id="naType" required>
+                      <option value="">Select type...</option>
+                      <option value="measurement">Site Measurement</option>
+                      <option value="installation">Installation</option>
+                      <option value="service">Service / Maintenance</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Date <span style="color:#e53e3e;">*</span></label>
+                    <input type="date" class="form-control" id="naDate" required />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Time <span style="color:#e53e3e;">*</span></label>
+                    <input type="time" class="form-control" id="naTime" required />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Order Reference</label>
+                    <input type="text" class="form-control" id="naRef" placeholder="e.g. AZ-2024-0042" />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Address <span style="color:#e53e3e;">*</span></label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="naAddress" placeholder="Start typing..." required />
+                      <button class="btn" type="button" style="background:#e2e8f0;border-radius:0 12px 12px 0;" onclick="Swal.fire({title:'Use Current Location',text:'Getting your location...',icon:'info',timer:1500,showConfirmButton:false})"><i class="fa-solid fa-location-crosshairs"></i></button>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Additional Notes</label>
+                    <textarea class="form-control" id="naNotes" placeholder="Any special instructions..."></textarea>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-modal" style="background:#e2e8f0;color:var(--primary-blue);" data-bs-dismiss="modal">Cancel</button>
+              <button class="btn-modal" style="background:var(--primary-blue);color:#fff;" onclick="submitNewAppt()"><i class="fa-regular fa-calendar-check me-1"></i> Book Appointment</button>
+            </div>
+          </div>
+        </div>`;
+        document.body.appendChild(modal);
+        const bsModal = new bootstrap.Modal(modal);
+        bsModal.show();
+        modal.addEventListener('hidden.bs.modal', () => modal.remove());
+        window.__newApptModal = bsModal;
+        const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+        const di = modal.querySelector('#naDate');
+        if (di) di.value = tomorrow.toISOString().split('T')[0];
+      }
+
+      function submitNewAppt() {
+        const type = document.getElementById('naType')?.value;
+        const date = document.getElementById('naDate')?.value;
+        const time = document.getElementById('naTime')?.value;
+        const address = document.getElementById('naAddress')?.value.trim();
+        if (!type || !date || !time || !address) {
+          Swal.fire({ title: 'Missing Fields', text: 'Please fill in all required fields.', icon: 'warning', confirmButtonColor: 'var(--primary-blue)' });
+          return;
+        }
+        Swal.fire({ title: 'Appointment Booked!', text: `Your ${type} on ${new Date(date).toLocaleDateString('en-GB')} at ${time} has been scheduled.`, icon: 'success', confirmButtonColor: 'var(--primary-blue)' });
+        if (window.__newApptModal) window.__newApptModal.hide();
+      }
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#f8faff;box-shadow:0 4px 16px rgba(10,25,41,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+
+      renderAppts(appointments);
+    </script>
+  </body>
+</html>

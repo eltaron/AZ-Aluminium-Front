@@ -3,27 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AZ Aluminium | Precision & Architectural Elegance</title>
+    <title>
+      Get a Quote | AZ Aluminium — Precision & Architectural Elegance
+    </title>
     <meta
       name="description"
-      content="Premium Aluminium and Glass solutions. Precision engineering for doors, windows, and facades."
+      content="Configure your aluminium product and get an instant quote. Real-time pricing, 3D product preview."
     />
     <meta
       name="keywords"
-      content="Aluminium, Windows, Doors, Glass, Construction, Architecture, Netherlands"
+      content="Aluminium, Quote, Pricing, Configurator, Pergola, Windows, Doors"
     />
     <meta name="author" content="AZ Aluminium" />
-    <meta property="og:title" content="AZ Aluminium - Integrated Solutions" />
+    <meta property="og:title" content="Get a Quote — AZ Aluminium" />
     <meta
       property="og:description"
-      content="Discover our architectural aluminium projects and products."
+      content="Configure your aluminium product and get an instant quote with live pricing."
     />
     <meta property="og:image" content="images/og-image.jpg" />
-    <meta property="og:url" content="https://az-aluminium.com" />
+    <meta property="og:url" content="https://az-aluminium.com/quote" />
     <link rel="icon" type="image/png" href="images/favicon.png" />
-
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link
@@ -38,22 +39,22 @@
     <link rel="stylesheet" href="css/quote.css" />
   </head>
   <body>
-    <!-- Header -->
     <header class="az-navbar navbar navbar-expand-lg sticky-top bg-white">
       <div class="container-fluid px-lg-5">
         <a class="navbar-brand az-brand" href="index.html">
           <img src="images/logo.png" alt="AZ Aluminium Logo" height="55" />
         </a>
-
         <button
           class="navbar-toggler border-0"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#sidebarMenu"
         >
-          <i class="fa-solid fa-bars-staggered var(--primary-blue)"></i>
+          <i
+            class="fa-solid fa-bars-staggered"
+            style="color: var(--primary-blue)"
+          ></i>
         </button>
-
         <div
           class="collapse navbar-collapse justify-content-between"
           id="navbarNav"
@@ -66,18 +67,17 @@
             <li><a class="nav-link" href="gallery.html">Gallery</a></li>
             <li><a class="nav-link" href="projects.html">Projects</a></li>
             <li><a class="nav-link" href="about.html">About Us</a></li>
+            <li><a class="nav-link" href="contact.html">Contact</a></li>
           </ul>
           <div class="d-flex align-items-center">
-            <i class="fa-solid fa-globe header-icon"></i>
+            <i class="fa-solid fa-globe header-icon" onclick="switchLanguage()" title="Language"></i>
             <i class="fa-regular fa-clock header-icon"></i>
             <i class="fa-solid fa-phone header-icon"></i>
-
             <a href="quote.html" class="btn btn-quote ms-4">Get a Quote</a>
           </div>
         </div>
       </div>
     </header>
-    <!-- Mobile Sidebar -->
     <div class="offcanvas offcanvas-start" id="sidebarMenu">
       <div class="offcanvas-header pt-4">
         <h5 class="text-white px-3">Menu</h5>
@@ -93,247 +93,368 @@
         <a class="nav-link" href="gallery.html">Gallery</a>
         <a class="nav-link" href="projects.html">Projects</a>
         <a class="nav-link" href="about.html">About Us</a>
+        <a class="nav-link" href="contact.html">Contact</a>
         <a href="quote.html" class="btn btn-quote w-100 mt-4">Get a Quote</a>
       </div>
     </div>
 
-    <main>
-      <section class="spec-container py-5">
+    <main class="quote-page">
+      <section class="mw-hero">
         <div class="container px-lg-5">
-          <!-- 1. Breadcrumbs التفاعلية -->
-          <nav aria-label="breadcrumb" class="az-breadcrumb mb-0 reveal">
-            <ol class="breadcrumb">
-              <li
-                class="breadcrumb-item d-flex align-items-center gap-2"
-                id="brd-1"
+          <div class="mw-content">
+            <nav aria-label="breadcrumb" class="mb-3">
+              <ol
+                class="breadcrumb"
+                style="background: transparent; padding: 0; margin: 0"
               >
-                <span class="step-num">1</span>
-                <a href="#" onclick="showStep(1)">Project Specifications</a>
-              </li>
-              <li
-                class="breadcrumb-item d-flex align-items-center gap-2 opacity-50"
-                id="brd-2"
-              >
-                <span class="step-num">2</span> <span>Contact Details</span>
-              </li>
-            </ol>
-          </nav>
-
-          <div class="row g-5">
-            <!-- العمود الأيسر: الحقول (Form) -->
-            <div class="col-lg-7">
-              <!-- القسم الأول: مواصفات المشروع -->
-              <div id="step-1" class="config-step active-step">
-                <h2 class="spec-title">Specify Your Project</h2>
-                <p class="spec-desc">
-                  Configure every detail of your system. Accuracy in technical
-                  specs ensures a seamless process.
-                </p>
-
-                <!-- 1. System Type -->
-                <div class="mb-5">
-                  <label class="az-label text-uppercase mb-3"
-                    >01. SYSTEM TYPE & POWER</label
+                <li class="breadcrumb-item">
+                  <a
+                    href="index.html"
+                    style="
+                      color: rgba(255, 255, 255, 0.5);
+                      text-decoration: none;
+                      font-size: 13px;
+                    "
+                    >Home</a
                   >
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <div
-                        class="finish-card active"
-                        onclick="selectCard(this, 'type')"
-                      >
-                        <i class="fas fa-plug mb-2"></i>
-                        <span class="finish-name">Standard Electric</span>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div
-                        class="finish-card"
-                        onclick="selectCard(this, 'type')"
-                      >
-                        <i class="fas fa-sun mb-2"></i>
-                        <span class="finish-name">Solar Powered</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 2. Dimensions -->
-                <div class="mb-5 p-4 bg-light rounded-2 border">
-                  <label class="az-label text-uppercase mb-3"
-                    >02. Technical Dimensions (MM)</label
-                  >
-                  <div class="row g-4">
-                    <div class="col-md-6">
-                      <label class="small fw-bold opacity-75">WIDTH</label>
-                      <input
-                        type="number"
-                        id="width"
-                        class="az-input shadow-none"
-                        placeholder="e.g. 4000"
-                      />
-                    </div>
-                    <div class="col-md-6">
-                      <label class="small fw-bold opacity-75"
-                        >DEPTH / HEIGHT</label
-                      >
-                      <input
-                        type="number"
-                        id="depth"
-                        class="az-input shadow-none"
-                        placeholder="e.g. 3000"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 3. Finish -->
-                <div class="mb-5">
-                  <label class="az-label text-uppercase mb-3"
-                    >03. PREFERRED FINISH (COLOUR)</label
-                  >
-                  <div class="row g-3">
-                    <div class="col-4">
-                      <div
-                        class="finish-card active"
-                        onclick="selectCard(this, 'finish')"
-                      >
-                        <div
-                          class="color-dot"
-                          style="background: #1c2431"
-                        ></div>
-                        <span class="finish-name">Anthracite</span>
-                      </div>
-                    </div>
-                    <div class="col-4">
-                      <div
-                        class="finish-card"
-                        onclick="selectCard(this, 'finish')"
-                      >
-                        <div
-                          class="color-dot"
-                          style="background: #dce1e9"
-                        ></div>
-                        <span class="finish-name">Silver</span>
-                      </div>
-                    </div>
-                    <div class="col-4">
-                      <div
-                        class="finish-card"
-                        onclick="selectCard(this, 'finish')"
-                      >
-                        <div
-                          class="color-dot"
-                          style="background: #ffffff; border: 1px solid #ddd"
-                        ></div>
-                        <span class="finish-name">White</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- القسم الثاني: بيانات التواصل -->
-              <div id="step-2" class="config-step d-none">
-                <h2 class="spec-title">Contact Details</h2>
-                <p class="spec-desc">
-                  Almost there! Please provide your information so we can send
-                  you the formal quotation.
-                </p>
-
-                <div class="mb-4">
-                  <label class="az-label text-uppercase small">FULL NAME</label>
-                  <input
-                    type="text"
-                    class="az-input shadow-none"
-                    placeholder="Enter your full name"
-                  />
-                </div>
-                <div class="mb-4">
-                  <label class="az-label text-uppercase small"
-                    >EMAIL ADDRESS</label
-                  >
-                  <input
-                    type="email"
-                    class="az-input shadow-none"
-                    placeholder="example@mail.com"
-                  />
-                </div>
-                <div class="mb-4">
-                  <label class="az-label text-uppercase small"
-                    >PHONE NUMBER</label
-                  >
-                  <input
-                    type="tel"
-                    class="az-input shadow-none"
-                    placeholder="+31 --- --- ---"
-                  />
-                </div>
-                <div class="mb-4">
-                  <label class="az-label text-uppercase small"
-                    >PROJECT LOCATION (CITY)</label
-                  >
-                  <input
-                    type="text"
-                    class="az-input shadow-none"
-                    placeholder="Amsterdam, Berlin, etc."
-                  />
-                </div>
-              </div>
-            </div>
-
-            <!-- العمود الأيمن الثابت للملاحظات -->
-            <div class="col-lg-5 ps-lg-5">
-              <div class="az-spec-sidebar">
-                <div class="sidebar-img-box mb-4">
-                  <img
-                    src="./images/quote.png"
-                    class="img-fluid rounded"
-                    alt="Preview Image"
-                  />
-                </div>
-                <div class="tech-note shadow-sm bg-white p-3 rounded-2 border">
-                  <h6
-                    class="tech-note-title text-uppercase"
-                    style="font-size: 12px; color: var(--cta-orange)"
-                  >
-                    Tech Standard
-                  </h6>
-                  <p class="tech-note-p small mb-0">
-                    Our structures meet ISO 9001 and CE requirements. Maximum
-                    wind resistance up to 120 km/h.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- الفوتر (الأزرار) -->
-            <div class="col-12 mt-5">
-              <div class="spec-footer py-4 border-top">
-                <button
-                  class="btn-back d-flex align-items-center gap-2 border-0 bg-transparent"
-                  id="prevBtn"
-                  style="display: none"
-                  onclick="showStep(1)"
+                </li>
+                <li
+                  class="breadcrumb-item active"
+                  style="color: rgba(255, 255, 255, 0.8); font-size: 13px"
                 >
-                  <i class="fas fa-arrow-left"></i> BACK TO PROJECT
-                </button>
-                <div class="ms-auto">
-                  <button
-                    class="btn btn-next px-5"
-                    id="mainBtn"
-                    onclick="handleFlow()"
-                  >
-                    NEXT: CONTACT DETAILS
-                  </button>
-                </div>
-              </div>
-            </div>
+                  Get a Quote
+                </li>
+              </ol>
+            </nav>
+            <h1>Request Your Quote</h1>
+            <p>
+              Fill in your technical specs, project location, and contact
+              details — we'll prepare a formal quotation within 24 hours.
+            </p>
           </div>
         </div>
       </section>
+
+      <div class="container px-lg-5">
+        <div class="config-layout">
+          <!-- ─── LEFT: Tabs ─── -->
+          <div class="form-card">
+            <div class="fc-title">Configure Your Project</div>
+            <div class="fc-desc">
+              Complete all sections to receive an accurate quote.
+            </div>
+
+            <div class="q-tabs">
+              <button class="q-tab active" data-tab="1" onclick="switchTab(1)">
+                <i class="fa-solid fa-microchip tab-icon"></i> Technical Specs
+              </button>
+              <button class="q-tab" data-tab="2" onclick="switchTab(2)">
+                <i class="fa-solid fa-location-dot tab-icon"></i> Location
+              </button>
+              <button class="q-tab" data-tab="3" onclick="switchTab(3)">
+                <i class="fa-solid fa-user tab-icon"></i> Contact
+              </button>
+            </div>
+
+            <!-- Tab 1: Technical -->
+            <div class="q-tab-content active" id="tab1">
+              <div class="opt-group">
+                <span class="opt-label"
+                  ><i class="fa-regular fa-layer-group me-1"></i> System
+                  Type</span
+                >
+                <div class="opt-row">
+                  <button
+                    class="opt-btn active"
+                    data-opt="type"
+                    data-val="pergola"
+                    onclick="selOpt(this, 'type')"
+                  >
+                    Bioclimatic Pergola
+                  </button>
+                  <button
+                    class="opt-btn"
+                    data-opt="type"
+                    data-val="winter"
+                    onclick="selOpt(this, 'type')"
+                  >
+                    Winter Garden
+                  </button>
+                  <button
+                    class="opt-btn"
+                    data-opt="type"
+                    data-val="sliding"
+                    onclick="selOpt(this, 'type')"
+                  >
+                    Sliding Wall
+                  </button>
+                </div>
+              </div>
+              <div class="opt-group">
+                <span class="opt-label"
+                  ><i class="fa-regular fa-ruler me-1"></i> Dimensions (m)</span
+                >
+                <div class="opt-input">
+                  <input
+                    type="number"
+                    id="dimW"
+                    value="4"
+                    min="2"
+                    max="8"
+                    oninput="updatePrice()"
+                  />
+                  <span>&times;</span>
+                  <input
+                    type="number"
+                    id="dimD"
+                    value="3"
+                    min="2"
+                    max="6"
+                    oninput="updatePrice()"
+                  />
+                  <span>m</span>
+                </div>
+              </div>
+              <div class="opt-group">
+                <span class="opt-label"
+                  ><i class="fa-regular fa-palette me-1"></i> Finish</span
+                >
+                <div class="opt-row">
+                  <button
+                    class="opt-btn active"
+                    data-opt="finish"
+                    data-val="white"
+                    onclick="selOpt(this, 'finish')"
+                  >
+                    White
+                  </button>
+                  <button
+                    class="opt-btn"
+                    data-opt="finish"
+                    data-val="black"
+                    onclick="selOpt(this, 'finish')"
+                  >
+                    Black
+                  </button>
+                  <button
+                    class="opt-btn"
+                    data-opt="finish"
+                    data-val="grey"
+                    onclick="selOpt(this, 'finish')"
+                  >
+                    Grey
+                  </button>
+                  <button
+                    class="opt-btn"
+                    data-opt="finish"
+                    data-val="wood"
+                    onclick="selOpt(this, 'finish')"
+                  >
+                    Wood
+                  </button>
+                </div>
+              </div>
+              <div class="opt-group">
+                <span class="opt-label"
+                  ><i class="fa-regular fa-plus me-1"></i> Add-ons</span
+                >
+                <div class="opt-check">
+                  <input
+                    type="checkbox"
+                    id="addonLed"
+                    onchange="updatePrice()"
+                  />
+                  <label for="addonLed">LED Integration Kit</label>
+                  <span class="opt-addon-price">+€1,800</span>
+                </div>
+                <div class="opt-check">
+                  <input
+                    type="checkbox"
+                    id="addonMotor"
+                    onchange="updatePrice()"
+                  />
+                  <label for="addonMotor">Motorised Screens (x4)</label>
+                  <span class="opt-addon-price">+€4,200</span>
+                </div>
+                <div class="opt-check">
+                  <input
+                    type="checkbox"
+                    id="addonHeat"
+                    onchange="updatePrice()"
+                  />
+                  <label for="addonHeat">Infrared Heating</label>
+                  <span class="opt-addon-price">+€2,950</span>
+                </div>
+                <div class="opt-check">
+                  <input
+                    type="checkbox"
+                    id="addonRain"
+                    onchange="updatePrice()"
+                  />
+                  <label for="addonRain">Rain Sensor + Auto-Close</label>
+                  <span class="opt-addon-price">+€680</span>
+                </div>
+              </div>
+              <div class="tab-footer">
+                <span></span>
+                <button class="tf-btn btn-next" onclick="switchTab(2)">
+                  Next: Location <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tab 2: Location -->
+            <div class="q-tab-content" id="tab2">
+              <div class="input-field">
+                <label>Project Name</label>
+                <input
+                  type="text"
+                  id="projName"
+                  placeholder="e.g. Hillside Residence"
+                />
+              </div>
+              <div class="input-field">
+                <label>Installation Address</label>
+                <input
+                  type="text"
+                  id="projAddress"
+                  placeholder="Street, building number"
+                />
+              </div>
+              <div class="input-row">
+                <div class="input-field">
+                  <label>City</label>
+                  <input type="text" id="projCity" placeholder="Amsterdam" />
+                </div>
+                <div class="input-field">
+                  <label>Postal Code</label>
+                  <input type="text" id="projZip" placeholder="1011 AB" />
+                </div>
+              </div>
+              <div class="input-field">
+                <label>Country</label>
+                <select id="projCountry">
+                  <option value="NL">Netherlands</option>
+                  <option value="BE">Belgium</option>
+                  <option value="DE">Germany</option>
+                  <option value="FR">France</option>
+                  <option value="UK">United Kingdom</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="input-field">
+                <label>Special Notes</label>
+                <textarea
+                  id="projNotes"
+                  placeholder="Any site-specific details our team should know..."
+                ></textarea>
+              </div>
+              <div class="tab-footer">
+                <button class="tf-btn btn-prev" onclick="switchTab(1)">
+                  <i class="fa-solid fa-arrow-left"></i> Technical
+                </button>
+                <button class="tf-btn btn-next" onclick="switchTab(3)">
+                  Next: Contact <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tab 3: Contact -->
+            <div class="q-tab-content" id="tab3">
+              <div class="input-row">
+                <div class="input-field">
+                  <label>Full Name <span style="color: #e53e3e">*</span></label>
+                  <input
+                    type="text"
+                    id="contactName"
+                    placeholder="Your full name"
+                  />
+                </div>
+                <div class="input-field">
+                  <label>Company</label>
+                  <input
+                    type="text"
+                    id="contactCompany"
+                    placeholder="Company name (optional)"
+                  />
+                </div>
+              </div>
+              <div class="input-row">
+                <div class="input-field">
+                  <label>Email <span style="color: #e53e3e">*</span></label>
+                  <input
+                    type="email"
+                    id="contactEmail"
+                    placeholder="your@email.com"
+                  />
+                </div>
+                <div class="input-field">
+                  <label>Phone <span style="color: #e53e3e">*</span></label>
+                  <input
+                    type="tel"
+                    id="contactPhone"
+                    placeholder="+31 6 1234 5678"
+                  />
+                </div>
+              </div>
+              <div class="input-field">
+                <label>Preferred Contact Method</label>
+                <select id="contactMethod">
+                  <option value="email">Email</option>
+                  <option value="phone">Phone</option>
+                  <option value="both">Both</option>
+                </select>
+              </div>
+              <div class="tab-footer">
+                <button class="tf-btn btn-prev" onclick="switchTab(2)">
+                  <i class="fa-solid fa-arrow-left"></i> Location
+                </button>
+                <button class="tf-btn btn-submit" onclick="submitQuote()">
+                  <i class="fa-regular fa-paper-plane"></i> Submit Request
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ─── RIGHT: Preview + Price Circle ─── -->
+          <div class="preview-card">
+            <div class="pc-visual">
+              <span class="pc-badge"
+                ><i class="fa-regular fa-cube me-1"></i> 3D Preview</span
+              >
+              <div class="pc-3d-wrap">
+                <img
+                  src="images/quote.png"
+                  alt="Product Preview"
+                  onerror="this.src = 'images/hero.jfif'"
+                />
+                <div class="pc-glow"></div>
+              </div>
+            </div>
+            <div class="pc-info">
+              <div class="pc-name" id="pcProductName">Bioclimatic Pergola</div>
+              <div class="pc-desc" id="pcProductDesc">
+                4 × 3 m &middot; White finish
+              </div>
+
+              <div class="pc-price-circle">
+                <span class="pc-price-label">Estimated Total</span>
+                <span class="pc-price-amount" id="pcPrice"
+                  >€12,500 <small>incl.</small></span
+                >
+                <span class="pc-price-vat">VAT included</span>
+              </div>
+
+              <!-- <div class="pc-actions">
+                <button class="pc-btn-submit" onclick="submitQuote()"><i class="fa-regular fa-paper-plane"></i> Submit Quote Request</button>
+                <button class="pc-btn-save" onclick="downloadQuote()"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
-    <!-- Footer -->
     <footer>
       <div class="container px-lg-5">
         <div class="row">
@@ -350,23 +471,24 @@
               lifetime investment.
             </p>
           </div>
-
           <div class="col-6 col-lg-2 ms-auto">
             <div class="footer-title">Resources</div>
-            <a href="#" class="footer-link">Technical Specs</a>
-            <a href="#" class="footer-link">Installation Support</a>
-            <a href="#" class="footer-link">Maintenance Guide</a>
-            <a href="#" class="footer-link">Warranty</a>
+            <a href="tech-specs.html" class="footer-link">Technical Specs</a>
+            <a href="installation-support.html" class="footer-link"
+              >Installation Support</a
+            >
+            <a href="maintenance-guide.html" class="footer-link"
+              >Maintenance Guide</a
+            >
+            <a href="warranty.html" class="footer-link">Warranty</a>
           </div>
-
           <div class="col-6 col-lg-2">
             <div class="footer-title">Support</div>
-            <a href="#" class="footer-link">Contact Support</a>
-            <a href="#" class="footer-link">FAQs</a>
-            <a href="#" class="footer-link">Privacy Policy</a>
-            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="contact.html" class="footer-link">Contact Support</a>
+            <a href="faq.html" class="footer-link">FAQs</a>
+            <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
           </div>
-
           <div class="col-lg-3">
             <div class="footer-title">Office</div>
             <p class="office-text">Precision Square 42</p>
@@ -379,11 +501,10 @@
             </div>
           </div>
         </div>
-
         <div class="footer-bottom">
           <div class="row align-items-center text-center text-md-start">
             <div class="col-md-6 mb-3 mb-md-0">
-              © 2024 AZ Aluminium. Precision Engineering & Architectural
+              &copy; 2026 AZ Aluminium. Precision Engineering & Architectural
               Elegance.
             </div>
             <div class="col-md-6 text-md-end">
@@ -391,35 +512,196 @@
               <span class="mx-2 opacity-50 small border-start ps-2"
                 >CE MARKED</span
               >
-              <span class="ms-2 badge-eu"> MADE IN EU</span>
+              <span class="ms-2 badge-eu">MADE IN EU</span>
             </div>
           </div>
         </div>
       </div>
     </footer>
-    <!-- Mobile Bottom Navbar (UX Enhancement) -->
+
     <nav class="mobile-bottom-nav">
-      <a href="index.html" class="m-nav-item active">
-        <i class="fa-solid fa-home"></i>
-        <span>Home</span>
-      </a>
-      <a href="products.html" class="m-nav-item">
-        <i class="fa-solid fa-boxes-stacked"></i>
-        <span>Products</span>
-      </a>
-      <a href="quote.html" class="m-nav-cta text-decoration-none">
-        <i class="fa-solid fa-paper-plane"></i>
-      </a>
-      <a href="projects.html" class="m-nav-item">
-        <i class="fa-solid fa-hard-hat"></i>
-        <span>Projects</span>
-      </a>
-      <a href="gallery.html" class="m-nav-item">
-        <i class="fa-solid fa-images"></i>
-        <span>Gallery</span>
-      </a>
+      <a href="index.html" class="m-nav-item active"
+        ><i class="fa-solid fa-home"></i><span>Home</span></a
+      >
+      <a href="products.html" class="m-nav-item"
+        ><i class="fa-solid fa-boxes-stacked"></i><span>Products</span></a
+      >
+      <a href="quote.html" class="m-nav-cta text-decoration-none"
+        ><i class="fa-solid fa-paper-plane"></i
+      ></a>
+      <a href="projects.html" class="m-nav-item"
+        ><i class="fa-solid fa-hard-hat"></i><span>Projects</span></a
+      >
+      <a href="gallery.html" class="m-nav-item"
+        ><i class="fa-solid fa-images"></i><span>Gallery</span></a
+      >
     </nav>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/quote.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      // ── Tab Switching ──
+      let currentTab = 1;
+      function switchTab(n) {
+        document
+          .querySelectorAll(".q-tab, .q-tab-content")
+          .forEach((el) => el.classList.remove("active"));
+        document
+          .querySelector(`.q-tab[data-tab="${n}"]`)
+          .classList.add("active");
+        document.getElementById("tab" + n).classList.add("active");
+        currentTab = n;
+      }
+
+      // ── Pricing Engine ──
+      const PRICING = {
+        type: {
+          pergola: {
+            base: 12500,
+            label: "Bioclimatic Pergola",
+            desc: "Bioclimatic Pergola",
+          },
+          winter: {
+            base: 18500,
+            label: "Winter Garden",
+            desc: "Winter Garden",
+          },
+          sliding: {
+            base: 15800,
+            label: "Sliding Glass Wall",
+            desc: "Sliding Glass Wall",
+          },
+        },
+        finish: {
+          white: { add: 0, label: "White" },
+          black: { add: 450, label: "Black" },
+          grey: { add: 350, label: "Grey" },
+          wood: { add: 950, label: "Wood Effect" },
+        },
+        addons: { led: 1800, motor: 4200, heat: 2950, rain: 680 },
+      };
+
+      const config = {
+        type: "pergola",
+        finish: "white",
+        w: 4,
+        d: 3,
+        addons: [],
+      };
+
+      function selOpt(btn, group) {
+        document
+          .querySelectorAll(`.opt-btn[data-opt="${group}"]`)
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        config[group] = btn.dataset.val;
+        updatePrice();
+      }
+
+      function updatePrice() {
+        config.w = parseFloat(document.getElementById("dimW").value) || 4;
+        config.d = parseFloat(document.getElementById("dimD").value) || 3;
+        config.addons = [];
+        document
+          .querySelectorAll("#addonLed, #addonMotor, #addonHeat, #addonRain")
+          .forEach((cb) => {
+            if (cb.checked)
+              config.addons.push(cb.id.replace("addon", "").toLowerCase());
+          });
+
+        const typeData = PRICING.type[config.type];
+        const finishData = PRICING.finish[config.finish];
+        const area = config.w * config.d;
+        const baseArea = 12;
+        const sizeSurcharge =
+          area > baseArea ? Math.round((area - baseArea) * 420) : 0;
+        const finishAdd = finishData.add;
+        let addonsTotal = 0;
+        config.addons.forEach((a) => {
+          addonsTotal += PRICING.addons[a] || 0;
+        });
+        let subtotal = typeData.base + sizeSurcharge + finishAdd + addonsTotal;
+        const discount = subtotal > 18000 ? Math.round(subtotal * 0.05) : 0;
+        const total = subtotal - discount;
+        const fmt = (n) => "€" + n.toLocaleString();
+
+        // ── Update preview card ──
+        document.getElementById("pcProductName").textContent = typeData.label;
+        document.getElementById("pcProductDesc").textContent =
+          config.w + " × " + config.d + " m &middot; " + finishData.label;
+        document.getElementById("pcPrice").innerHTML =
+          fmt(total) +
+          ' <small style="font-size:14px;font-weight:400;opacity:.7;">incl.</small>';
+      }
+
+      function submitQuote() {
+        const name = document.getElementById("contactName")?.value;
+        const email = document.getElementById("contactEmail")?.value;
+        const phone = document.getElementById("contactPhone")?.value;
+        if (!name || !email || !phone) {
+          if (currentTab !== 3) switchTab(3);
+          Swal.fire({
+            title: "Missing Fields",
+            text: "Please fill in your name, email, and phone to submit.",
+            icon: "warning",
+            confirmButtonColor: "var(--primary-blue)",
+          });
+          return;
+        }
+        Swal.fire({
+          title: "Submit Quote Request?",
+          html: '<p style="color:#64748b;">We\'ll review your configuration and send a formal quotation within 24 hours.</p>',
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "var(--primary-blue)",
+          cancelButtonColor: "#64748b",
+          confirmButtonText:
+            '<i class="fa-regular fa-paper-plane me-1"></i> Submit',
+          cancelButtonText: "Cancel",
+        }).then((r) => {
+          if (r.isConfirmed) {
+            Swal.fire({
+              title: "Quote Request Sent!",
+              text: "You'll receive a formal quotation within 24 hours.",
+              icon: "success",
+              confirmButtonColor: "var(--primary-blue)",
+            });
+          }
+        });
+      }
+
+      function downloadQuote() {
+        Swal.fire({
+          title: "Download Quote",
+          text: "Your quote PDF is being generated...",
+          icon: "info",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      }
+
+      updatePrice();
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;color:var(--primary-blue);">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#eef2f7;box-shadow:0 4px 16px rgba(27,64,94,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: 'Language set to ' + r.value.toUpperCase(), icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+    </script>
   </body>
 </html>

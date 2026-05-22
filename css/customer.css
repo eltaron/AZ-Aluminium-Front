@@ -1,0 +1,68 @@
+:root { --sidebar-w: 280px; }
+body { background: #f4f7fc; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+
+.c-sidebar {
+  position: fixed; top: 0; left: 0; width: var(--sidebar-w); height: 100vh;
+  background: #fff; border-right: 1px solid #e2e8f0; z-index: 1040;
+  display: flex; flex-direction: column; padding: 24px 16px; transition: transform 0.3s ease;
+}
+.c-sidebar .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 0 12px 24px; border-bottom: 1px solid #f1f5f9; }
+.c-sidebar .sidebar-brand img { width: 36px; height: 36px; }
+.c-sidebar .sidebar-brand .sb-text { line-height: 1.2; }
+.c-sidebar .sidebar-brand .sb-text .sb-title { display: block; font-weight: 700; color: var(--primary-blue); font-size: 16px; }
+.c-sidebar .sidebar-brand .sb-text .sb-sub { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+.c-sidebar .sidebar-toolbar { display: flex; justify-content: flex-end; gap: 4px; padding: 12px 12px 8px; }
+.c-sidebar .sidebar-toolbar .tb-btn { width: 36px; height: 36px; border-radius: 10px; border: none; background: #f8fafc; color: #64748b; transition: .25s; position: relative; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.c-sidebar .sidebar-toolbar .tb-btn:hover { background: #eef2f7; color: var(--primary-blue); }
+.c-sidebar .sidebar-toolbar .tb-btn .tb-badge { position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%; background: #e53e3e; color: #fff; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; }
+.c-sidebar nav { flex: 1; min-height: 0; padding: 4px 0; overflow-y: auto; }
+.c-sidebar .nav-item { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-radius: 12px; font-weight: 500; font-size: 14px; color: #64748b; text-decoration: none; transition: 0.25s; margin-bottom: 4px; }
+.c-sidebar .nav-item i { font-size: 20px; width: 24px; text-align: center; }
+.c-sidebar .nav-item:hover { background: #eef2f7; color: var(--primary-blue); }
+.c-sidebar .nav-item.active { background: var(--primary-blue); color: #fff; }
+.c-sidebar .nav-item.active i { color: #fff; }
+.c-sidebar .sidebar-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+.c-sidebar .user-card { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #f8fafc; margin-bottom: 12px; }
+.c-sidebar .user-card .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--primary-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; }
+.c-sidebar .user-card .u-name { font-size: 14px; font-weight: 600; color: var(--primary-blue); margin: 0; }
+.c-sidebar .user-card .u-role { font-size: 12px; color: #94a3b8; margin: 0; }
+.c-sidebar .user-card .u-arrow { margin-left: auto; color: #94a3b8; font-size: 12px; }
+.c-sidebar .logout-link { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 500; color: #94a3b8; text-decoration: none; transition: 0.25s; }
+.c-sidebar .logout-link:hover { color: #e53e3e; background: #fef2f2; }
+
+.mobile-header { display: none; position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 1050; background: #fff; border-bottom: 1px solid #e2e8f0; padding: 0 16px; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+.mobile-header .mh-left { display: flex; align-items: center; gap: 10px; }
+.mobile-header .mh-left .mh-toggle { width: 38px; height: 38px; border-radius: 10px; border: none; background: var(--primary-blue); color: #fff; font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.mobile-header .mh-left img { width: 26px; height: 26px; }
+.mobile-header .mh-left .mh-brand { font-weight: 700; color: var(--primary-blue); font-size: 15px; }
+.mobile-header .mh-right { display: flex; align-items: center; gap: 2px; }
+.mobile-header .mh-right .mh-btn { width: 36px; height: 36px; border-radius: 10px; border: none; background: transparent; color: #64748b; font-size: 18px; display: flex; align-items: center; justify-content: center; position: relative; transition: .2s; cursor: pointer; }
+.mobile-header .mh-right .mh-btn:hover { background: #f1f5f9; }
+.mobile-header .mh-right .mh-btn .mh-badge { position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: 50%; background: #e53e3e; color: #fff; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; }
+
+.c-main { margin-left: var(--sidebar-w); min-height: 100vh; padding: 32px 36px; }
+.c-main .page-header { margin-bottom: 32px; }
+.c-main .page-header h2 { font-weight: 700; color: var(--primary-blue); margin: 0; font-size: 28px; }
+.c-main .page-header p { color: #64748b; margin: 4px 0 0; }
+
+.mobile-toggle { display: none; position: fixed; top: 16px; left: 16px; z-index: 1050; width: 44px; height: 44px; border-radius: 12px; background: var(--primary-blue); color: #fff; border: none; font-size: 20px; align-items: center; justify-content: center; transition: 0.2s; }
+.mobile-toggle:hover { background: #15304a; }
+
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1035; }
+.sidebar-overlay.show { display: block; }
+
+.c-footer { padding: 20px 36px; border-top: 1px solid #e2e8f0; background: #fff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12px; color: #94a3b8; }
+.c-footer a { color: #94a3b8; text-decoration: none; transition: .2s; }
+.c-footer a:hover { color: var(--primary-blue); }
+
+@media (max-width: 992px) {
+  .mobile-header { display: flex; }
+  .c-sidebar { transform: translateX(-100%); }
+  .c-sidebar.open { transform: translateX(0); }
+  .c-main { margin-left: 0; padding: 24px 20px; padding-top: 72px; }
+}
+
+@media (max-width: 576px) {
+  .c-main { padding: 20px 16px; padding-top: 72px; }
+  .c-main .page-header h2 { font-size: 22px; }
+}

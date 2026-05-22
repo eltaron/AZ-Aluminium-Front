@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AZ Aluminium | Privacybeleid</title>
+    <meta
+      name="description"
+      content="Lees het privacybeleid van AZ Aluminium. Hoe wij omgaan met uw persoonlijke gegevens volgens de AVG."
+    />
+    <meta name="author" content="AZ Aluminium" />
+    <meta property="og:title" content="AZ Aluminium - Privacybeleid" />
+    <meta
+      property="og:description"
+      content="Ons privacybeleid beschrijft hoe we informatie verzamelen, gebruiken en beschermen."
+    />
+    <meta property="og:image" content="images/og-image.jpg" />
+    <meta property="og:url" content="https://az-aluminium.com" />
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/app.css" />
+    <style>
+      .privacy-header-section {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, #0d122b 100%);
+        padding: 100px 0 60px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+      .privacy-header-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(#ffffff0a 1px, transparent 0);
+        background-size: 30px 30px;
+        pointer-events: none;
+      }
+      .privacy-header-section .breadcrumb-custom {
+        font-size: 14px;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+      }
+      .privacy-header-section .breadcrumb-custom a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: 0.3s;
+      }
+      .privacy-header-section .breadcrumb-custom a:hover {
+        color: #fff;
+      }
+      .privacy-header-section .breadcrumb-custom span {
+        color: #fff;
+        font-weight: 600;
+      }
+      .privacy-header-section h1 {
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+      .privacy-header-section .header-accent-txt {
+        position: absolute;
+        right: -20px;
+        top: 20px;
+        font-size: 150px;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.03);
+        line-height: 1;
+        pointer-events: none;
+        user-select: none;
+        letter-spacing: 10px;
+      }
+
+      .privacy-content-section {
+        padding: 80px 0;
+        background: #fff;
+      }
+      .privacy-content-section .content-wrapper {
+        max-width: 860px;
+        margin: 0 auto;
+      }
+      .privacy-content-section .last-updated {
+        display: inline-block;
+        background: #f1f4f9;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 14px;
+        color: var(--header-gray);
+        margin-bottom: 40px;
+        font-weight: 500;
+      }
+      .privacy-content-section h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--primary-blue);
+        margin-top: 50px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f1f4f9;
+      }
+      .privacy-content-section h2:first-of-type {
+        margin-top: 0;
+      }
+      .privacy-content-section p {
+        font-size: 15px;
+        color: var(--header-gray);
+        line-height: 1.8;
+        margin-bottom: 16px;
+      }
+      .privacy-content-section ul {
+        padding-left: 20px;
+        margin-bottom: 20px;
+      }
+      .privacy-content-section ul li {
+        font-size: 15px;
+        color: var(--header-gray);
+        line-height: 1.8;
+        margin-bottom: 6px;
+        list-style: none;
+        position: relative;
+        padding-left: 22px;
+      }
+      .privacy-content-section ul li::before {
+        content: "\f105";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        left: 0;
+        color: var(--cta-orange);
+      }
+      .privacy-content-section ul li strong {
+        color: var(--primary-blue);
+      }
+      .privacy-content-section .highlight-box {
+        background: #f8fafc;
+        border-left: 4px solid var(--cta-orange);
+        padding: 20px 25px;
+        border-radius: 12px;
+        margin: 25px 0;
+      }
+      .privacy-content-section .highlight-box p {
+        margin-bottom: 0;
+      }
+      .privacy-content-section .contact-block {
+        background: #f1f4f9;
+        padding: 25px 30px;
+        border-radius: 16px;
+        margin: 25px 0;
+      }
+      .privacy-content-section .contact-block a {
+        color: var(--cta-orange);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .privacy-content-section .contact-block a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 991px) {
+        .privacy-header-section {
+          padding: 80px 0 50px;
+        }
+        .privacy-header-section h1 {
+          font-size: 34px;
+        }
+        .privacy-header-section .header-accent-txt {
+          font-size: 80px;
+          right: -10px;
+          top: 40px;
+        }
+        .privacy-content-section {
+          padding: 50px 0;
+        }
+        .privacy-content-section h2 {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="az-navbar navbar navbar-expand-lg sticky-top bg-white">
+      <div class="container-fluid px-lg-5">
+        <a class="navbar-brand az-brand" href="index.html">
+          <img src="images/logo.png" alt="AZ Aluminium Logo" height="55" />
+        </a>
+
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebarMenu"
+        >
+          <i class="fa-solid fa-bars-staggered var(--primary-blue)"></i>
+        </button>
+
+        <div
+          class="collapse navbar-collapse justify-content-between"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="products.html">Products</a></li>
+            <li>
+              <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+            </li>
+            <li><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link" href="projects.html">Projects</a></li>
+            <li><a class="nav-link" href="about.html">About Us</a></li>
+            <li><a class="nav-link" href="contact.html">Contact</a></li>
+          </ul>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-globe header-icon" onclick="switchLanguage()" title="Language"></i>
+            <i class="fa-regular fa-clock header-icon"></i>
+            <i class="fa-solid fa-phone header-icon"></i>
+
+            <a href="quote.html" class="btn btn-quote ms-4">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Mobile Sidebar -->
+    <div class="offcanvas offcanvas-start" id="sidebarMenu">
+      <div class="offcanvas-header pt-4">
+        <h5 class="text-white px-3">Menu</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+      <div class="offcanvas-body px-4">
+        <a class="nav-link" href="products.html">Products</a>
+        <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+        <a class="nav-link" href="gallery.html">Gallery</a>
+        <a class="nav-link" href="projects.html">Projects</a>
+        <a class="nav-link" href="about.html">About Us</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+        <a href="quote.html" class="btn btn-quote w-100 mt-4">Get a Quote</a>
+      </div>
+    </div>
+
+    <main>
+      <!-- Header Section -->
+      <section class="privacy-header-section">
+        <div class="header-accent-txt">PRIVACY</div>
+        <div class="container px-lg-5">
+          <div class="breadcrumb-custom">
+            <a href="index.html">HOME</a> / <span>PRIVACYBELEID</span>
+          </div>
+          <h1>
+            Privacybeleid van <br />
+            <span style="color: var(--footer-orange)">AZ Aluminium</span>
+          </h1>
+          <p class="opacity-75 mt-3 fs-5" style="max-width: 600px">
+            Wij hechten veel waarde aan het beschermen van uw privacy en het
+            waarborgen van de veiligheid van uw persoonlijke gegevens.
+          </p>
+        </div>
+      </section>
+
+      <!-- Content Section -->
+      <section class="privacy-content-section">
+        <div class="container px-lg-5">
+          <div class="content-wrapper">
+            <span class="last-updated">
+              <i class="fa-regular fa-calendar me-2"></i> Laatst bijgewerkt: 24/12/2024
+            </span>
+
+            <p>
+              Bij AZ Aluminium hechten we veel waarde aan het beschermen van uw
+              privacy en het waarborgen van de veiligheid van uw persoonlijke
+              gegevens. Dit privacybeleid beschrijft hoe we informatie
+              verzamelen, gebruiken en beschermen die u met ons deelt bij het
+              gebruik van onze website. Door onze website te gebruiken, stemt u
+              in met de voorwaarden van dit beleid.
+            </p>
+
+            <h2>1. Welke gegevens verzamelen we?</h2>
+            <p>
+              We verzamelen persoonlijke gegevens die u vrijwillig met ons
+              deelt, bijvoorbeeld bij het aanvragen van een offerte of het
+              inschrijven voor onze nieuwsbrief. De gegevens die we mogelijk
+              verzamelen, zijn:
+            </p>
+            <ul>
+              <li>Volledige naam</li>
+              <li>E-mailadres</li>
+              <li>Telefoonnummer</li>
+              <li>Details van uw aanvraag (bijvoorbeeld afmetingen, kleuren)</li>
+            </ul>
+
+            <h2>2. Hoe gebruiken we uw gegevens?</h2>
+            <p>Uw gegevens worden gebruikt voor de volgende doeleinden:</p>
+            <ul>
+              <li>Het verwerken van offerteaanvragen</li>
+              <li>Het sturen van offertes naar uw e-mailadres</li>
+              <li>Communicatie over onze producten en diensten</li>
+              <li>Het versturen van updates of promotionele informatie (met uw toestemming)</li>
+            </ul>
+
+            <h2>3. Cookies</h2>
+            <p>
+              We gebruiken Google Analytics om het verkeer op onze website te
+              analyseren en beter te begrijpen hoe bezoekers de inhoud
+              gebruiken.
+            </p>
+            <ul>
+              <li>Cookies helpen ons om uw ervaring op onze website te verbeteren</li>
+              <li>
+                U kunt cookies uitschakelen via de instellingen van uw browser,
+                maar dit kan invloed hebben op de functionaliteit van de website
+              </li>
+            </ul>
+
+            <h2>4. Hoe beschermen we uw gegevens?</h2>
+            <p>
+              We nemen technische en organisatorische maatregelen om uw
+              persoonlijke gegevens te beschermen tegen ongeoorloofde toegang,
+              wijziging of verwijdering.
+            </p>
+            <ul>
+              <li>Uw gegevens worden veilig opgeslagen en vertrouwelijk behandeld</li>
+              <li>We voldoen aan de Algemene Verordening Gegevensbescherming (AVG)</li>
+            </ul>
+
+            <div class="highlight-box">
+              <p>
+                <i class="fa-solid fa-shield-halved me-2" style="color: var(--cta-orange)"></i>
+                <strong>AVG Compliant:</strong> Wij nemen uw privacy serieus en
+                voldoen aan alle toepasselijke wetgeving.
+              </p>
+            </div>
+
+            <h2>5. Delen van gegevens</h2>
+            <p>
+              We verkopen of delen uw persoonlijke gegevens niet met derden,
+              behalve in de volgende gevallen:
+            </p>
+            <ul>
+              <li>Als de gegevens nodig zijn om onze diensten uit te voeren (bijvoorbeeld onze medewerkers)</li>
+              <li>Als we wettelijk verplicht zijn om gegevens te verstrekken</li>
+              <li>Als we uw expliciete toestemming hebben om de gegevens te delen</li>
+            </ul>
+
+            <h2>6. Uw rechten</h2>
+            <p>
+              Volgens de Algemene Verordening Gegevensbescherming (AVG) heeft u
+              de volgende rechten:
+            </p>
+            <ul>
+              <li>
+                <strong>Recht op inzage:</strong> U kunt een kopie van uw
+                persoonlijke gegevens opvragen
+              </li>
+              <li>
+                <strong>Recht op rectificatie:</strong> U kunt verzoeken om
+                onjuiste gegevens te corrigeren
+              </li>
+              <li>
+                <strong>Recht op verwijdering:</strong> U kunt verzoeken om uw
+                persoonlijke gegevens te verwijderen (tenzij er een wettelijke
+                noodzaak is om ze te bewaren)
+              </li>
+              <li>
+                <strong>Recht op bezwaar:</strong> U kunt bezwaar maken tegen
+                het gebruik van uw gegevens voor marketingdoeleinden
+              </li>
+            </ul>
+            <p>
+              Neem contact met ons op via onderstaande gegevens als u een van
+              deze rechten wilt uitoefenen.
+            </p>
+
+            <h2>7. Contact opnemen</h2>
+            <p>
+              Als u vragen heeft over dit privacybeleid of uw gegevens, kunt u
+              contact met ons opnemen:
+            </p>
+            <div class="contact-block">
+              <p class="mb-2">
+                <i class="fa-regular fa-envelope me-2" style="color: var(--cta-orange)"></i>
+                <strong>E-mailadres:</strong>
+                <a href="mailto:info@azaluminium.nl">info@azaluminium.nl</a>
+              </p>
+              <p class="mb-0">
+                <i class="fa-brands fa-whatsapp me-2" style="color: var(--cta-orange)"></i>
+                <strong>Telefoon (WhatsApp):</strong>
+                <a href="https://wa.me/31642035804" target="_blank">+31642035804</a>
+              </p>
+            </div>
+
+            <h2>8. Wijzigingen in het privacybeleid</h2>
+            <p>
+              We behouden ons het recht voor om dit privacybeleid van tijd tot
+              tijd aan te passen om te voldoen aan wettelijke of operationele
+              wijzigingen. Eventuele wijzigingen worden op deze pagina
+              gepubliceerd. We raden u aan dit beleid regelmatig te controleren.
+            </p>
+
+            <h2>9. Bezoekers binnen de Europese Unie</h2>
+            <p>
+              Omdat we opereren binnen de Europese Unie, voldoen we aan de
+              Algemene Verordening Gegevensbescherming (AVG) om ervoor te
+              zorgen dat uw gegevens worden beschermd volgens de Europese
+              wetgeving.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container px-lg-5">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="footer-logo mb-4">
+              <img
+                src="images/logo-white.png"
+                alt="AZ Aluminium Logo"
+                height="80"
+              />
+            </div>
+            <p class="footer-desc">
+              Precision engineering meeting architectural elegance for your
+              lifetime investment.
+            </p>
+          </div>
+
+          <div class="col-6 col-lg-2 ms-auto">
+            <div class="footer-title">Resources</div>
+            <a href="tech-specs.html" class="footer-link">Technical Specs</a>
+            <a href="installation-support.html" class="footer-link">Installation Support</a>
+            <a href="maintenance-guide.html" class="footer-link">Maintenance Guide</a>
+            <a href="warranty.html" class="footer-link">Warranty</a>
+          </div>
+
+          <div class="col-6 col-lg-2">
+            <div class="footer-title">Support</div>
+            <a href="contact.html" class="footer-link">Contact Support</a>
+            <a href="faq.html" class="footer-link">FAQs</a>
+            <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+          </div>
+
+          <div class="col-lg-3">
+            <div class="footer-title">Office</div>
+            <p class="office-text">Precision Square 42</p>
+            <p class="office-text">Architectural District</p>
+            <p class="office-text">NL-1011 Amsterdam</p>
+            <div class="mt-4">
+              <a href="contact.html" class="text-decoration-none">
+                <i class="fa-solid fa-medal footer-social-icon"></i>
+              </a>
+              <i class="fa-solid fa-share-nodes footer-social-icon"></i>
+              <i class="fa-solid fa-globe footer-social-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="row align-items-center text-center text-md-start">
+            <div class="col-md-6 mb-3 mb-md-0">
+              &copy; 2024 AZ Aluminium. Precision Engineering & Architectural
+              Elegance.
+            </div>
+            <div class="col-md-6 text-md-end">
+              <span class="mx-2 opacity-50 small">ISO 9001 CERTIFIED</span>
+              <span class="mx-2 opacity-50 small border-start ps-2"
+                >CE MARKED</span
+              >
+              <span class="ms-2 badge-eu"> MADE IN EU</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Mobile Bottom Navbar (UX Enhancement) -->
+    <nav class="mobile-bottom-nav">
+      <a href="index.html" class="m-nav-item active">
+        <i class="fa-solid fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="products.html" class="m-nav-item">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <span>Products</span>
+      </a>
+      <a href="quote.html" class="m-nav-cta text-decoration-none">
+        <i class="fa-solid fa-paper-plane"></i>
+      </a>
+      <a href="projects.html" class="m-nav-item">
+        <i class="fa-solid fa-hard-hat"></i>
+        <span>Projects</span>
+      </a>
+      <a href="gallery.html" class="m-nav-item">
+        <i class="fa-solid fa-images"></i>
+        <span>Gallery</span>
+      </a>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;color:var(--primary-blue);">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#eef2f7;box-shadow:0 4px 16px rgba(27,64,94,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: 'Language set to ' + r.value.toUpperCase(), icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
+</html>

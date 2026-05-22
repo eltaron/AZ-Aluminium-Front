@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings | Customer Portal — AZ Aluminium</title>
+    <meta name="description" content="Manage your AZ Aluminium account settings, security, addresses, and notifications." />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/customer.css" />
+    <style>
+      :root { --sidebar-w: 280px; }
+      body { background: #f4f7fc; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+      .c-sidebar { position: fixed; top: 0; left: 0; width: var(--sidebar-w); height: 100vh; background: #fff; border-right: 1px solid #e2e8f0; z-index: 1040; display: flex; flex-direction: column; padding: 24px 16px; transition: transform .3s; }
+      .c-sidebar .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 0 12px 24px; border-bottom: 1px solid #f1f5f9; }
+      .c-sidebar .sidebar-brand img { width: 36px; height: 36px; }
+      .c-sidebar .sidebar-brand .sb-text { line-height: 1.2; }
+      .c-sidebar .sidebar-brand .sb-text .sb-title { display: block; font-weight: 700; color: var(--primary-blue); font-size: 16px; }
+      .c-sidebar .sidebar-brand .sb-text .sb-sub { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+      .c-sidebar .sidebar-toolbar { display: flex; justify-content: flex-end; gap: 4px; padding: 12px 12px 8px; }
+      .c-sidebar .sidebar-toolbar .tb-btn { width: 36px; height: 36px; border-radius: 10px; border: none; background: #f8fafc; color: #64748b; transition: .25s; position: relative; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+      .c-sidebar .sidebar-toolbar .tb-btn:hover { background: #eef2f7; color: var(--primary-blue); }
+      .c-sidebar .sidebar-toolbar .tb-btn .tb-badge { position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%; background: #e53e3e; color: #fff; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; }
+      .c-sidebar nav { flex: 1; min-height: 0; padding: 4px 0; overflow-y: auto; }
+      .c-sidebar .nav-item { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-radius: 12px; font-weight: 500; font-size: 14px; color: #64748b; text-decoration: none; transition: .25s; margin-bottom: 4px; }
+      .c-sidebar .nav-item i { font-size: 20px; width: 24px; text-align: center; }
+      .c-sidebar .nav-item:hover { background: #eef2f7; color: var(--primary-blue); }
+      .c-sidebar .nav-item.active { background: var(--primary-blue); color: #fff; }
+      .c-sidebar .nav-item.active i { color: #fff; }
+      .c-sidebar .sidebar-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+      .c-sidebar .user-card { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #f8fafc; margin-bottom: 12px; }
+      .c-sidebar .user-card .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--primary-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; }
+      .c-sidebar .user-card .u-name { font-size: 14px; font-weight: 600; color: var(--primary-blue); margin: 0; }
+      .c-sidebar .user-card .u-role { font-size: 12px; color: #94a3b8; margin: 0; }
+      .c-sidebar .logout-link { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 500; color: #94a3b8; text-decoration: none; transition: .25s; }
+      .c-sidebar .logout-link:hover { color: #e53e3e; background: #fef2f2; }
+      .c-sidebar .user-card .u-arrow { margin-left: auto; color: #94a3b8; font-size: 12px; }
+      .mobile-header { display: none; position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 1050; background: #fff; border-bottom: 1px solid #e2e8f0; padding: 0 16px; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+      .mobile-header .mh-left { display: flex; align-items: center; gap: 10px; }
+      .mobile-header .mh-left .mh-toggle { width: 38px; height: 38px; border-radius: 10px; border: none; background: var(--primary-blue); color: #fff; font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+      .mobile-header .mh-left img { width: 26px; height: 26px; }
+      .mobile-header .mh-left .mh-brand { font-weight: 700; color: var(--primary-blue); font-size: 15px; }
+      .mobile-header .mh-right { display: flex; align-items: center; gap: 2px; }
+      .mobile-header .mh-right .mh-btn { width: 36px; height: 36px; border-radius: 10px; border: none; background: transparent; color: #64748b; font-size: 18px; display: flex; align-items: center; justify-content: center; position: relative; transition: .2s; cursor: pointer; }
+      .mobile-header .mh-right .mh-btn:hover { background: #f1f5f9; }
+      .mobile-header .mh-right .mh-btn .mh-badge { position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: 50%; background: #e53e3e; color: #fff; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; }
+      .c-main { margin-left: var(--sidebar-w); min-height: 100vh; display: flex; flex-direction: column; }
+      .c-main .main-content { flex: 1; padding: 32px 36px; }
+      .c-main .page-header { margin-bottom: 28px; }
+      .c-main .page-header h2 { font-weight: 700; color: var(--primary-blue); margin: 0; font-size: 28px; }
+      .c-main .page-header p { color: #64748b; margin: 4px 0 0; }
+      .mobile-toggle { display: none; position: fixed; top: 16px; left: 16px; z-index: 1050; width: 44px; height: 44px; border-radius: 12px; background: var(--primary-blue); color: #fff; border: none; font-size: 20px; align-items: center; justify-content: center; }
+      .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1035; }
+      .sidebar-overlay.show { display: block; }
+      .c-footer { padding: 20px 36px; border-top: 1px solid #e2e8f0; background: #fff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12px; color: #94a3b8; }
+      .c-footer a { color: #94a3b8; text-decoration: none; transition: .2s; }
+      .c-footer a:hover { color: var(--primary-blue); }
+
+      .profile-hero {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, #1e3a8a 100%);
+        border-radius: 20px; padding: 40px 36px; position: relative; overflow: hidden;
+      }
+      .profile-hero::before {
+        content: ""; position: absolute; inset: 0;
+        background-image: radial-gradient(circle at 80% 20%, rgba(255,107,0,0.12) 0%, transparent 50%),
+          radial-gradient(circle at 20% 80%, rgba(255,255,255,0.04) 0%, transparent 50%);
+        pointer-events: none;
+      }
+      .profile-hero .ph-row { display: flex; align-items: center; gap: 24px; position: relative; z-index: 1; flex-wrap: wrap; }
+      .profile-hero .ph-avatar { width: 90px; height: 90px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 700; color: var(--primary-blue); flex-shrink: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+      .profile-hero .ph-info { flex: 1; }
+      .profile-hero .ph-info h3 { font-weight: 700; color: #fff; margin: 0; font-size: 24px; }
+      .profile-hero .ph-info p { color: rgba(255,255,255,0.75); margin: 2px 0 0; font-size: 14px; }
+      .profile-hero .ph-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+      .profile-hero .ph-actions button {
+        padding: 10px 22px; border-radius: 12px; font-weight: 500; font-size: 13px;
+        border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1);
+        color: #fff; transition: .3s; display: flex; align-items: center; gap: 8px;
+      }
+      .profile-hero .ph-actions button:hover { background: rgba(255,255,255,0.2); }
+
+      .tabs-nav {
+        display: flex; gap: 4px; background: #fff; border: 1px solid #e2e8f0;
+        border-radius: 16px; padding: 6px; overflow-x: auto; margin-bottom: 24px;
+      }
+      .tabs-nav::-webkit-scrollbar { height: 0; }
+      .tabs-nav .tab-btn {
+        padding: 12px 22px; border-radius: 12px; border: none; background: transparent;
+        font-size: 13px; font-weight: 500; color: #64748b; cursor: pointer;
+        transition: .25s; display: flex; align-items: center; gap: 8px; white-space: nowrap;
+      }
+      .tabs-nav .tab-btn:hover { background: #f1f5f9; color: var(--primary-blue); }
+      .tabs-nav .tab-btn.active { background: var(--primary-blue); color: #fff; box-shadow: 0 4px 12px rgba(10,25,41,0.15); }
+
+      .tab-panel { display: none; }
+      .tab-panel.active { display: block; }
+
+      .section-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 32px 36px; }
+      .section-card .sc-title { font-size: 16px; font-weight: 600; color: var(--primary-blue); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+      .section-card .sc-title i { font-size: 18px; }
+
+      .form-label { font-weight: 500; color: var(--primary-blue); font-size: 13px; margin-bottom: 6px; }
+      .form-control, .form-select { border-radius: 12px; padding: 12px 16px; border: 2px solid #e2e8f0; font-size: 14px; transition: .3s; }
+      .form-control:focus, .form-select:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(10,25,41,0.08); outline: none; }
+      .form-control-plaintext { font-size: 14px; color: var(--primary-blue); font-weight: 500; padding: 12px 0; }
+
+      .btn-primary-solid { padding: 12px 32px; border-radius: 12px; background: var(--primary-blue); color: #fff; font-weight: 600; font-size: 14px; border: none; transition: .3s; }
+      .btn-primary-solid:hover { background: #15304a; transform: translateY(-2px); }
+      .btn-outline-primary { padding: 12px 32px; border-radius: 12px; background: transparent; color: var(--primary-blue); border: 2px solid var(--primary-blue); font-weight: 600; font-size: 14px; transition: .3s; }
+      .btn-outline-primary:hover { background: var(--primary-blue); color: #fff; }
+      .btn-danger-ghost { padding: 12px 32px; border-radius: 12px; background: transparent; color: #e53e3e; border: 2px solid #f8d7da; font-weight: 600; font-size: 14px; transition: .3s; }
+      .btn-danger-ghost:hover { background: #fef2f2; }
+
+      .toggle-switch { position: relative; display: inline-block; width: 46px; height: 26px; flex-shrink: 0; }
+      .toggle-switch input { opacity: 0; width: 0; height: 0; }
+      .toggle-switch .slider { position: absolute; cursor: pointer; inset: 0; background: #e2e8f0; border-radius: 26px; transition: .3s; }
+      .toggle-switch .slider::before { content: ""; position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .3s; }
+      .toggle-switch input:checked + .slider { background: var(--primary-blue); }
+      .toggle-switch input:checked + .slider::before { transform: translateX(20px); }
+
+      .notif-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid #f1f5f9; gap: 16px; }
+      .notif-row:last-child { border-bottom: none; padding-bottom: 0; }
+      .notif-row .nr-info h6 { font-size: 14px; font-weight: 600; color: var(--primary-blue); margin: 0 0 2px; }
+      .notif-row .nr-info p { font-size: 13px; color: #64748b; margin: 0; }
+
+      .addr-card {
+        display: flex; justify-content: space-between; align-items: flex-start;
+        padding: 20px 0; border-bottom: 1px solid #f1f5f9; gap: 16px;
+      }
+      .addr-card:last-of-type { border-bottom: none; padding-bottom: 0; }
+      .addr-card .ac-info h6 { font-size: 14px; font-weight: 600; color: var(--primary-blue); margin: 0 0 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .addr-card .ac-info h6 .ac-badge { font-size: 9px; padding: 3px 10px; border-radius: 50px; background: var(--primary-blue); color: #fff; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+      .addr-card .ac-info p { font-size: 13px; color: #64748b; margin: 0; line-height: 1.7; }
+      .addr-card .ac-actions { display: flex; gap: 6px; flex-shrink: 0; }
+      .addr-card .ac-actions button { padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; border: none; transition: .2s; }
+      .addr-card .ac-actions .btn-edit { background: #eef2f7; color: var(--primary-blue); }
+      .addr-card .ac-actions .btn-edit:hover { background: #e2e8f0; }
+      .addr-card .ac-actions .btn-del { background: #fef2f2; color: #e53e3e; }
+      .addr-card .ac-actions .btn-del:hover { background: #f8d7da; }
+
+      @media (max-width: 992px) {
+        .mobile-header { display: flex; }
+        .c-sidebar { transform: translateX(-100%); }
+        .c-sidebar.open { transform: translateX(0); }
+        .c-main { margin-left: 0; }
+        .c-main .main-content { padding: 24px 20px; padding-top: 72px; }
+        .profile-hero { padding: 30px 24px; }
+        .profile-hero .ph-row { flex-direction: column; text-align: center; }
+        .section-card { padding: 24px; }
+        .tabs-nav { overflow-x: auto; }
+        .tabs-nav .tab-btn { padding: 10px 16px; font-size: 12px; }
+      }
+      @media (max-width: 576px) {
+        .c-main .main-content { padding: 20px 16px; padding-top: 72px; }
+        .c-main .page-header h2 { font-size: 22px; }
+        .profile-hero .ph-avatar { width: 70px; height: 70px; font-size: 26px; }
+        .section-card { padding: 20px; }
+        .tabs-nav .tab-btn { padding: 8px 14px; font-size: 11px; }
+        .notif-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+        .addr-card { flex-direction: column; }
+        .addr-card .ac-actions { align-self: flex-start; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">3</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="c-sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../images/logo.png" alt="AZ Aluminium" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Customer Portal</span>
+        </div>
+      </div>
+      <div class="sidebar-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">3</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="orders.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Orders</a>
+        <a href="quotes.html" class="nav-item"><i class="fa-regular fa-file-lines"></i> Quotes</a>
+        <a href="invoices.html" class="nav-item"><i class="fa-solid fa-file-invoice"></i> Invoices</a>
+        <a href="tickets.html" class="nav-item"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Appointments</a>
+        <a href="profile.html" class="nav-item active"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="avatar">AH</div>
+          <div>
+            <p class="u-name">Alex Harrison</p>
+            <p class="u-role">Premium Member</p>
+          </div>
+          <i class="fa-solid fa-chevron-right u-arrow"></i>
+        </div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="c-main">
+      <div class="main-content">
+        <div class="page-header">
+          <h2>Settings</h2>
+          <p>Manage your account, security, addresses, and preferences.</p>
+        </div>
+
+        <!-- Profile Hero -->
+        <div class="profile-hero mb-4">
+          <div class="ph-row">
+            <div class="ph-avatar">AH</div>
+            <div class="ph-info">
+              <h3>Alex Harrison</h3>
+              <p>Premium Member &bull; Since 2024</p>
+            </div>
+            <div class="ph-actions">
+              <button onclick="document.getElementById('avatarInput').click()"><i class="fa-regular fa-camera"></i> Change Photo</button>
+              <input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="Swal.fire({title:'Photo Updated',text:'Your profile photo has been changed.',icon:'success',timer:1500,showConfirmButton:false})" />
+              <button onclick="Swal.fire({title:'Profile View',text:'All your information is secure and private.',icon:'info',confirmButtonColor:'var(--primary-blue)'})"><i class="fa-regular fa-eye"></i> View Public</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-nav" id="tabsNav">
+          <button class="tab-btn active" data-tab="profile"><i class="fa-regular fa-user"></i> Profile</button>
+          <button class="tab-btn" data-tab="security"><i class="fa-solid fa-lock"></i> Security</button>
+          <button class="tab-btn" data-tab="addresses"><i class="fa-regular fa-location-dot"></i> Addresses</button>
+          <button class="tab-btn" data-tab="notifications"><i class="fa-regular fa-bell"></i> Notifications</button>
+          <button class="tab-btn" data-tab="account"><i class="fa-regular fa-circle-exclamation"></i> Account</button>
+        </div>
+
+        <!-- Tab: Profile -->
+        <div class="tab-panel active" id="tab-profile">
+          <div class="section-card">
+            <div class="sc-title"><i class="fa-regular fa-user" style="color:var(--cta-orange);"></i> Personal Information</div>
+            <form onsubmit="return saveProfile(event)">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <label class="form-label">First Name</label>
+                  <input type="text" class="form-control" value="Alex" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" class="form-control" value="Harrison" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" class="form-control" value="alex.harrison@email.com" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" class="form-control" value="+31 6 12345678" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Date of Birth</label>
+                  <input type="date" class="form-control" value="1985-06-15" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Preferred Language</label>
+                  <select class="form-select">
+                    <option>English</option>
+                    <option>Dutch</option>
+                    <option>German</option>
+                    <option>French</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mt-4">
+                <button type="submit" class="btn-primary-solid"><i class="fa-regular fa-floppy-disk me-2"></i> Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Tab: Security -->
+        <div class="tab-panel" id="tab-security">
+          <div class="section-card">
+            <div class="sc-title"><i class="fa-solid fa-lock" style="color:var(--cta-orange);"></i> Change Password</div>
+            <form onsubmit="return changePassword(event)">
+              <div class="row g-4">
+                <div class="col-md-4">
+                  <label class="form-label">Current Password</label>
+                  <input type="password" class="form-control" placeholder="Enter current password" required />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">New Password</label>
+                  <input type="password" class="form-control" placeholder="Enter new password" required />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Confirm New Password</label>
+                  <input type="password" class="form-control" placeholder="Confirm new password" required />
+                </div>
+              </div>
+              <div class="mt-4 d-flex gap-3 flex-wrap">
+                <button type="submit" class="btn-primary-solid"><i class="fa-solid fa-key me-2"></i> Update Password</button>
+                <button type="button" class="btn-outline-primary" onclick="Swal.fire({title:'Two-Factor Authentication',text:'2FA setup will be available soon.',icon:'info',confirmButtonColor:'var(--primary-blue)'})"><i class="fa-solid fa-shield me-2"></i> Enable 2FA</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Tab: Addresses -->
+        <div class="tab-panel" id="tab-addresses">
+          <div class="section-card">
+            <div class="sc-title"><i class="fa-regular fa-location-dot" style="color:var(--cta-orange);"></i> My Addresses <button class="btn-outline-primary" style="padding:6px 18px;font-size:12px;margin-left:auto;" onclick="addAddress()"><i class="fa-regular fa-plus me-1"></i> Add New</button></div>
+            <div id="addressesContainer">
+              <div class="addr-card">
+                <div class="ac-info">
+                  <h6>Primary Residence <span class="ac-badge">Default</span></h6>
+                  <p>Hillside Residence, 42 Architect Avenue<br />Amsterdam, NL-1011<br />Netherlands</p>
+                </div>
+                <div class="ac-actions">
+                  <button class="btn-edit" onclick="Swal.fire({title:'Edit Address',text:'Address editing coming soon.',icon:'info',confirmButtonColor:'var(--primary-blue)'})"><i class="fa-regular fa-pen-to-square me-1"></i> Edit</button>
+                  <button class="btn-del" onclick="deleteAddress(this)"><i class="fa-regular fa-trash me-1"></i> Delete</button>
+                </div>
+              </div>
+              <div class="addr-card">
+                <div class="ac-info">
+                  <h6>Office / Business</h6>
+                  <p>14 Canal Street, Suite 3B<br />Rotterdam, NL-3011<br />Netherlands</p>
+                </div>
+                <div class="ac-actions">
+                  <button class="btn-edit" onclick="Swal.fire({title:'Edit Address',text:'Address editing coming soon.',icon:'info',confirmButtonColor:'var(--primary-blue)'})"><i class="fa-regular fa-pen-to-square me-1"></i> Edit</button>
+                  <button class="btn-del" onclick="deleteAddress(this)"><i class="fa-regular fa-trash me-1"></i> Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Notifications -->
+        <div class="tab-panel" id="tab-notifications">
+          <div class="section-card">
+            <div class="sc-title"><i class="fa-regular fa-bell" style="color:var(--cta-orange);"></i> Notification Preferences</div>
+            <div class="notif-row">
+              <div class="nr-info">
+                <h6>Email Notifications</h6>
+                <p>Order confirmations, invoice updates, and support replies.</p>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="notif-row">
+              <div class="nr-info">
+                <h6>SMS / WhatsApp Alerts</h6>
+                <p>Appointment reminders, delivery updates, urgent notices.</p>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="notif-row">
+              <div class="nr-info">
+                <h6>Quote Expiry Reminders</h6>
+                <p>Receive a reminder 7 days before a quote expires.</p>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="notif-row">
+              <div class="nr-info">
+                <h6>Promotional &amp; Newsletter</h6>
+                <p>New products, seasonal offers, and company news.</p>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" /><span class="slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Account -->
+        <div class="tab-panel" id="tab-account">
+          <div class="section-card">
+            <div class="sc-title"><i class="fa-regular fa-circle-exclamation" style="color:var(--cta-orange);"></i> Account Actions</div>
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div style="background:#f8fafc;border-radius:16px;padding:24px;border:1px solid #f1f5f9;">
+                  <h6 style="font-weight:600;color:var(--primary-blue);margin-bottom:8px;"><i class="fa-solid fa-download me-2" style="color:var(--cta-orange);"></i> Download My Data</h6>
+                  <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Get a ZIP file with all your account information, documents, and activity history.</p>
+                  <button class="btn-outline-primary" style="width:100%;" onclick="Swal.fire({title:'Download Started',text:'We will email you a download link shortly.',icon:'success',confirmButtonColor:'var(--primary-blue)'})"><i class="fa-solid fa-download me-2"></i> Request Data Export</button>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div style="background:#fef2f2;border-radius:16px;padding:24px;border:1px solid #fee2e2;">
+                  <h6 style="font-weight:600;color:#e53e3e;margin-bottom:8px;"><i class="fa-regular fa-circle-xmark me-2" style="color:#e53e3e;"></i> Delete Account</h6>
+                  <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Permanently remove your account and all associated data. This action cannot be undone.</p>
+                  <button class="btn-danger-ghost" style="width:100%;" onclick="deleteAccount()"><i class="fa-regular fa-circle-xmark me-2"></i> Delete My Account</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="c-footer">
+        <span>© 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Made with <i class="fa-solid fa-heart" style="color:var(--cta-orange);"></i> for architectural excellence</span>
+      </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      // ── Tabs ──
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+          this.classList.add('active');
+          document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+        });
+      });
+
+      function saveProfile(e) { e.preventDefault(); Swal.fire({title:'Profile Saved',text:'Your personal information has been updated.',icon:'success',timer:1800,showConfirmButton:false}); return false; }
+      function changePassword(e) { e.preventDefault(); Swal.fire({title:'Password Updated',text:'Your password has been changed successfully.',icon:'success',confirmButtonColor:'var(--primary-blue)'}); return false; }
+
+      function deleteAddress(el) {
+        Swal.fire({title:'Remove Address?',text:'Are you sure you want to delete this address?',icon:'question',showCancelButton:true,confirmButtonColor:'#e53e3e',cancelButtonColor:'#64748b',confirmButtonText:'Delete',cancelButtonText:'Cancel'})
+          .then(r => { if (r.isConfirmed) { el.closest('.addr-card').remove(); Swal.fire({title:'Deleted',text:'Address has been removed.',icon:'info',timer:1200,showConfirmButton:false}); } });
+      }
+
+      function addAddress() {
+        Swal.fire({
+          title: 'Add New Address',
+          html: `<div class="d-flex flex-column gap-3" style="text-align:left;">
+            <input class="form-control" id="swALabel" placeholder="Label (e.g. Home / Office)" />
+            <input class="form-control" id="swAStreet" placeholder="Street & Number" />
+            <div class="d-flex gap-2"><input class="form-control" id="swACity" placeholder="City" style="flex:2;"><input class="form-control" id="swAZip" placeholder="Postcode" style="flex:1;"></div>
+            <input class="form-control" id="swACountry" placeholder="Country" value="Netherlands" />
+          </div>`,
+          showCancelButton: true, confirmButtonColor: 'var(--primary-blue)', cancelButtonColor: '#64748b',
+          confirmButtonText: '<i class="fa-regular fa-plus me-1"></i> Add Address',
+          cancelButtonText: 'Cancel',
+          preConfirm: () => {
+            const label = document.getElementById('swALabel').value.trim();
+            const street = document.getElementById('swAStreet').value.trim();
+            if (!label || !street) { Swal.showValidationMessage('Label and street are required.'); return false; }
+            return { label, street, city: document.getElementById('swACity').value.trim(), zip: document.getElementById('swAZip').value.trim(), country: document.getElementById('swACountry').value.trim() };
+          }
+        }).then(r => {
+          if (r.isConfirmed && r.value) {
+            const a = r.value;
+            const html = `<div class="addr-card"><div class="ac-info"><h6>${a.label}</h6><p>${a.street}<br />${a.city ? a.city + ', ' : ''}${a.zip || ''}<br />${a.country || 'Netherlands'}</p></div><div class="ac-actions"><button class="btn-edit" onclick="Swal.fire({title:'Edit Address',text:'Address editing coming soon.',icon:'info',confirmButtonColor:'var(--primary-blue)'})"><i class="fa-regular fa-pen-to-square me-1"></i> Edit</button><button class="btn-del" onclick="deleteAddress(this)"><i class="fa-regular fa-trash me-1"></i> Delete</button></div></div>`;
+            document.getElementById('addressesContainer').insertAdjacentHTML('beforeend', html);
+            Swal.fire({title:'Address Added',text:`${a.label} has been saved.`,icon:'success',timer:1500,showConfirmButton:false});
+          }
+        });
+      }
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#f8faff;box-shadow:0 4px 16px rgba(10,25,41,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+
+      function deleteAccount() {
+        Swal.fire({
+          title: 'Delete Account?',
+          text: 'This action is permanent and cannot be undone. All your data will be removed.',
+          icon: 'warning', showCancelButton: true,
+          confirmButtonColor: '#e53e3e', cancelButtonColor: '#64748b',
+          confirmButtonText: '<i class="fa-regular fa-circle-xmark me-1"></i> Delete My Account',
+          cancelButtonText: 'Cancel',
+        }).then(r => { if (r.isConfirmed) Swal.fire({title:'Account Deletion Requested',text:'We have sent a confirmation link to your email. Please verify to proceed.',icon:'info',confirmButtonColor:'var(--primary-blue)'}); });
+      }
+    </script>
+  </body>
+</html>

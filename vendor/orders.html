@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orders — AZ Aluminium</title>
+    <meta name="description" content="Manage and fulfill your customer orders — AZ Aluminium Vendor Portal." />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/vendor.css" />
+    <style>
+      .stat-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 18px;
+        padding: 26px 24px; transition: .3s; height: 100%;
+        display: flex; flex-direction: column; justify-content: space-between;
+      }
+      .stat-card:hover { border-color: var(--v-accent); box-shadow: 0 8px 30px rgba(0,0,0,0.04); }
+      .stat-card .sc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+      .stat-card .sc-top .sc-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+      .stat-card .sc-top .sc-badge { font-size: 11px; font-weight: 600; padding: 4px 14px; border-radius: 50px; }
+      .stat-card .sc-number { font-size: 32px; font-weight: 700; color: var(--v-primary); line-height: 1.2; }
+      .stat-card .sc-label { font-size: 13px; color: #64748b; font-weight: 500; }
+      .stat-card .sc-footer { margin-top: 16px; padding-top: 14px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 600; cursor: pointer; transition: .25s; }
+      .stat-card .sc-footer:hover { gap: 4px; }
+
+      .section-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 24px 28px; }
+
+      /* ── orders page specific ── */
+      .order-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 24px; }
+      .order-controls .search-box {
+        flex: 1; min-width: 240px; position: relative;
+      }
+      .order-controls .search-box input {
+        width: 100%; padding: 10px 16px 10px 42px; border-radius: 12px;
+        border: 1px solid #e2e8f0; background: #fff; font-size: 13px;
+        font-family: inherit; outline: none; transition: .25s;
+      }
+      .order-controls .search-box input:focus { border-color: var(--v-accent); box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+      .order-controls .search-box i {
+        position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+        color: #94a3b8; font-size: 16px;
+      }
+      .filter-group { display: flex; flex-wrap: wrap; gap: 6px; }
+      .filter-group .filter-btn {
+        padding: 8px 18px; border-radius: 10px; border: 1px solid #e2e8f0;
+        background: #fff; font-size: 12px; font-weight: 600; color: #64748b;
+        cursor: pointer; transition: .25s; font-family: inherit;
+      }
+      .filter-group .filter-btn:hover { border-color: var(--v-accent); color: var(--v-accent); }
+      .filter-group .filter-btn.active { background: var(--v-accent); border-color: var(--v-accent); color: #fff; }
+
+      .order-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 18px;
+        padding: 22px 24px; transition: .3s; cursor: pointer; height: 100%;
+        display: flex; flex-direction: column;
+      }
+      .order-card:hover { border-color: var(--v-accent); box-shadow: 0 8px 30px rgba(0,0,0,0.04); transform: translateY(-2px); }
+      .order-card .oc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+      .order-card .oc-head .oc-ref { font-weight: 700; font-size: 15px; color: var(--v-primary); }
+      .order-card .oc-head .oc-badge { font-size: 11px; font-weight: 600; padding: 4px 14px; border-radius: 50px; }
+      .oc-badge.processing { background: #dbeafe; color: #1e40af; }
+      .oc-badge.shipped { background: #fef3c7; color: #92400e; }
+      .oc-badge.completed { background: #d1fae5; color: #065f46; }
+      .oc-badge.cancelled { background: #fee2e2; color: #991b1b; }
+
+      .order-card .oc-customer { margin-bottom: 10px; }
+      .order-card .oc-customer .oc-name { font-size: 13px; font-weight: 600; color: var(--v-primary); margin: 0; }
+      .order-card .oc-customer .oc-company { font-size: 11px; color: #94a3b8; margin: 0; }
+
+      .order-card .oc-items { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+      .order-card .oc-items .oc-tag {
+        background: #f1f5f9; color: var(--v-primary); font-size: 10px; font-weight: 500;
+        padding: 4px 10px; border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+      }
+      .order-card .oc-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12px; margin-bottom: 14px; color: #64748b; }
+      .order-card .oc-meta span i { width: 16px; margin-right: 4px; color: #94a3b8; }
+      .order-card .oc-total { font-size: 18px; font-weight: 700; color: var(--v-primary); margin-bottom: 14px; }
+
+      .order-card .oc-progress { margin-bottom: 16px; }
+      .order-card .oc-progress .oc-progress-label { display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
+      .order-card .oc-progress .oc-bar {
+        height: 6px; background: #f1f5f9; border-radius: 10px; overflow: hidden;
+      }
+      .order-card .oc-progress .oc-bar .oc-fill {
+        height: 100%; border-radius: 10px; transition: width .6s ease;
+      }
+      .oc-fill.processing { background: #3b82f6; }
+      .oc-fill.shipped { background: #f59e0b; }
+      .oc-fill.completed { background: var(--v-accent); }
+      .oc-fill.cancelled { background: #ef4444; }
+
+      .order-card .oc-actions { margin-top: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+      .order-card .oc-actions .oc-btn {
+        padding: 8px 18px; border-radius: 10px; border: none; font-size: 12px;
+        font-weight: 600; cursor: pointer; transition: .25s; font-family: inherit;
+      }
+      .oc-btn-primary { background: var(--v-accent); color: #fff; }
+      .oc-btn-primary:hover { background: var(--v-accent-hover); }
+      .oc-btn-secondary { background: #f1f5f9; color: var(--v-primary); }
+      .oc-btn-secondary:hover { background: #e2e8f0; }
+      .oc-btn-muted { background: #f1f5f9; color: #94a3b8; cursor: default; }
+
+      /* ═══ Detail modal ═══ */
+      .modal-content { border: none; border-radius: 18px; overflow: hidden; }
+      .modal-header { border-bottom: 1px solid #f1f5f9; padding: 20px 28px; }
+      .modal-header .modal-title { font-weight: 700; color: var(--v-primary); font-size: 18px; }
+      .modal-body { padding: 24px 28px; }
+      .modal-body .dm-section { margin-bottom: 24px; }
+      .modal-body .dm-section h6 { font-size: 13px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+      .modal-body .dm-section .dm-label { font-size: 12px; color: #64748b; margin-bottom: 2px; }
+      .modal-body .dm-section .dm-value { font-size: 14px; font-weight: 600; color: var(--v-primary); }
+      .modal-body .dm-items-table { width: 100%; border-collapse: collapse; }
+      .modal-body .dm-items-table th { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; border-bottom: 1px solid #f1f5f9; text-align: left; font-weight: 600; }
+      .modal-body .dm-items-table td { font-size: 13px; color: var(--v-primary); padding: 10px 12px; border-bottom: 1px solid #f1f5f9; }
+      .modal-body .dm-items-table tr:last-child td { border-bottom: none; }
+      .modal-body .dm-total-row { display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding-top: 12px; }
+      .modal-body .dm-total-row span:first-child { font-size: 13px; color: #64748b; font-weight: 500; }
+      .modal-body .dm-total-row span:last-child { font-size: 22px; font-weight: 700; color: var(--v-primary); }
+
+      .timeline { display: flex; align-items: flex-start; justify-content: space-between; position: relative; padding: 8px 0; }
+      .timeline::before { content: ''; position: absolute; top: 16px; left: 30px; right: 30px; height: 3px; background: #e2e8f0; z-index: 0; }
+      .timeline .tl-step { position: relative; z-index: 1; text-align: center; flex: 1; }
+      .timeline .tl-step .tl-dot {
+        width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 8px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 12px; border: 3px solid #e2e8f0; background: #fff; color: #94a3b8;
+        transition: .3s;
+      }
+      .timeline .tl-step.active .tl-dot { border-color: var(--v-accent); background: var(--v-accent); color: #fff; }
+      .timeline .tl-step.done .tl-dot { border-color: var(--v-accent); background: var(--v-accent); color: #fff; }
+      .timeline .tl-step .tl-label { font-size: 10px; font-weight: 500; color: #94a3b8; max-width: 80px; margin: 0 auto; line-height: 1.3; }
+      .timeline .tl-step.active .tl-label { color: var(--v-accent); font-weight: 600; }
+      .timeline .tl-step.done .tl-label { color: var(--v-accent); }
+
+      .modal-footer { border-top: 1px solid #f1f5f9; padding: 16px 28px; }
+      .modal-footer .btn {
+        padding: 10px 24px; border-radius: 10px; font-size: 13px; font-weight: 600; font-family: inherit;
+      }
+      .modal-footer .btn-secondary { background: #f1f5f9; color: var(--v-primary); border: none; }
+      .modal-footer .btn-secondary:hover { background: #e2e8f0; }
+
+      @media (max-width: 992px) {
+        .timeline { flex-wrap: wrap; gap: 8px; justify-content: center; }
+        .timeline::before { display: none; }
+        .timeline .tl-step { flex: 0 0 calc(33.33% - 8px); }
+      }
+      @media (max-width: 576px) {
+        .stat-card { padding: 20px; }
+        .stat-card .sc-number { font-size: 26px; }
+        .section-card { padding: 20px; }
+        .order-card { padding: 18px; }
+        .order-controls .search-box { min-width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo-white.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">5</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ═══ Sidebar ═══ -->
+    <aside class="v-sidebar" id="sidebar">
+      <div class="sb-brand">
+        <img src="../images/logo-white.png" alt="AZ Aluminium" onerror="this.src='../images/logo.png'" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Vendor Portal</span>
+        </div>
+      </div>
+      <div class="sb-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">5</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="quote-requests.html" class="nav-item"><i class="fa-regular fa-file-lines"></i> Quote Requests</a>
+        <a href="orders.html" class="nav-item active"><i class="fa-solid fa-truck"></i> Orders</a>
+        <a href="tickets.html" class="nav-item"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sb-footer">
+        <div class="user-card">
+          <div class="avatar">SC</div>
+          <div>
+            <p class="u-name">SteelCraft Supplies</p>
+            <p class="u-role">Premium Vendor</p>
+          </div>
+          <i class="fa-solid fa-chevron-right u-arrow"></i>
+        </div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <!-- ═══ Main ═══ -->
+    <main class="v-main">
+      <div class="main-content">
+        <div class="page-header">
+          <h2>Orders</h2>
+          <p>Manage and fulfill your customer orders.</p>
+        </div>
+
+        <!-- Summary row -->
+        <div class="row g-4 mb-4">
+          <div class="col-6 col-md">
+            <div class="stat-card">
+              <div>
+                <div class="sc-top">
+                  <span class="sc-icon" style="background:#dbeafe;color:#1e40af;"><i class="fa-solid fa-truck"></i></span>
+                </div>
+                <div class="sc-number">08</div>
+                <div class="sc-label">Total Orders</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md">
+            <div class="stat-card">
+              <div>
+                <div class="sc-top">
+                  <span class="sc-icon" style="background:#dbeafe;color:#1e40af;"><i class="fa-solid fa-gear"></i></span>
+                </div>
+                <div class="sc-number">03</div>
+                <div class="sc-label">Processing</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md">
+            <div class="stat-card">
+              <div>
+                <div class="sc-top">
+                  <span class="sc-icon" style="background:#fef3c7;color:#92400e;"><i class="fa-solid fa-box"></i></span>
+                </div>
+                <div class="sc-number">02</div>
+                <div class="sc-label">Shipped</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md">
+            <div class="stat-card">
+              <div>
+                <div class="sc-top">
+                  <span class="sc-icon" style="background:#d1fae5;color:#065f46;"><i class="fa-regular fa-circle-check"></i></span>
+                </div>
+                <div class="sc-number">02</div>
+                <div class="sc-label">Completed</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md">
+            <div class="stat-card">
+              <div>
+                <div class="sc-top">
+                  <span class="sc-icon" style="background:#fee2e2;color:#991b1b;"><i class="fa-solid fa-ban"></i></span>
+                </div>
+                <div class="sc-number">01</div>
+                <div class="sc-label">Cancelled</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="order-controls">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search by order ref or customer..." oninput="filterOrders()" />
+          </div>
+          <div class="filter-group" id="filterGroup">
+            <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">All</button>
+            <button class="filter-btn" data-filter="processing" onclick="setFilter(this)">Processing</button>
+            <button class="filter-btn" data-filter="shipped" onclick="setFilter(this)">Shipped</button>
+            <button class="filter-btn" data-filter="completed" onclick="setFilter(this)">Completed</button>
+            <button class="filter-btn" data-filter="cancelled" onclick="setFilter(this)">Cancelled</button>
+          </div>
+        </div>
+
+        <!-- Order cards -->
+        <div class="row g-4" id="ordersContainer"></div>
+      </div>
+
+      <footer class="v-footer">
+        <span>&copy; 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Vendor Portal <i class="fa-solid fa-circle" style="font-size:6px;color:var(--v-accent);margin:0 6px;"></i> Powered by AZ Platform</span>
+      </footer>
+    </main>
+
+    <!-- ═══ Detail Modal ═══ -->
+    <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="dmRef">ORD-0000</h5>
+            <span class="oc-badge" id="dmBadge">—</span>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row dm-section">
+              <div class="col-6">
+                <div class="dm-label">Customer</div>
+                <div class="dm-value" id="dmName">—</div>
+              </div>
+              <div class="col-6">
+                <div class="dm-label">Company</div>
+                <div class="dm-value" id="dmCompany">—</div>
+              </div>
+            </div>
+            <div class="dm-section">
+              <h6>Items</h6>
+              <table class="dm-items-table">
+                <thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead>
+                <tbody id="dmItemsBody"></tbody>
+              </table>
+              <div class="dm-total-row">
+                <span>Total</span>
+                <span id="dmTotal">€0</span>
+              </div>
+            </div>
+            <div class="dm-section">
+              <h6>Progress</h6>
+              <div class="timeline" id="dmTimeline"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--v-accent);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--v-accent);background:#f0fdf4;box-shadow:0 4px 16px rgba(16,185,129,.15)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--v-accent)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+
+      const orders = [
+        { ref: 'ORD-0071', customer: 'Alex Harrison', company: 'Private Client', date: '22 May 2026', eta: '05 Jun 2026', status: 'processing', badge: 'Processing', badgeClass: 'processing', progress: 40, items: [{ name: 'Bioclimatic Pergola 4x3m', qty: 1, price: '€14,000' }, { name: 'LED Integration Kit', qty: 1, price: '€600' }], total: '€14,600' },
+        { ref: 'ORD-0065', customer: 'Sarah Mitchell', company: 'Mitchell Constructions', date: '20 May 2026', eta: '02 Jun 2026', status: 'processing', badge: 'Processing', badgeClass: 'processing', progress: 50, items: [{ name: 'Sliding Glass Wall 6m', qty: 1, price: '€15,800' }], total: '€15,800' },
+        { ref: 'ORD-0058', customer: 'David Miller', company: 'DM Holdings', date: '18 May 2026', eta: '30 May 2026', status: 'shipped', badge: 'Shipped', badgeClass: 'shipped', progress: 70, items: [{ name: 'Winter Garden 5x4m', qty: 1, price: '€22,500' }, { name: 'Installation Service', qty: 1, price: '€3,000' }], total: '€25,500' },
+        { ref: 'ORD-0042', customer: 'Linda Park', company: 'Park Development', date: '15 May 2026', eta: '28 May 2026', status: 'shipped', badge: 'Shipped', badgeClass: 'shipped', progress: 75, items: [{ name: 'Glass Railing System 15m', qty: 1, price: '€12,500' }, { name: 'Corner Profiles', qty: 4, price: '€2,100' }], total: '€14,600' },
+        { ref: 'ORD-0033', customer: 'James Wilson', company: 'Wilson & Co.', date: '10 May 2026', eta: 'Completed', status: 'completed', badge: 'Completed', badgeClass: 'completed', progress: 100, items: [{ name: 'Motorised Pergola 5x5m', qty: 1, price: '€20,000' }, { name: 'Side Screens (x4)', qty: 4, price: '€4,100' }], total: '€24,100' },
+        { ref: 'ORD-0028', customer: 'Emma Turner', company: 'Brighton Homes', date: '05 May 2026', eta: 'Completed', status: 'completed', badge: 'Completed', badgeClass: 'completed', progress: 100, items: [{ name: 'Aluminium Sliding Doors 3x2.5m', qty: 3, price: '€7,200' }], total: '€7,200' },
+        { ref: 'ORD-0015', customer: 'Robert Chen', company: 'Chen Architecture', date: '25 Apr 2026', eta: '\u2014', status: 'cancelled', badge: 'Cancelled', badgeClass: 'cancelled', progress: 0, items: [{ name: 'Custom Glass Wall 8m', qty: 1, price: '€14,500' }], total: '€14,500' },
+        { ref: 'ORD-0022', customer: 'Maria Santos', company: 'Santos Design', date: '01 May 2026', eta: '\u2014', status: 'completed', badge: 'Completed', badgeClass: 'completed', progress: 100, items: [{ name: 'Bioclimatic Pergola 6x4m Premium', qty: 1, price: '€22,700' }], total: '€22,700' },
+      ];
+
+      const priceMap = {
+        'Bioclimatic Pergola 4x3m': '€14,000',
+        'LED Integration Kit': '€600',
+        'Sliding Glass Wall 6m': '€15,800',
+        'Winter Garden 5x4m': '€22,500',
+        'Installation Service': '€3,000',
+        'Glass Railing System 15m': '€12,500',
+        'Corner Profiles': '€525',
+        'Motorised Pergola 5x5m': '€20,000',
+        'Side Screens (x4)': '€1,025',
+        'Aluminium Sliding Doors 3x2.5m': '€2,400',
+        'Custom Glass Wall 8m': '€14,500',
+        'Bioclimatic Pergola 6x4m Premium': '€22,700',
+      };
+
+      let currentFilter = 'all';
+      let currentSearch = '';
+
+      function setFilter(btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderOrders();
+      }
+
+      function filterOrders() {
+        currentSearch = document.getElementById('searchInput').value.toLowerCase();
+        renderOrders();
+      }
+
+      function renderOrders() {
+        const container = document.getElementById('ordersContainer');
+        const filtered = orders.filter(o => {
+          const matchFilter = currentFilter === 'all' || o.status === currentFilter;
+          const matchSearch = o.ref.toLowerCase().includes(currentSearch) || o.customer.toLowerCase().includes(currentSearch);
+          return matchFilter && matchSearch;
+        });
+
+        if (!filtered.length) {
+          container.innerHTML = '<div class="col-12"><div class="section-card text-center py-5"><i class="fa-solid fa-search" style="font-size:40px;color:#cbd5e1;margin-bottom:12px;"></i><p style="color:#94a3b8;margin:0;">No orders found matching your criteria.</p></div></div>';
+          return;
+        }
+
+        container.innerHTML = filtered.map(o => {
+          const tags = o.items.map(i => `${i.qty}x ${i.name}`).join('</span><span class="oc-tag">');
+          const actionHtml = o.status === 'processing'
+            ? `<button class="oc-btn oc-btn-primary" onclick="event.stopPropagation();markShipped('${o.ref}')"><i class="fa-solid fa-truck me-1"></i> Mark as Shipped</button>`
+            : o.status === 'shipped'
+            ? `<button class="oc-btn oc-btn-primary" onclick="event.stopPropagation();markDelivered('${o.ref}')"><i class="fa-regular fa-circle-check me-1"></i> Mark as Delivered</button>`
+            : '<button class="oc-btn oc-btn-muted" disabled>No action needed</button>';
+
+          return `
+            <div class="col-12 col-md-6 col-xl-4">
+              <div class="order-card" onclick="openDetail('${o.ref}')">
+                <div class="oc-head">
+                  <span class="oc-ref">${o.ref}</span>
+                  <span class="oc-badge ${o.badgeClass}">${o.badge}</span>
+                </div>
+                <div class="oc-customer">
+                  <p class="oc-name">${o.customer}</p>
+                  <p class="oc-company">${o.company}</p>
+                </div>
+                <div class="oc-items"><span class="oc-tag">${tags}</span></div>
+                <div class="oc-meta">
+                  <span><i class="fa-regular fa-calendar"></i> ${o.date}</span>
+                  <span><i class="fa-regular fa-clock"></i> ETA: ${o.eta}</span>
+                </div>
+                <div class="oc-total">${o.total}</div>
+                <div class="oc-progress">
+                  <div class="oc-progress-label">
+                    <span>Progress</span>
+                    <span>${o.progress}%</span>
+                  </div>
+                  <div class="oc-bar">
+                    <div class="oc-fill ${o.badgeClass}" style="width:${o.progress}%"></div>
+                  </div>
+                </div>
+                <div class="oc-actions">${actionHtml}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function markShipped(ref) {
+        const order = orders.find(o => o.ref === ref);
+        Swal.fire({
+          title: 'Mark as Shipped?',
+          text: `Confirm that ${ref} has been shipped to ${order.customer}.`,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: 'var(--v-accent)',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: '<i class="fa-solid fa-truck me-1"></i> Yes, Mark as Shipped',
+          cancelButtonText: 'Cancel',
+        }).then(r => {
+          if (r.isConfirmed) {
+            const tracking = 'TRK-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            order.status = 'shipped';
+            order.badge = 'Shipped';
+            order.badgeClass = 'shipped';
+            order.progress = 70;
+            order.eta = tracking;
+            renderOrders();
+            Swal.fire({
+              title: 'Shipped!', icon: 'success',
+              text: `Order ${ref} marked as shipped. Tracking: ${tracking}`,
+              timer: 3000, showConfirmButton: false, timerProgressBar: true,
+            });
+          }
+        });
+      }
+
+      function markDelivered(ref) {
+        const order = orders.find(o => o.ref === ref);
+        Swal.fire({
+          title: 'Mark as Delivered?',
+          text: `Confirm that ${ref} has been delivered to ${order.customer}.`,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: 'var(--v-accent)',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: '<i class="fa-regular fa-circle-check me-1"></i> Yes, Mark as Delivered',
+          cancelButtonText: 'Cancel',
+        }).then(r => {
+          if (r.isConfirmed) {
+            order.status = 'completed';
+            order.badge = 'Completed';
+            order.badgeClass = 'completed';
+            order.progress = 100;
+            order.eta = 'Completed';
+            renderOrders();
+            Swal.fire({
+              title: 'Delivered!', icon: 'success',
+              text: `Order ${ref} marked as delivered.`,
+              timer: 3000, showConfirmButton: false, timerProgressBar: true,
+            });
+          }
+        });
+      }
+
+      function openDetail(ref) {
+        const order = orders.find(o => o.ref === ref);
+        if (!order) return;
+        document.getElementById('dmRef').textContent = order.ref;
+        const badger = document.getElementById('dmBadge');
+        badger.textContent = order.badge;
+        badger.className = 'oc-badge ' + order.badgeClass;
+        document.getElementById('dmName').textContent = order.customer;
+        document.getElementById('dmCompany').textContent = order.company;
+
+        document.getElementById('dmItemsBody').innerHTML = order.items.map(i => `
+          <tr><td>${i.name}</td><td>${i.qty}</td><td>${i.price || priceMap[i.name] || '\u2014'}</td></tr>
+        `).join('');
+        document.getElementById('dmTotal').textContent = order.total;
+
+        const steps = [
+          { key: 'placed', label: 'Order Placed' },
+          { key: 'production', label: 'In Production' },
+          { key: 'shipped', label: 'Shipped' },
+          { key: 'transit', label: 'In Transit' },
+          { key: 'delivered', label: 'Delivered' },
+        ];
+        let activeStep = 0;
+        if (order.status === 'processing') activeStep = 1;
+        else if (order.status === 'shipped') activeStep = 3;
+        else if (order.status === 'completed') activeStep = 4;
+
+        document.getElementById('dmTimeline').innerHTML = steps.map((s, i) => `
+          <div class="tl-step ${i < activeStep ? 'done' : ''} ${i === activeStep ? 'active' : ''}">
+            <div class="tl-dot"><i class="fa-solid ${i < activeStep ? 'fa-check' : i === activeStep && activeStep === 4 ? 'fa-check' : 'fa-circle'}"></i></div>
+            <div class="tl-label">${s.label}</div>
+          </div>
+        `).join('');
+
+        const modal = new bootstrap.Modal(document.getElementById('orderDetailModal'));
+        modal.show();
+      }
+
+      renderOrders();
+    </script>
+  </body>
+</html>

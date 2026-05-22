@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Support Tickets | Customer Portal — AZ Aluminium</title>
+    <meta name="description" content="Manage your AZ Aluminium support tickets — track, reply, and resolve issues." />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/customer.css" />
+    <style>
+      .controls-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+      .controls-bar .search-box { position: relative; max-width: 340px; width: 100%; }
+      .controls-bar .search-box input { width: 100%; padding: 12px 18px 12px 46px; border-radius: 14px; border: 2px solid #e2e8f0; font-size: 14px; background: #fff; transition: .3s; }
+      .controls-bar .search-box input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(10,25,41,0.08); outline: none; }
+      .controls-bar .search-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+      .controls-bar .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
+      .controls-bar .filter-group .fil-btn { padding: 10px 20px; border-radius: 50px; border: 2px solid #e2e8f0; background: #fff; font-size: 13px; font-weight: 500; color: #64748b; cursor: pointer; transition: .25s; }
+      .controls-bar .filter-group .fil-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+      .controls-bar .filter-group .fil-btn.active { background: var(--primary-blue); border-color: var(--primary-blue); color: #fff; }
+      .controls-bar .btn-new { padding: 12px 28px; border-radius: 14px; background: var(--cta-orange); color: #fff; font-weight: 600; font-size: 14px; border: none; transition: .3s; display: flex; align-items: center; gap: 8px; }
+      .controls-bar .btn-new:hover { background: #e65a00; transform: translateY(-2px); }
+
+      .ticket-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 24px 28px; transition: .3s; cursor: pointer; }
+      .ticket-card:hover { border-color: var(--primary-blue); box-shadow: 0 6px 24px rgba(0,0,0,0.04); }
+      .ticket-card .tc-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+      .ticket-card .tc-top .tc-ref { font-weight: 700; color: var(--primary-blue); font-size: 15px; }
+      .ticket-card .tc-top .tc-date { font-size: 12px; color: #94a3b8; }
+      .ticket-card .tc-subject { font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 10px; }
+      .ticket-card .tc-meta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+      .ticket-card .tc-meta .tc-badge { padding: 4px 14px; border-radius: 50px; font-size: 11px; font-weight: 600; }
+      .tc-badge.open { background: #cce5ff; color: #004085; }
+      .tc-badge.in-progress { background: #fff3cd; color: #856404; }
+      .tc-badge.resolved { background: #d4edda; color: #155724; }
+      .tc-badge.closed { background: #e2e8f0; color: #64748b; }
+      .prio-badge { padding: 3px 12px; border-radius: 50px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+      .prio-low { background: #d4edda; color: #155724; }
+      .prio-medium { background: #fff3cd; color: #856404; }
+      .prio-high { background: #f8d7da; color: #721c24; }
+      .prio-urgent { background: #721c24; color: #fff; }
+      .ticket-card .tc-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 14px; border-top: 1px solid #f1f5f9; margin-top: 14px; }
+      .ticket-card .tc-bottom .tc-assignee { font-size: 12px; color: #64748b; display: flex; align-items: center; gap: 6px; }
+      .ticket-card .tc-bottom .tc-assignee .tc-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--primary-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; }
+
+      .modal-content { border-radius: 20px; border: none; padding: 8px; }
+      .modal-header { border-bottom: 1px solid #f1f5f9; padding: 20px 24px 16px; }
+      .modal-header .modal-title { font-weight: 700; color: var(--primary-blue); }
+      .modal-body { padding: 24px; }
+      .ticket-conversation { display: flex; flex-direction: column; gap: 16px; max-height: 400px; overflow-y: auto; padding-right: 4px; }
+      .ticket-conversation .msg { display: flex; gap: 14px; }
+      .ticket-conversation .msg .msg-avatar { width: 36px; height: 36px; min-width: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; color: #fff; }
+      .ticket-conversation .msg .msg-bubble { background: #f8fafc; border-radius: 14px; padding: 14px 18px; flex: 1; }
+      .ticket-conversation .msg .msg-bubble .msg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+      .ticket-conversation .msg .msg-bubble .msg-header strong { font-size: 13px; color: var(--primary-blue); }
+      .ticket-conversation .msg .msg-bubble .msg-header span { font-size: 11px; color: #94a3b8; }
+      .ticket-conversation .msg .msg-bubble p { font-size: 14px; color: #1e293b; margin: 0; line-height: 1.6; }
+      .ticket-conversation .msg.my-msg { flex-direction: row-reverse; }
+      .ticket-conversation .msg.my-msg .msg-avatar { background: var(--primary-blue); }
+      .ticket-conversation .msg.my-msg .msg-bubble { background: #eef2f7; }
+      .ticket-conversation .msg .msg-bubble .msg-attachment { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; font-size: 12px; color: var(--primary-blue); margin-top: 8px; text-decoration: none; }
+      .reply-box { border-top: 1px solid #f1f5f9; padding: 16px 0 0; margin-top: 16px; }
+      .reply-box textarea { width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 14px; font-size: 14px; resize: vertical; min-height: 80px; font-family: inherit; transition: .3s; }
+      .reply-box textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(10,25,41,0.08); outline: none; }
+      .reply-box .reply-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
+      .reply-box .reply-actions button { padding: 10px 24px; border-radius: 12px; font-weight: 600; font-size: 13px; border: none; transition: .25s; }
+      .reply-box .reply-actions .btn-send { background: var(--primary-blue); color: #fff; }
+      .reply-box .reply-actions .btn-send:hover { background: #15304a; }
+      .reply-box .reply-actions .btn-close-ticket { background: #e2e8f0; color: #64748b; }
+      .modal-footer { border-top: 1px solid #f1f5f9; padding: 16px 24px; }
+      .modal-footer .btn-modal { padding: 12px 28px; border-radius: 12px; font-weight: 600; font-size: 14px; border: none; transition: .25s; }
+
+      /* ── New Ticket Form (inline in modal) ── */
+      .new-ticket-form .form-label { font-weight: 600; color: var(--primary-blue); font-size: 14px; }
+      .new-ticket-form .form-control, .new-ticket-form .form-select { border-radius: 12px; padding: 12px 16px; border: 2px solid #e2e8f0; font-size: 14px; transition: .3s; }
+      .new-ticket-form .form-control:focus, .new-ticket-form .form-select:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(10,25,41,0.08); outline: none; }
+      .new-ticket-form textarea.form-control { min-height: 120px; resize: vertical; }
+      .prio-select { display: flex; gap: 8px; flex-wrap: wrap; }
+      .prio-select .prio-opt { padding: 8px 18px; border-radius: 50px; border: 2px solid #e2e8f0; background: #fff; font-size: 12px; font-weight: 500; cursor: pointer; transition: .25s; display: flex; align-items: center; gap: 6px; }
+      .prio-select .prio-opt:hover { border-color: var(--primary-blue); }
+      .prio-select .prio-opt.selected { border-color: var(--primary-blue); background: var(--primary-blue); color: #fff; }
+      .prio-select .prio-opt input { display: none; }
+
+      @media (max-width: 576px) {
+        .ticket-card { padding: 20px; }
+        .controls-bar { flex-direction: column; align-items: stretch; }
+        .controls-bar .search-box { max-width: 100%; }
+        .ticket-card .tc-meta { gap: 8px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">3</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="c-sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../images/logo.png" alt="AZ Aluminium" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Customer Portal</span>
+        </div>
+      </div>
+      <div class="sidebar-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">3</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="orders.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Orders</a>
+        <a href="quotes.html" class="nav-item"><i class="fa-regular fa-file-lines"></i> Quotes</a>
+        <a href="invoices.html" class="nav-item"><i class="fa-solid fa-file-invoice"></i> Invoices</a>
+        <a href="tickets.html" class="nav-item active"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Appointments</a>
+        <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="avatar">AH</div>
+          <div>
+            <p class="u-name">Alex Harrison</p>
+            <p class="u-role">Premium Member</p>
+          </div>
+          <i class="fa-solid fa-chevron-right u-arrow"></i>
+        </div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="c-main">
+      <div class="page-header">
+        <h2>Support Tickets</h2>
+        <p>Track, reply to, and manage your support requests.</p>
+      </div>
+
+      <div class="controls-bar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Search tickets..." oninput="filterTickets()" />
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <div class="filter-group">
+            <span class="fil-btn active" data-filter="all" onclick="setFilter(this,'all')">All</span>
+            <span class="fil-btn" data-filter="open" onclick="setFilter(this,'open')">Open</span>
+            <span class="fil-btn" data-filter="in-progress" onclick="setFilter(this,'in-progress')">In Progress</span>
+            <span class="fil-btn" data-filter="resolved" onclick="setFilter(this,'resolved')">Resolved</span>
+          </div>
+          <button class="btn-new" onclick="openNewTicket()"><i class="fa-regular fa-plus"></i> New Ticket</button>
+        </div>
+      </div>
+
+      <div id="ticketsContainer" class="d-flex flex-column gap-3"></div>
+      <footer class="c-footer">
+        <span>© 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Made with <i class="fa-solid fa-heart" style="color:var(--cta-orange);"></i> for architectural excellence</span>
+      </footer>
+    </main>
+
+    <!-- Ticket Detail Modal -->
+    <div class="modal fade" id="ticketModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="ticketModalContent"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      const tickets = [
+        { ref: 'TKT-847291', subject: 'Roller shutter motor not responding', status: 'in-progress', badge: 'In Progress', badgeClass: 'in-progress', priority: 'high', priorityLabel: 'High', prioClass: 'prio-high', date: '20 May 2026', assignee: { name: 'Sarah Chen', initials: 'SC' }, orderRef: 'AZ-2024-0042',
+          messages: [
+            { from: 'customer', name: 'Alex Harrison', text: 'The motor on my roller shutter stopped working yesterday. It makes a humming sound but the slats don\'t move.', time: '20 May 2026, 09:14' },
+            { from: 'agent', name: 'Sarah Chen', avatar: 'SC', text: 'Thank you for reporting this, Alex. It sounds like the motor coupling may have come loose. Our technician will inspect it. Can you confirm the shutter model?', time: '20 May 2026, 11:32' },
+            { from: 'customer', name: 'Alex Harrison', text: 'It\'s the RS-2500 model, installed in April.', time: '20 May 2026, 12:05' },
+            { from: 'agent', name: 'Sarah Chen', avatar: 'SC', text: 'Thanks! I\'ve scheduled a service visit for 24 May between 10:00–13:00. Our technician Markus will contact you beforehand.', time: '21 May 2026, 08:15' },
+          ]
+        },
+        { ref: 'TKT-846103', subject: 'Request for installation manual — Bioclimatic Pergola', status: 'open', badge: 'Open', badgeClass: 'open', priority: 'low', priorityLabel: 'Low', prioClass: 'prio-low', date: '22 May 2026', assignee: { name: 'Unassigned', initials: '?' }, orderRef: 'AZ-2024-0071',
+          messages: [
+            { from: 'customer', name: 'Alex Harrison', text: 'Hi, I recently purchased the Bioclimatic Pergola 5×5m and would like to receive the full installation manual and electrical wiring diagram.', time: '22 May 2026, 15:40' },
+          ]
+        },
+        { ref: 'TKT-844950', subject: 'Glass panel scratch — Winter Garden', status: 'resolved', badge: 'Resolved', badgeClass: 'resolved', priority: 'urgent', priorityLabel: 'Urgent', prioClass: 'prio-urgent', date: '10 May 2026', assignee: { name: 'Marcus Vane', initials: 'MV' }, orderRef: 'AZ-2024-0058',
+          messages: [
+            { from: 'customer', name: 'Alex Harrison', text: 'One of the glass panels on the Winter Garden has a noticeable scratch approximately 30cm long. This was noticed during the final walkthrough.', time: '10 May 2026, 16:22' },
+            { from: 'agent', name: 'Marcus Vane', avatar: 'MV', text: 'I\'m sorry about that, Alex. I\'ve reviewed the photos you sent. We\'ll order a replacement panel under warranty. ETA for the new panel is 7–10 working days.', time: '11 May 2026, 09:05' },
+            { from: 'customer', name: 'Alex Harrison', text: 'Thank you, Marcus. Please keep me updated on the delivery.', time: '11 May 2026, 10:30' },
+            { from: 'agent', name: 'Marcus Vane', avatar: 'MV', text: 'The replacement panel has arrived and was installed today. Everything looks perfect. Please confirm you\'re satisfied so we can close this ticket.', time: '22 May 2026, 14:00' },
+          ]
+        },
+        { ref: 'TKT-842211', subject: 'Billing discrepancy on invoice INV-2024-0033', status: 'closed', badge: 'Closed', badgeClass: 'closed', priority: 'medium', priorityLabel: 'Medium', prioClass: 'prio-medium', date: '02 Feb 2026', assignee: { name: 'Linda Park', initials: 'LP' }, orderRef: 'AZ-2024-0033',
+          messages: [
+            { from: 'customer', name: 'Alex Harrison', text: 'The invoice shows 21% VAT but I believe the correct rate for this work should be 10.5%. Could you please review?', time: '02 Feb 2026, 11:00' },
+            { from: 'agent', name: 'Linda Park', avatar: 'LP', text: 'You\'re right, Alex. This was a mistake on our end. I\'ve issued a corrected invoice with the 10.5% rate. The difference will be credited to your account.', time: '03 Feb 2026, 13:45' },
+            { from: 'customer', name: 'Alex Harrison', text: 'Received the corrected invoice. Thank you for sorting it out quickly.', time: '04 Feb 2026, 09:20' },
+            { from: 'agent', name: 'Linda Park', avatar: 'LP', text: 'You\'re welcome! Closing this ticket now.', time: '04 Feb 2026, 10:00' },
+          ]
+        },
+        { ref: 'TKT-848500', subject: 'Scheduling follow-up measurement', status: 'open', badge: 'Open', badgeClass: 'open', priority: 'medium', priorityLabel: 'Medium', prioClass: 'prio-medium', date: '23 May 2026', assignee: { name: 'Unassigned', initials: '?' }, orderRef: '—',
+          messages: [
+            { from: 'customer', name: 'Alex Harrison', text: 'I\'d like to schedule a follow-up measurement for the new veranda project at my property. Please advise available dates.', time: '23 May 2026, 10:05' },
+          ]
+        },
+      ];
+
+      let currentFilter = 'all', currentSearch = '';
+
+      function renderTickets(data) {
+        const container = document.getElementById('ticketsContainer');
+        if (!data.length) {
+          container.innerHTML = `<div class="text-center py-5" style="color:#94a3b8;"><i class="fa-regular fa-message" style="font-size:48px;margin-bottom:16px;display:block;"></i><h5 style="color:var(--primary-blue);">No tickets found</h5><p>Try a different filter or create a new ticket.</p></div>`;
+          return;
+        }
+        container.innerHTML = data.map(t => {
+          const lastMsg = t.messages[t.messages.length - 1];
+          const preview = lastMsg.text.length > 80 ? lastMsg.text.slice(0, 80) + '…' : lastMsg.text;
+          return `<div class="ticket-card" onclick="openTicket('${t.ref}')">
+            <div class="tc-top">
+              <div>
+                <div class="tc-ref">${t.ref}</div>
+                <div class="tc-date">${t.date}</div>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <span class="prio-badge ${t.prioClass}">${t.priorityLabel}</span>
+                <span class="tc-badge ${t.badgeClass}">${t.badge}</span>
+              </div>
+            </div>
+            <div class="tc-subject">${t.subject}</div>
+            <div style="font-size:13px;color:#64748b;margin-bottom:8px;">${preview}</div>
+            <div class="tc-bottom">
+              <div class="tc-assignee">
+                <div class="tc-avatar">${t.assignee.initials}</div>
+                ${t.assignee.name}
+              </div>
+              <div class="tc-assignee">
+                <i class="fa-regular fa-message" style="font-size:12px;"></i>
+                ${t.messages.length} message${t.messages.length > 1 ? 's' : ''}
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      function filterTickets() { currentSearch = document.getElementById('searchInput').value.toLowerCase().trim(); applyFilters(); }
+      function setFilter(el, f) { document.querySelectorAll('.fil-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); currentFilter = f; applyFilters(); }
+      function applyFilters() {
+        let filtered = tickets;
+        if (currentFilter !== 'all') filtered = filtered.filter(t => t.status === currentFilter);
+        if (currentSearch) filtered = filtered.filter(t => t.ref.toLowerCase().includes(currentSearch) || t.subject.toLowerCase().includes(currentSearch) || t.orderRef.toLowerCase().includes(currentSearch));
+        renderTickets(filtered);
+      }
+
+      function openTicket(ref) {
+        const t = tickets.find(x => x.ref === ref);
+        if (!t) return;
+        const msgsHtml = t.messages.map(m => {
+          const isMe = m.from === 'customer';
+          const avatar = isMe ? 'AH' : (m.avatar || 'AZ');
+          const name = isMe ? 'Alex Harrison' : m.name;
+          return `<div class="msg ${isMe ? 'my-msg' : ''}">
+            <div class="msg-avatar" style="background:${isMe ? 'var(--primary-blue)' : 'var(--cta-orange)'};">${avatar}</div>
+            <div class="msg-bubble">
+              <div class="msg-header"><strong>${name}</strong><span>${m.time}</span></div>
+              <p>${m.text}</p>
+            </div>
+          </div>`;
+        }).join('');
+
+        const isResolvedOrClosed = t.status === 'resolved' || t.status === 'closed';
+
+        document.getElementById('ticketModalContent').innerHTML = `
+          <div class="modal-header">
+            <h5 class="modal-title">${t.ref}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+              <div>
+                <div style="font-size:16px;font-weight:600;color:var(--primary-blue);margin-bottom:4px;">${t.subject}</div>
+                <span style="font-size:12px;color:#94a3b8;">Created: ${t.date} • Order: ${t.orderRef} • Assignee: ${t.assignee.name}</span>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <span class="prio-badge ${t.prioClass}">${t.priorityLabel}</span>
+                <span class="tc-badge ${t.badgeClass}">${t.badge}</span>
+              </div>
+            </div>
+            <div class="ticket-conversation">${msgsHtml}</div>
+            ${!isResolvedOrClosed ? `
+            <div class="reply-box">
+              <textarea id="replyText" placeholder="Type your reply..."></textarea>
+              <div class="reply-actions">
+                <button class="btn-close-ticket" onclick="closeTicket('${t.ref}')"><i class="fa-regular fa-circle-check me-1"></i> Close Ticket</button>
+                <button class="btn-send" onclick="sendReply('${t.ref}')"><i class="fa-regular fa-paper-plane me-1"></i> Send Reply</button>
+              </div>
+            </div>` : `
+            <div style="margin-top:16px;padding:14px 18px;background:#f8fafc;border-radius:12px;font-size:13px;color:#64748b;text-align:center;">
+              <i class="fa-regular fa-circle-check" style="color:#155724;margin-right:6px;"></i>
+              This ticket is ${t.status === 'resolved' ? 'resolved' : 'closed'}. If you need further assistance, please create a new ticket.
+            </div>`}
+          </div>
+          <div class="modal-footer">
+            <button class="btn-modal" style="background:#e2e8f0;color:var(--primary-blue);" data-bs-dismiss="modal">Close</button>
+            ${!isResolvedOrClosed ? `<button class="btn-modal" style="background:var(--primary-blue);color:#fff;" onclick="sendReply('${t.ref}')"><i class="fa-regular fa-paper-plane me-1"></i> Reply</button>` : ''}
+          </div>`;
+        new bootstrap.Modal(document.getElementById('ticketModal')).show();
+      }
+
+      function sendReply(ref) {
+        const textarea = document.getElementById('replyText');
+        if (!textarea) return;
+        const text = textarea.value.trim();
+        if (!text) { Swal.fire({ title: 'Empty Reply', text: 'Please write a message before sending.', icon: 'warning', confirmButtonColor: 'var(--primary-blue)' }); return; }
+        Swal.fire({ title: 'Reply Sent', text: 'Your message has been added to the conversation.', icon: 'success', timer: 1800, showConfirmButton: false });
+        textarea.value = '';
+      }
+
+      function closeTicket(ref) {
+        Swal.fire({
+          title: 'Close Ticket?',
+          text: `Are you sure you want to close ${ref}? You can reopen it later if needed.`,
+          icon: 'question', showCancelButton: true,
+          confirmButtonColor: '#155724', cancelButtonColor: '#64748b',
+          confirmButtonText: '<i class="fa-regular fa-circle-check me-1"></i> Yes, Close',
+          cancelButtonText: 'Cancel',
+        }).then(r => {
+          if (r.isConfirmed) {
+            Swal.fire({ title: 'Ticket Closed', text: `${ref} has been closed.`, icon: 'success', confirmButtonColor: 'var(--primary-blue)' });
+            bootstrap.Modal.getInstance(document.getElementById('ticketModal')).hide();
+          }
+        });
+      }
+
+      function openNewTicket() {
+        const modal = document.createElement('div');
+        modal.className = 'modal fade'; modal.id = 'newTicketModal'; modal.tabIndex = '-1';
+        modal.innerHTML = `<div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="border-radius:20px;border:none;padding:8px;">
+            <div class="modal-header"><h5 class="modal-title">New Support Ticket</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+              <form class="new-ticket-form" id="newTicketForm">
+                <div class="mb-3">
+                  <label class="form-label">Subject <span style="color:#e53e3e;">*</span></label>
+                  <select class="form-select" id="ntSubject" required>
+                    <option value="">Select a topic...</option>
+                    <option>Product Defect or Issue</option>
+                    <option>Installation Problem</option>
+                    <option>Warranty Claim</option>
+                    <option>Service / Maintenance Request</option>
+                    <option>Order / Delivery Inquiry</option>
+                    <option>Billing Question</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Priority <span style="color:#e53e3e;">*</span></label>
+                  <div class="prio-select" id="ntPrio">
+                    <label class="prio-opt" data-value="low"><input type="radio" name="ntPrio" value="low" /> Low</label>
+                    <label class="prio-opt selected" data-value="medium"><input type="radio" name="ntPrio" value="medium" checked /> Medium</label>
+                    <label class="prio-opt" data-value="high"><input type="radio" name="ntPrio" value="high" /> High</label>
+                    <label class="prio-opt" data-value="urgent"><input type="radio" name="ntPrio" value="urgent" /> Urgent</label>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Order Reference (optional)</label>
+                  <input type="text" class="form-control" id="ntOrder" placeholder="e.g. AZ-2024-0042" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Message <span style="color:#e53e3e;">*</span></label>
+                  <textarea class="form-control" id="ntMessage" required placeholder="Describe your issue in detail..."></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-modal" style="background:#e2e8f0;color:var(--primary-blue);" data-bs-dismiss="modal">Cancel</button>
+              <button class="btn-modal" style="background:var(--primary-blue);color:#fff;" onclick="submitNewTicket()"><i class="fa-regular fa-paper-plane me-1"></i> Submit Ticket</button>
+            </div>
+          </div>
+        </div>`;
+        document.body.appendChild(modal);
+
+        modal.querySelectorAll('.prio-opt').forEach(el => {
+          el.addEventListener('click', function() {
+            modal.querySelectorAll('.prio-opt').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            this.querySelector('input').checked = true;
+          });
+        });
+
+        const bsModal = new bootstrap.Modal(modal);
+        bsModal.show();
+        modal.addEventListener('hidden.bs.modal', () => modal.remove());
+        window.__newTicketModal = bsModal;
+      }
+
+      function submitNewTicket() {
+        const subject = document.getElementById('ntSubject')?.value;
+        const message = document.getElementById('ntMessage')?.value.trim();
+        if (!subject || !message) {
+          Swal.fire({ title: 'Missing Fields', text: 'Please fill in all required fields.', icon: 'warning', confirmButtonColor: 'var(--primary-blue)' });
+          return;
+        }
+        Swal.fire({ title: 'Ticket Created!', text: 'Your support request has been submitted. Our team will respond within 24 hours.', icon: 'success', confirmButtonColor: 'var(--primary-blue)' });
+        if (window.__newTicketModal) window.__newTicketModal.hide();
+      }
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#f8faff;box-shadow:0 4px 16px rgba(10,25,41,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+
+      renderTickets(tickets);
+    </script>
+  </body>
+</html>

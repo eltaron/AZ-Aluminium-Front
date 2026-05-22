@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Detail | Customer Portal — AZ Aluminium</title>
+    <meta name="description" content="Detailed view of your AZ Aluminium project — progress, timeline, gallery, and team." />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/customer.css" />
+    <style>
+      .breadcrumb-custom { font-size: 13px; color: #94a3b8; display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+      .breadcrumb-custom a { color: #94a3b8; text-decoration: none; }
+      .breadcrumb-custom a:hover { color: var(--primary-blue); }
+      .breadcrumb-custom span { color: var(--primary-blue); font-weight: 600; }
+
+      .project-header h1 { font-weight: 700; color: var(--primary-blue); font-size: 32px; margin: 0 0 4px; }
+      .project-header p { color: #64748b; margin: 0; font-size: 15px; }
+      .project-header .ph-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+      .project-header .ph-actions button { padding: 12px 28px; border-radius: 12px; font-weight: 600; font-size: 13px; border: none; transition: .3s; }
+      .project-header .ph-actions .btn-outline-primary { background: transparent; border: 2px solid var(--primary-blue); color: var(--primary-blue); }
+      .project-header .ph-actions .btn-outline-primary:hover { background: var(--primary-blue); color: #fff; }
+      .project-header .ph-actions .btn-solid-primary { background: var(--primary-blue); color: #fff; }
+      .project-header .ph-actions .btn-solid-primary:hover { background: #15304a; }
+
+      .progress-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 32px 36px; }
+      .progress-card .pc-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+      .progress-card .pc-top h5 { font-weight: 600; color: var(--primary-blue); margin: 0; }
+      .progress-card .pc-top .pc-status-badge { padding: 6px 18px; border-radius: 50px; font-size: 12px; font-weight: 600; }
+      .pc-status-badge.active { background: #cce5ff; color: #004085; }
+
+      .stepper { position: relative; display: flex; justify-content: space-between; padding: 16px 0; }
+      .stepper::before { content: ""; position: absolute; top: 26px; left: 30px; right: 30px; height: 2px; background: #e2e8f0; z-index: 0; }
+      .stepper .step { display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 1; flex: 1; }
+      .stepper .step .step-dot { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; transition: .3s; }
+      .stepper .step .step-dot.done { background: var(--primary-blue); }
+      .stepper .step .step-dot.active { background: var(--cta-orange); box-shadow: 0 0 0 6px rgba(255,107,0,0.15); }
+      .stepper .step .step-dot.pending { background: #e2e8f0; color: #94a3b8; }
+      .stepper .step .step-label { font-size: 12px; font-weight: 500; color: var(--primary-blue); text-align: center; }
+      .stepper .step .step-date { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; }
+
+      .detail-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 32px 36px; }
+      .detail-card .dc-title { font-weight: 600; color: var(--primary-blue); font-size: 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+      .detail-card .dc-title a { font-size: 12px; color: var(--primary-blue); text-decoration: none; font-weight: 500; }
+      .detail-card .dc-title a:hover { text-decoration: underline; }
+
+      .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .gallery-grid .g-item { aspect-ratio: 1; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; background: #f1f5f9; }
+      .gallery-grid .g-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+      .gallery-grid .g-item:hover img { transform: scale(1.1); }
+      .gallery-grid .g-item .g-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 14px; background: rgba(10,25,41,0.8); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: .5px; opacity: 0; transition: .3s; }
+      .gallery-grid .g-item:hover .g-label { opacity: 1; }
+      .gallery-grid .g-add { aspect-ratio: 1; border-radius: 12px; border: 2px dashed #e2e8f0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; cursor: pointer; transition: .3s; }
+      .gallery-grid .g-add:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+      .gallery-grid .g-add i { font-size: 28px; margin-bottom: 6px; }
+      .gallery-grid .g-add span { font-size: 12px; font-weight: 500; }
+
+      .timeline-list { position: relative; padding-left: 0; }
+      .timeline-list::before { content: ""; position: absolute; left: 16px; top: 8px; bottom: 8px; width: 2px; background: #e2e8f0; }
+      .timeline-list .tl-item { display: flex; gap: 16px; padding: 16px 0; position: relative; }
+      .timeline-list .tl-item .tl-dot { width: 34px; height: 34px; min-width: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; z-index: 1; position: relative; }
+      .timeline-list .tl-item .tl-dot.primary { background: var(--primary-blue); }
+      .timeline-list .tl-item .tl-dot.secondary { background: var(--cta-orange); }
+      .timeline-list .tl-item .tl-c { flex: 1; padding-top: 2px; }
+      .timeline-list .tl-item .tl-c h6 { font-size: 14px; font-weight: 600; color: var(--primary-blue); margin: 0 0 2px; }
+      .timeline-list .tl-item .tl-c p { font-size: 13px; color: #64748b; margin: 0; line-height: 1.5; }
+      .timeline-list .tl-item .tl-c .tl-time { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+
+      .team-card { background: var(--primary-blue); border-radius: 18px; padding: 32px 28px; color: #fff; }
+      .team-card h5 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 20px; opacity: .7; display: flex; align-items: center; gap: 8px; }
+      .team-card .tm-member { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,0.08); margin-bottom: 10px; }
+      .team-card .tm-member .tm-avatar { width: 44px; height: 44px; min-width: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; }
+      .team-card .tm-member .tm-info h6 { font-size: 14px; font-weight: 600; margin: 0; }
+      .team-card .tm-member .tm-info p { font-size: 11px; opacity: .7; margin: 0; text-transform: uppercase; letter-spacing: .5px; }
+      .team-card .tm-member .tm-chat { margin-left: auto; color: rgba(255,255,255,0.5); cursor: pointer; transition: .2s; }
+      .team-card .tm-member .tm-chat:hover { color: #fff; }
+      .team-card .tm-group { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,0.08); }
+      .team-card .tm-group .tm-icon { width: 44px; height: 44px; min-width: 44px; border-radius: 50%; background: var(--cta-orange); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+      .team-card .tm-group .tm-info h6 { font-size: 14px; font-weight: 600; margin: 0; }
+      .team-card .tm-group .tm-info p { font-size: 11px; opacity: .7; margin: 0; text-transform: uppercase; letter-spacing: .5px; }
+      .team-card .btn-contact-team { width: 100%; margin-top: 20px; padding: 14px; border-radius: 12px; background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; font-weight: 600; font-size: 13px; transition: .3s; }
+      .team-card .btn-contact-team:hover { background: rgba(255,255,255,0.1); }
+
+      .quick-actions { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 28px; }
+      .quick-actions h5 { font-size: 14px; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; color: var(--primary-blue); margin-bottom: 16px; }
+      .quick-actions .qa-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 12px; background: #f8fafc; border: 1px solid #f1f5f9; margin-bottom: 8px; cursor: pointer; transition: .3s; }
+      .quick-actions .qa-item:hover { border-color: var(--primary-blue); }
+      .quick-actions .qa-item .qa-left { display: flex; align-items: center; gap: 12px; }
+      .quick-actions .qa-item .qa-left i { font-size: 18px; width: 22px; }
+      .quick-actions .qa-item .qa-left span { font-size: 13px; font-weight: 500; color: var(--primary-blue); }
+      .quick-actions .qa-item .qa-arrow { color: #94a3b8; font-size: 12px; }
+
+      .milestone-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 28px; }
+      .milestone-card .ms-label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: #94a3b8; font-weight: 600; margin-bottom: 4px; }
+      .milestone-card h5 { font-weight: 700; color: var(--primary-blue); margin-bottom: 12px; }
+      .milestone-card .ms-date { display: flex; align-items: center; gap: 8px; color: #64748b; font-size: 14px; margin-bottom: 20px; }
+      .milestone-card .ms-date i { color: var(--primary-blue); }
+      .milestone-card .btn-confirm { width: 100%; padding: 14px; border-radius: 12px; background: var(--primary-blue); color: #fff; font-weight: 600; font-size: 14px; border: none; transition: .3s; }
+      .milestone-card .btn-confirm:hover { background: #15304a; }
+
+      @media (max-width: 992px) {
+        .project-header h1 { font-size: 26px; }
+        .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 768px) {
+        .stepper { flex-wrap: wrap; gap: 16px; }
+        .stepper::before { display: none; }
+        .stepper .step { flex-direction: row; gap: 12px; flex: auto; width: 100%; }
+      }
+      @media (max-width: 576px) {
+        .progress-card, .detail-card { padding: 24px 20px; }
+        .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">3</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="c-sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../images/logo.png" alt="AZ Aluminium" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Customer Portal</span>
+        </div>
+      </div>
+      <div class="sidebar-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">3</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="projects.html" class="nav-item active"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+        <a href="quotes.html" class="nav-item"><i class="fa-regular fa-file-lines"></i> Quotes</a>
+        <a href="orders.html" class="nav-item"><i class="fa-solid fa-truck"></i> Orders</a>
+        <a href="invoices.html" class="nav-item"><i class="fa-solid fa-file-invoice"></i> Invoices</a>
+        <a href="tickets.html" class="nav-item"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Appointments</a>
+        <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card"><div class="avatar">DM</div><div><p class="u-name">David Miller</p><p class="u-role">Premium Client</p></div><i class="fa-solid fa-chevron-right u-arrow"></i></div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="c-main" id="mainContent">
+      <div class="breadcrumb-custom">
+        <a href="projects.html">Projects</a> <i class="fa-solid fa-chevron-right" style="font-size:8px;"></i>
+        <span id="breadcrumbRef">AZ-4822</span>
+      </div>
+
+      <div class="project-header d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+        <div>
+          <h1 id="projectTitle">Riverside Premium Veranda</h1>
+          <p id="projectLocation"><i class="fa-regular fa-location-dot me-1"></i> 422 West Riverbank, London</p>
+        </div>
+        <div class="ph-actions">
+          <button class="btn-outline-primary" onclick="Swal.fire({title:'Blueprint',text:'Blueprint viewer coming soon.',icon:'info',confirmButtonColor:'var(--primary-blue)'})"><i class="fa-regular fa-file-lines me-2"></i> View Blueprint</button>
+          <button class="btn-solid-primary" onclick="Swal.fire({title:'Download Started',text:'Project documents are being prepared.',icon:'success',timer:1500,showConfirmButton:false})"><i class="fa-solid fa-download me-2"></i> Download Documents</button>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <!-- Left Column -->
+        <div class="col-12 col-lg-8 d-flex flex-column gap-4">
+          <!-- Progress Stepper -->
+          <div class="progress-card">
+            <div class="pc-top">
+              <h5>Project Progress</h5>
+              <span class="pc-status-badge active" id="statusBadge">In Production</span>
+            </div>
+            <div class="stepper" id="stepperContainer"></div>
+          </div>
+
+          <!-- Gallery -->
+          <div class="detail-card">
+            <div class="dc-title">
+              <span>Project Gallery</span>
+              <a onclick="document.getElementById('galleryUpload').click()"><i class="fa-regular fa-image me-1"></i> Upload Photo</a>
+              <input type="file" id="galleryUpload" accept="image/*" style="display:none;" onchange="Swal.fire({title:'Photo Uploaded',text:'Your photo has been added to the gallery.',icon:'success',timer:1500,showConfirmButton:false})" />
+            </div>
+            <div class="gallery-grid">
+              <div class="g-item"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&q=80" alt="Site Survey" /><div class="g-label">SITE SURVEY — OCT 10</div></div>
+              <div class="g-item"><img src="https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=400&q=80" alt="Structural Frame" /><div class="g-label">FRAME ASSEMBLY — OCT 25</div></div>
+              <div class="g-item"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&q=80" alt="Glass Panels" /><div class="g-label">GLASS PREP — OCT 28</div></div>
+              <div class="g-add" onclick="document.getElementById('galleryUpload').click()"><i class="fa-regular fa-plus"></i><span>Add Photos</span></div>
+            </div>
+          </div>
+
+          <!-- Activity Timeline -->
+          <div class="detail-card">
+            <div class="dc-title">Activity Timeline</div>
+            <div class="timeline-list" id="timelineContainer"></div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-12 col-lg-4 d-flex flex-column gap-4">
+          <!-- Team -->
+          <div class="team-card">
+            <h5><i class="fa-solid fa-users"></i> Assigned Team</h5>
+            <div class="tm-member">
+              <div class="tm-avatar" style="background:#fd651e;"><i class="fa-solid fa-user"></i></div>
+              <div class="tm-info"><h6>Sarah Jenkins</h6><p>Lead Engineer</p></div>
+              <i class="fa-regular fa-comment tm-chat" onclick="Swal.fire({title:'Message Sarah',text:'Your message has been sent.',icon:'success',timer:1500,showConfirmButton:false})"></i>
+            </div>
+            <div class="tm-member">
+              <div class="tm-avatar" style="background:#1e3a8a;"><i class="fa-solid fa-user-tie"></i></div>
+              <div class="tm-info"><h6>Marcus Vane</h6><p>Project Manager</p></div>
+              <i class="fa-regular fa-comment tm-chat" onclick="Swal.fire({title:'Message Marcus',text:'Your message has been sent.',icon:'success',timer:1500,showConfirmButton:false})"></i>
+            </div>
+            <div class="tm-group">
+              <div class="tm-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+              <div class="tm-info"><h6>Installation Team B</h6><p>Specialist Crew</p></div>
+            </div>
+            <button class="btn-contact-team" onclick="Swal.fire({title:'Contact Team',text:'Your message will be sent to the entire project team.',icon:'info',confirmButtonColor:'var(--primary-blue)'})">Contact Project Team</button>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="quick-actions">
+            <h5>Quick Actions</h5>
+            <div class="qa-item" onclick="Swal.fire({title:'Reschedule',text:'Rescheduling options will be available soon.',icon:'info',confirmButtonColor:'var(--primary-blue)'})">
+              <div class="qa-left"><i class="fa-regular fa-calendar" style="color:var(--primary-blue);"></i><span>Reschedule Installation</span></div>
+              <i class="fa-solid fa-chevron-right qa-arrow"></i>
+            </div>
+            <div class="qa-item" onclick="Swal.fire({title:'View Contract',text:'Contract document will open in a new tab.',icon:'info',confirmButtonColor:'var(--primary-blue)'})">
+              <div class="qa-left"><i class="fa-regular fa-file-contract" style="color:var(--primary-blue);"></i><span>View Contract</span></div>
+              <i class="fa-solid fa-chevron-right qa-arrow"></i>
+            </div>
+            <div class="qa-item" onclick="Swal.fire({title:'Payment History',text:'Redirecting to payment history...',icon:'info',confirmButtonColor:'var(--primary-blue)'})">
+              <div class="qa-left"><i class="fa-solid fa-credit-card" style="color:var(--primary-blue);"></i><span>Payment History</span></div>
+              <i class="fa-solid fa-chevron-right qa-arrow"></i>
+            </div>
+            <div class="qa-item" onclick="location.href='tickets.html'">
+              <div class="qa-left"><i class="fa-solid fa-triangle-exclamation" style="color:var(--cta-orange);"></i><span>Report an Issue</span></div>
+              <i class="fa-solid fa-chevron-right qa-arrow"></i>
+            </div>
+          </div>
+
+          <!-- Next Milestone -->
+          <div class="milestone-card">
+            <div class="ms-label">Next Milestone</div>
+            <h5>Installation Window</h5>
+            <div class="ms-date"><i class="fa-regular fa-calendar"></i> Nov 04 — Nov 06, 2026</div>
+            <button class="btn-confirm" onclick="Swal.fire({title:'Appointment Confirmed',text:'Your installation window has been confirmed.',icon:'success',confirmButtonColor:'var(--primary-blue)'})"><i class="fa-regular fa-check me-2"></i> Confirm Appointment</button>
+          </div>
+        </div>
+      </div>
+      <footer class="c-footer">
+        <span>© 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Made with <i class="fa-solid fa-heart" style="color:var(--cta-orange);"></i> for architectural excellence</span>
+      </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      const projectData = {
+        'AZ-4822': {
+          title: 'Riverside Premium Veranda',
+          location: '422 West Riverbank, London',
+          status: 'In Production',
+          stepper: [
+            { icon: 'fa-regular fa-circle-check', dot: 'done', label: 'Quote Approved', date: 'Oct 12' },
+            { icon: 'fa-solid fa-cubes', dot: 'done', label: 'Materials Ordered', date: 'Oct 15' },
+            { icon: 'fa-solid fa-industry', dot: 'active', label: 'In Production', date: 'Active' },
+            { icon: 'fa-regular fa-clock', dot: 'pending', label: 'Installation', date: 'Nov 04' },
+            { icon: 'fa-regular fa-circle-check', dot: 'pending', label: 'Completed', date: '—' },
+          ],
+          timeline: [
+            { icon: 'primary', title: 'Manufacturing Commenced', desc: 'The main structural frame for your veranda has entered the precision cutting phase.', time: 'Today, 09:42 AM' },
+            { icon: 'primary', title: 'Technical Specs Verified', desc: 'Engineering lead Sarah Jenkins has signed off on the structural load calculations.', time: 'Oct 24, 02:15 PM' },
+            { icon: 'primary', title: 'Materials Delivered to Factory', desc: '6063-T6 Structural Aluminium extrusions received and logged.', time: 'Oct 18, 11:30 AM' },
+          ]
+        },
+        'AZ-4791': {
+          title: 'Hillside Residence Pergo-Tech',
+          location: 'Hillside Residence, Amsterdam',
+          status: 'In Progress',
+          stepper: [
+            { icon: 'fa-regular fa-circle-check', dot: 'done', label: 'Quote Approved', date: 'Sep 20' },
+            { icon: 'fa-solid fa-cubes', dot: 'done', label: 'Materials Ordered', date: 'Sep 25' },
+            { icon: 'fa-solid fa-industry', dot: 'done', label: 'In Production', date: 'Oct 10' },
+            { icon: 'fa-regular fa-clock', dot: 'active', label: 'Installation', date: 'Active' },
+            { icon: 'fa-regular fa-circle-check', dot: 'pending', label: 'Completed', date: '—' },
+          ],
+          timeline: [
+            { icon: 'primary', title: 'Installation Phase Started', desc: 'Installation crew has begun on-site work. Framework assembly in progress.', time: 'Today, 08:30 AM' },
+            { icon: 'primary', title: 'Materials Delivered to Site', desc: 'All aluminium profiles and glass panels arrived on location.', time: 'Oct 28, 14:00 PM' },
+            { icon: 'primary', title: 'Production Completed', desc: 'Factory production completed and quality check passed.', time: 'Oct 22, 16:45 PM' },
+          ]
+        }
+      };
+
+      function loadProject() {
+        const params = new URLSearchParams(window.location.search);
+        const ref = params.get('ref') || 'AZ-4822';
+        const data = projectData[ref] || projectData['AZ-4822'];
+
+        document.getElementById('breadcrumbRef').textContent = ref;
+        document.getElementById('projectTitle').textContent = data.title;
+        document.getElementById('projectLocation').innerHTML = '<i class="fa-regular fa-location-dot me-1"></i> ' + data.location;
+        document.getElementById('statusBadge').textContent = data.status;
+
+        // Stepper
+        document.getElementById('stepperContainer').innerHTML = data.stepper.map(s => `
+          <div class="step">
+            <div class="step-dot ${s.dot}"><i class="${s.icon}"></i></div>
+            <div class="step-label">${s.label}</div>
+            <div class="step-date">${s.date}</div>
+          </div>
+        `).join('');
+
+        // Timeline
+        document.getElementById('timelineContainer').innerHTML = data.timeline.map(t => `
+          <div class="tl-item">
+            <div class="tl-dot ${t.icon}"><i class="fa-regular fa-circle"></i></div>
+            <div class="tl-c">
+              <h6>${t.title}</h6>
+              <p>${t.desc}</p>
+              <div class="tl-time">${t.time}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      loadProject();
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#f8faff;box-shadow:0 4px 16px rgba(10,25,41,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+    </script>
+  </body>
+</html>

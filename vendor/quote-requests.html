@@ -1,0 +1,1375 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quote Requests — AZ Aluminium</title>
+    <meta name="description" content="Review incoming quote requests and send your best prices." />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/vendor.css" />
+    <style>
+      .section-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 24px 28px; }
+
+      .controls-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 24px; }
+      .controls-bar .search-wrap { position: relative; flex: 1; min-width: 200px; }
+      .controls-bar .search-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 15px; }
+      .controls-bar .search-wrap input {
+        width: 100%; padding: 10px 16px 10px 40px; border: 1px solid #e2e8f0;
+        border-radius: 12px; font-size: 13px; font-family: 'Poppins', sans-serif;
+        background: #fff; transition: .25s;
+      }
+      .controls-bar .search-wrap input:focus { outline: none; border-color: var(--v-accent); box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+      .controls-bar .filter-group { display: flex; gap: 4px; }
+      .controls-bar .filter-group button {
+        padding: 8px 16px; border-radius: 10px; border: 1px solid #e2e8f0;
+        background: #fff; font-size: 12px; font-weight: 600; color: #64748b;
+        transition: .2s; font-family: 'Poppins', sans-serif; cursor: pointer;
+      }
+      .controls-bar .filter-group button:hover { border-color: var(--v-accent); color: var(--v-accent); }
+      .controls-bar .filter-group button.active { background: var(--v-accent); border-color: var(--v-accent); color: #fff; }
+      .controls-bar .sort-wrap select {
+        padding: 8px 14px; border-radius: 10px; border: 1px solid #e2e8f0;
+        background: #fff; font-size: 12px; font-weight: 600; color: #64748b;
+        font-family: 'Poppins', sans-serif; cursor: pointer;
+      }
+      .controls-bar .sort-wrap select:focus { outline: none; border-color: var(--v-accent); }
+
+      .summary-row { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
+      .summary-row .summary-item {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+        padding: 14px 22px; display: flex; align-items: center; gap: 14px; flex: 1; min-width: 120px;
+      }
+      .summary-row .summary-item .sum-icon {
+        width: 42px; height: 42px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center; font-size: 18px;
+      }
+      .summary-row .summary-item .sum-info .sum-num { font-size: 22px; font-weight: 700; color: var(--v-primary); line-height: 1.2; }
+      .summary-row .summary-item .sum-info .sum-label { font-size: 11px; color: #94a3b8; font-weight: 500; }
+
+      .quote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .quote-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+        padding: 20px; transition: .3s; display: flex; flex-direction: column;
+      }
+      .quote-card:hover { border-color: var(--v-accent); box-shadow: 0 8px 25px rgba(0,0,0,0.04); }
+      .quote-card .qc-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+      .quote-card .qc-top .qc-avatar { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; color: #fff; flex-shrink: 0; }
+      .quote-card .qc-top .qc-meta { flex: 1; }
+      .quote-card .qc-top .qc-meta .qc-name { font-weight: 600; color: var(--v-primary); margin: 0; font-size: 15px; }
+      .quote-card .qc-top .qc-meta .qc-company { font-size: 12px; color: #94a3b8; margin: 0; }
+      .quote-card .qc-top .qc-badge { font-size: 11px; font-weight: 600; padding: 4px 14px; border-radius: 50px; flex-shrink: 0; }
+
+      .qc-product { margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .qc-product .qc-prod-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+      .qc-product .qc-prod-name { font-size: 13px; font-weight: 500; color: var(--v-primary); margin: 0; }
+      .qc-product .qc-prod-lang {
+        font-size: 10px; font-weight: 600; padding: 2px 10px; border-radius: 50px;
+        background: #f1f5f9; color: #64748b; margin-left: auto;
+      }
+      .qc-product .qc-prod-lang.lang-nl { background: #dbeafe; color: #1e40af; }
+      .qc-product .qc-prod-lang.lang-tr { background: #fef3c7; color: #92400e; }
+
+      .quote-card .qc-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 12px; border-top: 1px solid #f1f5f9; }
+      .quote-card .qc-bottom .qc-date { font-size: 11px; color: #94a3b8; }
+      .quote-card .qc-bottom .qc-action {
+        padding: 8px 20px; border-radius: 10px; font-size: 12px; font-weight: 600;
+        border: none; transition: .2s; font-family: 'Poppins', sans-serif; cursor: pointer;
+      }
+      .qc-action.price { background: var(--v-accent); color: #fff; }
+      .qc-action.price:hover { background: var(--v-accent-hover); }
+      .qc-action.view { background: #eef2f7; color: var(--v-primary); }
+      .qc-action.view:hover { background: #e2e8f0; }
+
+      .badge-new { background: #dbeafe; color: #1e40af; }
+      .badge-priced { background: #d1fae5; color: #065f46; }
+      .badge-declined { background: #fee2e2; color: #991b1b; }
+
+      /* ── Form Modal ── */
+      .form-modal .modal-content { border-radius: 18px; border: none; overflow: hidden; }
+      .form-modal .modal-header { background: var(--v-sidebar-bg); color: #fff; border: none; padding: 20px 28px; }
+      .form-modal .modal-header .btn-close { filter: brightness(0) invert(1); }
+      .form-modal .modal-body { padding: 24px 28px; max-height: 70vh; overflow-y: auto; }
+
+      .fm-cust-info { background: #f8fafc; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 16px; }
+      .fm-cust-info .ci-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px; color: #fff; flex-shrink: 0; }
+      .fm-cust-info .ci-meta p { margin: 0; font-weight: 600; color: var(--v-primary); }
+      .fm-cust-info .ci-meta span { font-size: 12px; color: #94a3b8; }
+
+      /* ── Form Groups ── */
+      .fm-group { margin-bottom: 20px; border: 1px solid #f1f5f9; border-radius: 14px; overflow: hidden; }
+      .fm-group-header {
+        background: #fafbfc; padding: 12px 18px; font-weight: 600; font-size: 13px;
+        color: var(--v-primary); border-bottom: 1px solid #f1f5f9;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .fm-group-header i { font-size: 14px; color: var(--v-accent); }
+      .fm-group-body { padding: 16px 18px; }
+
+      .fm-row { display: flex; gap: 12px; margin-bottom: 12px; }
+      .fm-row:last-child { margin-bottom: 0; }
+      .fm-field { flex: 1; min-width: 0; }
+      .fm-field .fm-label { display: block; font-size: 11px; font-weight: 600; color: #64748b; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .3px; }
+      .fm-field .fm-label .fm-lang { font-weight: 400; text-transform: none; color: #94a3b8; font-size: 10px; margin-left: 4px; }
+
+      .fm-field input[type="text"], .fm-field input[type="number"], .fm-field input[type="tel"],
+      .fm-field input[type="email"], .fm-field input[type="date"], .fm-field textarea, .fm-field select {
+        width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px;
+        font-size: 13px; font-family: 'Poppins', sans-serif; transition: .2s;
+        background: #fff;
+      }
+      .fm-field textarea { resize: vertical; min-height: 60px; }
+      .fm-field input:focus, .fm-field textarea:focus, .fm-field select:focus {
+        outline: none; border-color: var(--v-accent); box-shadow: 0 0 0 3px rgba(16,185,129,0.08);
+      }
+
+      .fm-field .fm-price-wrap { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+      .fm-field .fm-price-wrap .fm-price-sign { font-size: 12px; font-weight: 600; color: var(--v-accent); }
+      .fm-field .fm-price-wrap input[type="number"] {
+        width: 100px; padding: 6px 10px; border: 1px solid #e2e8f0; border-radius: 8px;
+        font-size: 13px; text-align: right; font-family: 'Poppins', sans-serif; transition: .2s;
+      }
+      .fm-field .fm-price-wrap input[type="number"]:focus {
+        outline: none; border-color: var(--v-accent); box-shadow: 0 0 0 3px rgba(16,185,129,0.08);
+      }
+
+      .fm-radio-group { display: flex; flex-wrap: wrap; gap: 6px; }
+      .fm-radio-group label {
+        display: flex; align-items: center; gap: 6px; padding: 6px 14px;
+        border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer;
+        font-size: 12px; font-weight: 500; color: var(--v-primary); transition: .2s;
+      }
+      .fm-radio-group label:hover { border-color: var(--v-accent); }
+      .fm-radio-group input[type="radio"]:checked + span { color: var(--v-accent); font-weight: 600; }
+      .fm-radio-group input[type="radio"]:checked ~ span { color: var(--v-accent); }
+      .fm-radio-group label:has(input:checked) { border-color: var(--v-accent); background: #f0fdf4; }
+      .fm-radio-group input[type="radio"] { display: none; }
+
+      .fm-check-group { display: flex; flex-wrap: wrap; gap: 6px; }
+      .fm-check-group label {
+        display: flex; align-items: center; gap: 6px; padding: 6px 14px;
+        border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer;
+        font-size: 12px; font-weight: 500; color: var(--v-primary); transition: .2s;
+      }
+      .fm-check-group label:hover { border-color: var(--v-accent); }
+      .fm-check-group label:has(input:checked) { border-color: var(--v-accent); background: #f0fdf4; }
+      .fm-check-group input[type="checkbox"] { accent-color: var(--v-accent); }
+
+      .fm-color-swatch { display: flex; gap: 8px; flex-wrap: wrap; }
+      .fm-color-swatch .cs-item {
+        width: 40px; height: 40px; border-radius: 50%; border: 2px solid #e2e8f0;
+        cursor: pointer; transition: .2s; position: relative;
+      }
+      .fm-color-swatch .cs-item:hover { transform: scale(1.1); }
+      .fm-color-swatch .cs-item.active { border-color: var(--v-accent); box-shadow: 0 0 0 3px rgba(16,185,129,0.2); }
+      .fm-color-swatch .cs-item .cs-check { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+      .fm-color-swatch .cs-item.active .cs-check { display: block; }
+
+      .fm-table-wrap { overflow-x: auto; }
+      .fm-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+      .fm-table th { background: #f8fafc; padding: 8px 10px; font-weight: 600; color: #64748b; text-align: left; border-bottom: 2px solid #e2e8f0; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+      .fm-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; }
+      .fm-table td input { width: 100%; padding: 6px 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 12px; font-family: 'Poppins', sans-serif; }
+      .fm-table td input:focus { outline: none; border-color: var(--v-accent); }
+
+      .fm-table-extras { margin-top: 6px; }
+      .fm-table-extras button { padding: 4px 12px; border-radius: 6px; border: 1px solid #e2e8f0; background: #fff; font-size: 11px; font-weight: 500; cursor: pointer; transition: .2s; font-family: 'Poppins', sans-serif; }
+      .fm-table-extras button:hover { border-color: var(--v-accent); color: var(--v-accent); }
+
+      .fm-structure { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .fm-structure .strut-item { flex: 1; min-width: 80px; }
+      .fm-structure .strut-item input { width: 100%; padding: 6px 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 12px; text-align: center; font-family: 'Poppins', sans-serif; }
+      .fm-structure .strut-item input:focus { outline: none; border-color: var(--v-accent); }
+      .fm-structure .strut-plus { font-size: 16px; font-weight: 600; color: #94a3b8; }
+
+      /* ── Line Summary at bottom of form ── */
+      .fm-pricing-summary {
+        margin-top: 20px; padding: 16px 20px; background: #f8fafc;
+        border-radius: 12px; border: 1px solid #e2e8f0;
+      }
+      .fm-pricing-summary .ps-row { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; }
+      .fm-pricing-summary .ps-row label { font-size: 13px; color: #64748b; font-weight: 500; margin: 0; }
+      .fm-pricing-summary .ps-row .ps-value { font-weight: 600; color: var(--v-primary); font-size: 14px; }
+      .fm-pricing-summary .ps-row .ps-input { width: 100px; padding: 6px 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; text-align: right; font-family: 'Poppins', sans-serif; }
+      .fm-pricing-summary .ps-row .ps-input:focus { outline: none; border-color: var(--v-accent); box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+      .fm-pricing-summary .ps-divider { border-top: 1px solid #e2e8f0; margin: 8px 0; padding-top: 8px; }
+      .fm-pricing-summary .ps-total { font-weight: 700; font-size: 20px; color: var(--v-primary); }
+
+      .fm-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
+      .fm-footer button { padding: 10px 24px; border-radius: 10px; font-size: 12px; font-weight: 600; border: none; transition: .2s; font-family: 'Poppins', sans-serif; cursor: pointer; }
+
+      .empty-state { text-align: center; padding: 60px 20px; color: #94a3b8; }
+      .empty-state i { font-size: 48px; margin-bottom: 16px; display: block; }
+      .empty-state p { font-size: 14px; margin: 0; }
+
+      @media (max-width: 992px) {
+        .quote-grid { grid-template-columns: 1fr; }
+        .form-modal .modal-body { padding: 16px; max-height: 60vh; }
+      }
+      @media (max-width: 576px) {
+        .section-card { padding: 20px; }
+        .controls-bar { flex-direction: column; align-items: stretch; }
+        .controls-bar .filter-group { flex-wrap: wrap; }
+        .controls-bar .filter-group button { flex: 1; text-align: center; }
+        .summary-row { flex-direction: column; }
+        .fm-row { flex-direction: column; }
+        .fm-group-body { padding: 12px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo-white.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">5</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="v-sidebar" id="sidebar">
+      <div class="sb-brand">
+        <img src="../images/logo-white.png" alt="AZ Aluminium" onerror="this.src='../images/logo.png'" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Vendor Portal</span>
+        </div>
+      </div>
+      <div class="sb-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">5</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="quote-requests.html" class="nav-item active"><i class="fa-regular fa-file-lines"></i> Quote Requests</a>
+        <a href="orders.html" class="nav-item"><i class="fa-solid fa-truck"></i> Orders</a>
+        <a href="tickets.html" class="nav-item"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sb-footer">
+        <div class="user-card">
+          <div class="avatar">SC</div>
+          <div>
+            <p class="u-name">SteelCraft Supplies</p>
+            <p class="u-role">Premium Vendor</p>
+          </div>
+          <i class="fa-solid fa-chevron-right u-arrow"></i>
+        </div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="v-main">
+      <div class="main-content">
+        <div class="page-header">
+          <h2>Quote Requests</h2>
+          <p>Review incoming requests and send your best prices.</p>
+        </div>
+
+        <div class="controls-bar">
+          <div class="search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search by customer or product..." oninput="renderQuotes()" />
+          </div>
+          <div class="filter-group" id="filterGroup">
+            <button class="active" data-filter="all" onclick="setFilter(this)">All</button>
+            <button data-filter="new" onclick="setFilter(this)">New</button>
+            <button data-filter="priced" onclick="setFilter(this)">Quoted</button>
+            <button data-filter="declined" onclick="setFilter(this)">Declined</button>
+          </div>
+          <div class="sort-wrap">
+            <select id="sortSelect" onchange="renderQuotes()">
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="summary-row" id="summaryRow">
+          <div class="summary-item">
+            <span class="sum-icon" style="background:#f1f5f9;color:var(--v-primary);"><i class="fa-regular fa-file-lines"></i></span>
+            <div class="sum-info">
+              <div class="sum-num" id="sumTotal">08</div>
+              <div class="sum-label">Total</div>
+            </div>
+          </div>
+          <div class="summary-item">
+            <span class="sum-icon" style="background:#dbeafe;color:#1e40af;"><i class="fa-regular fa-clock"></i></span>
+            <div class="sum-info">
+              <div class="sum-num" id="sumNew">05</div>
+              <div class="sum-label">New</div>
+            </div>
+          </div>
+          <div class="summary-item">
+            <span class="sum-icon" style="background:#d1fae5;color:#065f46;"><i class="fa-regular fa-circle-check"></i></span>
+            <div class="sum-info">
+              <div class="sum-num" id="sumPriced">02</div>
+              <div class="sum-label">Quoted</div>
+            </div>
+          </div>
+          <div class="summary-item">
+            <span class="sum-icon" style="background:#fee2e2;color:#991b1b;"><i class="fa-regular fa-circle-xmark"></i></span>
+            <div class="sum-info">
+              <div class="sum-num" id="sumDeclined">01</div>
+              <div class="sum-label">Declined</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="quote-grid" id="quoteGrid"></div>
+        </div>
+      </div>
+
+      <footer class="v-footer">
+        <span>© 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Vendor Portal <i class="fa-solid fa-circle" style="font-size:6px;color:var(--v-accent);margin:0 6px;"></i> Powered by AZ Platform</span>
+      </footer>
+    </main>
+
+    <!-- ═══ Product-Form Modal ═══ -->
+    <div class="modal fade form-modal" id="formModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formModalTitle"><i class="fa-regular fa-file-lines me-2"></i>Price Quote</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="formModalBody"></div>
+          <div class="modal-footer" style="border-top:1px solid #f1f5f9;padding:16px 28px;">
+            <div style="display:flex;gap:12px;align-items:center;width:100%;justify-content:flex-end;">
+              <button class="btn btn-sm" style="background:#f1f5f9;color:var(--v-primary);border-radius:10px;font-weight:600;padding:8px 20px;" data-bs-dismiss="modal">Cancel</button>
+              <button class="btn btn-sm" style="background:#e2e8f0;color:var(--v-primary);border-radius:10px;font-weight:600;padding:8px 20px;" onclick="saveFormDraft()">Save Draft</button>
+              <button class="btn btn-sm" style="background:var(--v-accent);color:#fff;border-radius:10px;font-weight:600;padding:8px 24px;" onclick="sendFormQuote()"><i class="fa-regular fa-paper-plane me-1"></i> Send Quote</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Detail Modal (view-only) ═══ -->
+    <div class="modal fade form-modal" id="detailModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fa-regular fa-file-lines me-2"></i>Quote Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="detailModalBody"></div>
+          <div class="modal-footer" style="border-top:1px solid #f1f5f9;padding:16px 28px;">
+            <div style="display:flex;gap:12px;width:100%;justify-content:flex-end;">
+              <button class="btn btn-sm" style="background:#f1f5f9;color:var(--v-primary);border-radius:10px;font-weight:600;padding:8px 20px;" data-bs-dismiss="modal">Close</button>
+              <button class="btn btn-sm" id="reviseBtn" style="background:var(--v-accent);color:#fff;border-radius:10px;font-weight:600;padding:8px 24px;display:none;" onclick="reviseQuote()"><i class="fa-regular fa-pen-to-square me-1"></i> Revise Quote</button>
+              <button class="btn btn-sm" id="reopenBtn" style="background:#dbeafe;color:#1e40af;border-radius:10px;font-weight:600;padding:8px 24px;display:none;" onclick="reopenQuote()"><i class="fa-regular fa-rotate-left me-1"></i> Re-open</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      // ═══════════════════════════════════════════════════════
+      // Sidebar helpers
+      // ═══════════════════════════════════════════════════════
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--v-accent);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--v-accent);background:#f0fdf4;box-shadow:0 4px 16px rgba(16,185,129,.15)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--v-accent)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: 'Language set to ' + r.value.toUpperCase(), icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+
+      // ═══════════════════════════════════════════════════════
+      // Mock Quotes
+      // ═══════════════════════════════════════════════════════
+      const quotes = [
+        { id: 1, customer: 'Alex Harrison', company: 'Private Client', initials: 'AH', bg: '#1e40af',
+          product: 'Overkapping 4×3m with LED', productType: 'overkapping', lang: 'nl',
+          date: '22 May 2026', status: 'new', statusLabel: 'New', statusClass: 'new' },
+        { id: 2, customer: 'Sarah Mitchell', company: 'Mitchell Constructions', initials: 'SM', bg: '#065f46',
+          product: 'Plissé hor 6m Pet-proof', productType: 'plisse_hor', lang: 'nl',
+          date: '21 May 2026', status: 'new', statusLabel: 'New', statusClass: 'new' },
+        { id: 3, customer: 'David Miller', company: 'DM Holdings', initials: 'DM', bg: '#92400e',
+          product: 'PVC Excellence 5×4m', productType: 'pvc', lang: 'tr',
+          date: '20 May 2026', status: 'new', statusLabel: 'New', statusClass: 'new' },
+        { id: 4, customer: 'Linda Park', company: 'Park Development', initials: 'LP', bg: '#6b21a8',
+          product: 'Glas bestelformulier 6-panel', productType: 'glas', lang: 'nl',
+          date: '19 May 2026', status: 'priced', statusLabel: 'Quoted', statusClass: 'priced',
+          formData: { tableRows: 3, dikte1: '4mm', spouw1: '15mm', dikte2: '4mm', paneCount: 'double', glassType: 'gehard', glassColor: 'helder' },
+          pricing: { subtotal: 4200, discount: 0, tax: 21, grandTotal: 5082 } },
+        { id: 5, customer: 'James Wilson', company: 'Wilson & Co.', initials: 'JW', bg: '#15803d',
+          product: 'Zip-perde TR 5×5m', productType: 'zipperde', lang: 'tr',
+          date: '18 May 2026', status: 'new', statusLabel: 'New', statusClass: 'new' },
+        { id: 6, customer: 'Emma Turner', company: 'Brighton Homes', initials: 'ET', bg: '#be185d',
+          product: 'Plisségordijn 3×2.5m (x3)', productType: 'plisse', lang: 'nl',
+          date: '16 May 2026', status: 'priced', statusLabel: 'Quoted', statusClass: 'priced',
+          formData: { lengte: '250', breedte: '300', direction: 'horizontal', profColor: 'black', profWidth: 'normal', curtainColor: '#D4C5A9', blackout: 'full' },
+          pricing: { subtotal: 2850, discount: 0, tax: 21, grandTotal: 3448.5 } },
+        { id: 7, customer: 'Robert Chen', company: 'Chen Architecture', initials: 'RC', bg: '#1d4ed8',
+          product: 'Overkapping 8m Premium', productType: 'overkapping', lang: 'nl',
+          date: '14 May 2026', status: 'new', statusLabel: 'New', statusClass: 'new' },
+        { id: 8, customer: 'Maria Santos', company: 'Santos Design', initials: 'MS', bg: '#a16207',
+          product: 'PVC 70 Series 6×4m', productType: 'pvc', lang: 'tr',
+          date: '10 May 2026', status: 'declined', statusLabel: 'Declined', statusClass: 'declined' },
+      ];
+
+      let currentFilter = 'all';
+      let activeQuoteId = null;
+
+      function setFilter(btn) {
+        document.querySelectorAll('#filterGroup button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderQuotes();
+      }
+
+      function getFilteredQuotes() {
+        const search = document.getElementById('searchInput').value.toLowerCase().trim();
+        const sort = document.getElementById('sortSelect').value;
+        let filtered = quotes.filter(q => {
+          if (currentFilter !== 'all' && q.status !== currentFilter) return false;
+          if (search) {
+            const match = q.customer.toLowerCase().includes(search) || q.product.toLowerCase().includes(search);
+            if (!match) return false;
+          }
+          return true;
+        });
+        if (sort === 'newest') filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+        else filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+        return filtered;
+      }
+
+      function updateSummary() {
+        document.getElementById('sumTotal').textContent = String(quotes.length).padStart(2, '0');
+        document.getElementById('sumNew').textContent = String(quotes.filter(q => q.status === 'new').length).padStart(2, '0');
+        document.getElementById('sumPriced').textContent = String(quotes.filter(q => q.status === 'priced').length).padStart(2, '0');
+        document.getElementById('sumDeclined').textContent = String(quotes.filter(q => q.status === 'declined').length).padStart(2, '0');
+      }
+
+      const FORM_META = {
+        overkapping: { icon: 'fa-solid fa-umbrella', color: '#10b981' },
+        zipperde: { icon: 'fa-solid fa-arrows-up-down', color: '#f59e0b' },
+        pvc: { icon: 'fa-regular fa-window-maximize', color: '#3b82f6' },
+        plisse: { icon: 'fa-solid fa-bars-staggered', color: '#8b5cf6' },
+        plisse_hor: { icon: 'fa-solid fa-grip', color: '#ec4899' },
+        glas: { icon: 'fa-regular fa-cube', color: '#06b6d4' },
+      };
+
+      const LANG_META = { nl: { label: 'NL', cls: 'lang-nl' }, tr: { label: 'TR', cls: 'lang-tr' } };
+
+      function renderQuotes() {
+        const filtered = getFilteredQuotes();
+        const grid = document.getElementById('quoteGrid');
+        if (filtered.length === 0) {
+          grid.innerHTML = '<div class="empty-state"><i class="fa-regular fa-face-frown"></i><p>No quote requests match your criteria.</p></div>';
+          return;
+        }
+        grid.innerHTML = filtered.map(q => {
+          const isNew = q.status === 'new';
+          const meta = FORM_META[q.productType] || { icon: 'fa-file-lines', color: '#64748b' };
+          const lang = LANG_META[q.lang] || { label: '', cls: '' };
+          return `
+            <div class="quote-card">
+              <div class="qc-top">
+                <div class="qc-avatar" style="background:${q.bg};">${q.initials}</div>
+                <div class="qc-meta">
+                  <p class="qc-name">${q.customer}</p>
+                  <p class="qc-company">${q.company}</p>
+                </div>
+                <span class="qc-badge badge-${q.statusClass}">${q.statusLabel}</span>
+              </div>
+              <div class="qc-product">
+                <span class="qc-prod-icon" style="background:${meta.color}20;color:${meta.color};"><i class="${meta.icon}"></i></span>
+                <p class="qc-prod-name">${q.product}</p>
+                <span class="qc-prod-lang ${lang.cls}">${lang.label}</span>
+              </div>
+              <div class="qc-bottom">
+                <span class="qc-date"><i class="fa-regular fa-calendar me-1"></i>${q.date}</span>
+                <button class="qc-action ${isNew ? 'price' : 'view'}" onclick="${isNew ? `openFormModal(${q.id})` : `openDetailModal(${q.id})`}">${isNew ? 'Price Now' : 'View'}</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+        updateSummary();
+      }
+
+      // ═══════════════════════════════════════════════════════
+      // FORM DEFINITIONS
+      // ═══════════════════════════════════════════════════════
+      const FORM_DEFS = {
+        overkapping: {
+          title: 'Overkapping — Bestelformulier',
+          lang: 'NL',
+          groups: [
+            {
+              title: 'Contactgegevens',
+              icon: 'fa-address-card',
+              fields: [
+                { type: 'text', id: 'name_nl', label: 'Naam', col: 'half' },
+                { type: 'tel', id: 'phone_nl', label: 'Telefoon', col: 'half' },
+                { type: 'email', id: 'email_nl', label: 'E-mail', col: 'half' },
+                { type: 'date', id: 'datum', label: 'Datum', col: 'half' },
+                { type: 'textarea', id: 'adres', label: 'Adres & Postcode', col: 'full' },
+              ]
+            },
+            {
+              title: 'Afmetingen',
+              icon: 'fa-ruler-combined',
+              fields: [
+                { type: 'text', id: 'breedte', label: 'Breedte (Width)' },
+                { type: 'radios', id: 'diepte_type', label: 'Diepte (Depth)', options: [
+                  { v: 'standard', l: 'Standard' },
+                  { v: 'post', l: 'Including post' },
+                ]},
+                { type: 'text', id: 'diepte_val', label: 'Diepte — Value' },
+                { type: 'dimension', id: 'hoogte', label: 'Hoogte (Height)',
+                  sub1: { label: 'Wall plate (Muurplaat)', id: 'muurplaat' },
+                  sub2: { label: 'Passage height (Doorloophoogte)', id: 'doorloophoogte' } },
+              ]
+            },
+            {
+              title: 'Dak (Roof)',
+              icon: 'fa-arrow-up-from-bracket',
+              fields: [
+                { type: 'radios', id: 'dak', label: 'Dak Type', options: [
+                  { v: 'poly_clear', l: 'Polycarbonate — Clear (Helder)' },
+                  { v: 'poly_opal', l: 'Polycarbonate — Opal' },
+                  { v: 'glas_clear', l: 'Glass — Clear (Helder)' },
+                  { v: 'glas_opal', l: 'Glass — Opal' },
+                  { v: 'glas_getint', l: 'Glass — Tinted (Getint)' },
+                ]},
+              ]
+            },
+            {
+              title: 'Goot & Profiel',
+              icon: 'fa-paint-roller',
+              fields: [
+                { type: 'radios', id: 'goot', label: 'Goot (Gutter)', options: [
+                  { v: 'modern_strak', l: 'Modern Sleek (Modern Strak)', def: true },
+                ]},
+                { type: 'color_swatch', id: 'profiel_kleur', label: 'Profiel Kleur (Profile Color)', options: [
+                  { v: 'ral7016', l: 'Anthracite RAL 7016', color: '#383e42' },
+                  { v: 'ral9001', l: 'Cream RAL 9001', color: '#fdf4e3' },
+                  { v: 'ral9005', l: 'Black RAL 9005 (Zwart)', color: '#0a0a0a' },
+                ]},
+              ]
+            },
+            {
+              title: 'LED Verlichting',
+              icon: 'fa-lightbulb',
+              fields: [
+                { type: 'select', id: 'led_qty', label: 'LED Quantity per beam (Ligger)', options: [
+                  { v: '1', l: '1' }, { v: '2', l: '2' }, { v: '3', l: '3' }, { v: '4', l: '4' },
+                ]},
+                { type: 'radios', id: 'led_type', label: 'LED Type', options: [
+                  { v: 'cold', l: 'Cold (Koud)' },
+                  { v: 'warm', l: 'Warm' },
+                ]},
+              ]
+            },
+            {
+              title: 'Voorkant (Front Side)',
+              icon: 'fa-door-open',
+              fields: [
+                { type: 'radios', id: 'voorkant', label: 'Type', options: [
+                  { v: 'glas_schuif', l: 'Glass Sliding Walls (Glazen Schuifwanden)' },
+                  { v: 'schuifpui', l: 'Sliding Doors (Schuifpui)' },
+                ]},
+                { type: 'text', id: 'voorkant_hoogte', label: 'Height' },
+                { type: 'radios', id: 'voorkant_glas_type', label: 'Glass Type', options: [
+                  { v: 'clear', l: 'Clear' },
+                  { v: 'tinted', l: 'Tinted' },
+                ]},
+                { type: 'radios', id: 'voorkant_schuifpui', label: 'Sliding Door Glass', options: [
+                  { v: '442', l: 'Glass 4.4.2' },
+                  { v: '4155', l: 'Double glass 4.15.5' },
+                  { v: 'without', l: 'Without glass' },
+                ]},
+              ]
+            },
+            {
+              title: 'Zijkanten (Left/Right Sides)',
+              icon: 'fa-arrows-left-right',
+              fields: [
+                { type: 'checkboxes', id: 'zijkant_links', label: 'Left Side (Links)', options: [
+                  { v: 'poly_opal', l: 'Polycarbonate Opal' },
+                  { v: 'poly_clear', l: 'Polycarbonate Clear' },
+                  { v: 'sandwich', l: 'Sandwich Panels' },
+                  { v: 'glas', l: 'Glass' },
+                ]},
+                { type: 'checkboxes', id: 'zijkant_rechts', label: 'Right Side (Rechts)', options: [
+                  { v: 'poly_opal', l: 'Polycarbonate Opal' },
+                  { v: 'poly_clear', l: 'Polycarbonate Clear' },
+                  { v: 'sandwich', l: 'Sandwich Panels' },
+                  { v: 'glas', l: 'Glass' },
+                ]},
+              ]
+            },
+            {
+              title: 'Extras',
+              icon: 'fa-pen',
+              fields: [
+                { type: 'textarea', id: 'extras', label: 'Opmerkingen / Notities' },
+              ]
+            },
+          ]
+        },
+
+        zipperde: {
+          title: 'Zip-perde — Fiyat Teklifi Formu',
+          lang: 'TR',
+          groups: [
+            {
+              title: 'Product Bilgileri',
+              icon: 'fa-info-circle',
+              fields: [
+                { type: 'radios', id: 'perde_turu', label: 'Blind Type (Perde türü)', options: [
+                  { v: 'tavan', l: 'Ceiling blind (Tavan)' },
+                  { v: 'yan', l: 'Side blind (Yan)' },
+                ]},
+                { type: 'text', id: 'genislik', label: 'Width (Genişlik)' },
+                { type: 'text', id: 'yukseklik', label: 'Height/Depth (Yükseklik/Derinlik)' },
+                { type: 'number', id: 'adet', label: 'Quantity (Adet)' },
+              ]
+            },
+            {
+              title: 'Renk & Kumaş',
+              icon: 'fa-palette',
+              fields: [
+                { type: 'color_swatch', id: 'aluminyum_rengi', label: 'Aluminum Color (Alüminyum rengi)', options: [
+                  { v: 'antrasit', l: 'Anthracite (Antrasit)', color: '#383e42' },
+                  { v: 'krem', l: 'Cream (Krem)', color: '#fdf4e3' },
+                  { v: 'siyah', l: 'Black (Siyah)', color: '#0a0a0a' },
+                ]},
+                { type: 'radios', id: 'kumas_turu', label: 'Fabric Type (Kumaş türü)', options: [
+                  { v: 'copaco', l: 'Copaco' },
+                  { v: 'ferrari', l: 'Serge Ferrari' },
+                ]},
+                { type: 'text', id: 'kumas_rengi', label: 'Fabric Color (Kumaş rengi)' },
+              ]
+            },
+            {
+              title: 'Motor',
+              icon: 'fa-gear',
+              fields: [
+                { type: 'text', id: 'motor_tipi', label: 'Motor Type (Motor tipi)' },
+                { type: 'radios', id: 'motor_yonu', label: 'Motor Direction (Motor yönü)', options: [
+                  { v: 'sag', l: 'Right (Sağ)' },
+                  { v: 'sol', l: 'Left (Sol)' },
+                ]},
+              ]
+            },
+          ]
+        },
+
+        pvc: {
+          title: 'PVC Pencere & Kapı — Fiyat Teklifi Formu',
+          lang: 'TR',
+          groups: [
+            {
+              title: 'Ürün Detayları',
+              icon: 'fa-info-circle',
+              fields: [
+                { type: 'text', id: 'poz', label: 'Position ID (Poz)' },
+                { type: 'text', id: 'genislik_pvc', label: 'Width (Genişlik)' },
+                { type: 'text', id: 'yukseklik_pvc', label: 'Height (Yükseklik)' },
+                { type: 'number', id: 'adet_pvc', label: 'Quantity (Adet)' },
+                { type: 'select', id: 'seri', label: 'Series (Seri)', options: [
+                  { v: '70', l: '70 Series' },
+                  { v: 'excellence', l: 'Excellence' },
+                  { v: 'zenia', l: 'Sliding series Zenia' },
+                  { v: 'classic', l: 'Classic sliding' },
+                ]},
+              ]
+            },
+            {
+              title: 'Bakış & Açılma',
+              icon: 'fa-eye',
+              fields: [
+                { type: 'radios', id: 'bakis', label: 'View (Bakış)', options: [
+                  { v: 'icten', l: 'From inside (İçten)' },
+                ]},
+                { type: 'radios', id: 'acilma_sekli', label: 'Opening Type (Açılma Şekli)', options: [
+                  { v: 'ice', l: 'Inward opening (İçe açılım)' },
+                  { v: 'disa', l: 'Outward opening (Dışa açılım)' },
+                ]},
+              ]
+            },
+            {
+              title: 'Renk',
+              icon: 'fa-palette',
+              fields: [
+                { type: 'select', id: 'renk_ic', label: 'Interior (İç Renk)', options: [
+                  { v: 'beyaz', l: 'White' },
+                  { v: 'antrasit', l: 'Anthracite RAL 7016' },
+                  { v: 'altinmese', l: 'Golden Oak (Altınmeşe)' },
+                ]},
+                { type: 'select', id: 'renk_dis', label: 'Exterior (Dış Renk)', options: [
+                  { v: 'beyaz', l: 'White' },
+                  { v: 'antrasit', l: 'Anthracite RAL 7016' },
+                  { v: 'altinmese', l: 'Golden Oak (Altınmeşe)' },
+                ]},
+              ]
+            },
+            {
+              title: 'Cam (Glass)',
+              icon: 'fa-cube',
+              fields: [
+                { type: 'radios', id: 'cam_katmani', label: 'Glass Layer (Cam katmanı)', options: [
+                  { v: 'ikili', l: 'Double (İkili)' },
+                  { v: 'uclu', l: 'Triple (Üçlü)' },
+                ]},
+                { type: 'radios', id: 'cam_turu', label: 'Glass Type (Cam türü)', options: [
+                  { v: 'classic_argon', l: 'Classic Argon insulated' },
+                  { v: 'tempered_argon', l: 'Tempered Argon insulated' },
+                ]},
+              ]
+            },
+          ]
+        },
+
+        plisse: {
+          title: 'Plisségordijn — Bestelformulier',
+          lang: 'NL',
+          groups: [
+            {
+              title: 'Afmetingen',
+              icon: 'fa-ruler',
+              fields: [
+                { type: 'text', id: 'lengte', label: 'Length (Lengte)' },
+                { type: 'text', id: 'breedte_pl', label: 'Width (Breedte)' },
+              ]
+            },
+            {
+              title: 'Specificaties',
+              icon: 'fa-sliders',
+              fields: [
+                { type: 'radios', id: 'richting', label: 'Opening Direction', options: [
+                  { v: 'horizontal', l: 'Horizontal' },
+                  { v: 'vertical', l: 'Vertical' },
+                ]},
+                { type: 'color_swatch', id: 'profiel_kleur_pl', label: 'Profile Color', options: [
+                  { v: 'antracite', l: 'Anthracite', color: '#383e42' },
+                  { v: 'cream', l: 'Cream', color: '#fdf4e3' },
+                  { v: 'black', l: 'Black', color: '#0a0a0a' },
+                ]},
+                { type: 'radios', id: 'profiel_breedte', label: 'Profile Width', options: [
+                  { v: 'normal', l: 'Normal' },
+                  { v: 'smal', l: 'Slim (Smal)' },
+                ]},
+                { type: 'color', id: 'gordijn_kleur', label: 'Curtain Color' },
+                { type: 'radios', id: 'verduistering', label: 'Blackout (Verduistering)', options: [
+                  { v: 'half', l: 'Half darkening' },
+                  { v: 'full', l: 'Full blackout' },
+                ]},
+              ]
+            },
+            {
+              title: 'Extras',
+              icon: 'fa-pen',
+              fields: [
+                { type: 'textarea', id: 'extras_pl', label: 'Extra opmerkingen' },
+              ]
+            },
+          ]
+        },
+
+        plisse_hor: {
+          title: 'Plissé Hor (Insect Screen) — Bestelformulier',
+          lang: 'NL',
+          groups: [
+            {
+              title: 'Afmetingen',
+              icon: 'fa-ruler',
+              fields: [
+                { type: 'text', id: 'lengte_hor', label: 'Length (Lengte)' },
+                { type: 'text', id: 'breedte_hor', label: 'Width (Breedte)' },
+              ]
+            },
+            {
+              title: 'Specificaties',
+              icon: 'fa-sliders',
+              fields: [
+                { type: 'radios', id: 'kwaliteit', label: 'Quality (Kwaliteit)', options: [
+                  { v: 'standard', l: 'Standard' },
+                  { v: 'kedi', l: 'Pet-proof (Kedi — voor katten)' },
+                ]},
+                { type: 'radios', id: 'type_hor', label: 'Type', options: [
+                  { v: 'enkel', l: 'Single (Enkel)' },
+                  { v: 'dubbel', l: 'Double (Dubbel)' },
+                ]},
+                { type: 'radios', id: 'richting_hor', label: 'Opening Direction', options: [
+                  { v: 'horizontal', l: 'Horizontal' },
+                  { v: 'vertical', l: 'Vertical' },
+                ]},
+                { type: 'color_swatch', id: 'profiel_kleur_hor', label: 'Profile Color', options: [
+                  { v: 'antracite', l: 'Anthracite', color: '#383e42' },
+                  { v: 'cream', l: 'Cream', color: '#fdf4e3' },
+                  { v: 'black', l: 'Black', color: '#0a0a0a' },
+                ]},
+                { type: 'radios', id: 'drempel', label: 'Threshold Type (Drempeltype)', options: [
+                  { v: 'met', l: 'With threshold (Met)' },
+                  { v: 'zonder', l: 'Without (Zonder)' },
+                ]},
+                { type: 'radios', id: 'drempel_kleur', label: 'Threshold Color', options: [
+                  { v: 'cream', l: 'Cream' },
+                  { v: 'black', l: 'Black' },
+                ]},
+                { type: 'radios', id: 'profiel_breedte_hor', label: 'Profile Width', options: [
+                  { v: 'normal', l: 'Normal' },
+                  { v: 'smal', l: 'Slim (Smal)' },
+                ]},
+              ]
+            },
+            {
+              title: 'Extras',
+              icon: 'fa-pen',
+              fields: [
+                { type: 'textarea', id: 'extras_hor', label: 'Extra opmerkingen' },
+              ]
+            },
+          ]
+        },
+
+        glas: {
+          title: 'Glas Bestelformulier',
+          lang: 'NL',
+          groups: [
+            {
+              title: 'Ruit Afmetingen (Pane Dimensions)',
+              icon: 'fa-table',
+              fields: [
+                { type: 'dim_table', id: 'glas_table', label: 'Afmetingen',
+                  cols: [
+                    { id: 'gw', label: 'Width (Breedte)' },
+                    { id: 'gh', label: 'Height (Hoogte)' },
+                    { id: 'gq', label: 'Quantity (Aantal)' },
+                  ],
+                  defaultRows: 3 },
+              ]
+            },
+            {
+              title: 'Glasstructuur (Glass Structure)',
+              icon: 'fa-layer-group',
+              fields: [
+                { type: 'structure', id: 'structuur', label: 'Dikte (Structure: Glass + Spouw + Glass)' },
+              ]
+            },
+            {
+              title: 'Configuratie',
+              icon: 'fa-gear',
+              fields: [
+                { type: 'radios', id: 'aantal_ruiten', label: 'Number of Panes (Aantal ruiten)', options: [
+                  { v: 'single', l: 'Single (Enkel)' },
+                  { v: 'double', l: 'Double (Dubbel)' },
+                  { v: 'triple', l: 'Triple (Drievoudig)' },
+                ]},
+                { type: 'radios', id: 'soort_glas', label: 'Glass Type (Soort glas)', options: [
+                  { v: 'ongehard', l: 'Unhardened (Ongehard)' },
+                  { v: 'gehard', l: 'Tempered (Gehard)' },
+                  { v: 'gelaagd', l: 'Laminated (Gelaagd)' },
+                ]},
+                { type: 'radios', id: 'glaskleur', label: 'Glass Color (Glaskleur)', options: [
+                  { v: 'helder', l: 'Clear (Helder)' },
+                  { v: 'opaal', l: 'Opal' },
+                  { v: 'getint', l: 'Tinted (Getint)' },
+                ]},
+              ]
+            },
+            {
+              title: 'Extras',
+              icon: 'fa-pen',
+              fields: [
+                { type: 'textarea', id: 'extras_glas', label: 'Extra opmerkingen' },
+              ]
+            },
+          ]
+        },
+      };
+
+      // ═══════════════════════════════════════════════════════
+      // FORM RENDERER
+      // ═══════════════════════════════════════════════════════
+      let priceFields = {};
+
+      function renderForm(productType, q) {
+        const def = FORM_DEFS[productType];
+        if (!def) return '<p>Form not found for this product type.</p>';
+
+        let html = '';
+
+        // Customer info
+        html += `
+          <div class="fm-cust-info">
+            <div class="ci-avatar" style="background:${q.bg};">${q.initials}</div>
+            <div class="ci-meta">
+              <p>${q.customer}</p>
+              <span>${q.company}</span>
+              <span style="margin:0 6px;color:#e2e8f0;">·</span>
+              <span>${q.product}</span>
+            </div>
+          </div>`;
+
+        // Form title
+        html += `<div style="margin-bottom:16px;">
+          <span style="font-size:16px;font-weight:700;color:var(--v-primary);">${def.title}</span>
+          <span class="qc-prod-lang ${q.lang === 'nl' ? 'lang-nl' : 'lang-tr'}" style="margin-left:8px;display:inline-block;padding:2px 10px;border-radius:50px;font-size:10px;font-weight:600;">${def.lang}</span>
+        </div>`;
+
+        // Groups
+        def.groups.forEach(g => {
+            html += `<div class="fm-group">
+            <div class="fm-group-header"><i class="fa-solid ${g.icon || 'fa-file'}"></i> ${g.title}</div>
+            <div class="fm-group-body">`;
+
+          g.fields.forEach(f => {
+            html += renderField(f, productType, q);
+          });
+
+          html += `</div></div>`;
+        });
+
+        // Pricing summary at bottom
+        html += `
+          <div class="fm-pricing-summary" id="fmPricingSummary">
+            <div class="ps-row">
+              <label>Subtotal</label>
+              <span class="ps-value" id="psSubtotal">€0.00</span>
+            </div>
+            <div class="ps-row">
+              <label>Discount (%)</label>
+              <input type="number" class="ps-input" id="psDiscount" value="0" min="0" max="100" oninput="calcFormTotal()" />
+            </div>
+            <div class="ps-row">
+              <label>Tax Rate (%)</label>
+              <input type="number" class="ps-input" id="psTax" value="21" min="0" max="100" oninput="calcFormTotal()" />
+            </div>
+            <div class="ps-divider"></div>
+            <div class="ps-row">
+              <label style="font-weight:700;font-size:16px;color:var(--v-primary);">Grand Total</label>
+              <span class="ps-value ps-total" id="psGrandTotal">€0.00</span>
+            </div>
+          </div>`;
+
+        return html;
+      }
+
+      function renderField(f, productType, q) {
+        const pfx = productType + '_';
+        const id = f.id;
+        if (f.type === 'full') return `<div class="fm-row"><div class="fm-field">${renderInput(f, id)}</div></div>`;
+
+        if (f.type === 'half') {
+          return `<div class="fm-row"><div class="fm-field fm-field-half">${renderInput(f, id)}</div></div>`;
+        }
+
+        if (f.type === 'text' || f.type === 'number' || f.type === 'tel' || f.type === 'email' || f.type === 'date') {
+          return `<div class="fm-row"><div class="fm-field"><span class="fm-label">${f.label}</span>${renderInput(f, id)}${f.price !== false ? renderPrice(id, productType) : ''}</div></div>`;
+        }
+
+        if (f.type === 'textarea') {
+          return `<div class="fm-row"><div class="fm-field"><span class="fm-label">${f.label}</span><textarea id="${id}" rows="3"></textarea>${f.price !== false ? renderPrice(id, productType) : ''}</div></div>`;
+        }
+
+        if (f.type === 'select') {
+          const opts = (f.options || []).map(o => `<option value="${o.v}">${o.l}</option>`).join('');
+          return `<div class="fm-row"><div class="fm-field"><span class="fm-label">${f.label}</span><select id="${id}">${opts}</select>${renderPrice(id, productType)}</div></div>`;
+        }
+
+        if (f.type === 'radios') {
+          const opts = (f.options || []).map(o => {
+            const checked = o.def ? ' checked' : '';
+            return `<label><input type="radio" name="${id}" value="${o.v}"${checked} onchange="onFormChange()" /><span>${o.l}</span></label>`;
+          }).join('');
+          return `<div class="fm-row"><div class="fm-field"><span class="fm-label">${f.label}</span><div class="fm-radio-group">${opts}</div>${renderPrice(id, productType)}</div></div>`;
+        }
+
+        if (f.type === 'checkboxes') {
+          const opts = (f.options || []).map(o =>
+            `<label><input type="checkbox" name="${id}" value="${o.v}" onchange="onFormChange()" /><span>${o.l}</span></label>`
+          ).join('');
+          return `<div class="fm-row"><div class="fm-field"><span class="fm-label">${f.label}</span><div class="fm-check-group">${opts}</div>${renderPrice(id, productType)}</div></div>`;
+        }
+
+        if (f.type === 'color_swatch') {
+          const swatches = (f.options || []).map(o =>
+            `<div class="cs-item" style="background:${o.color};" data-val="${o.v}" onclick="selectSwatch(this,'${id}')" title="${o.l}"><span class="cs-check"><i class="fa-solid fa-check"></i></span></div>`
+          ).join('');
+          return `<div class="fm-row"><div class="fm-field"><span class="fm-label">${f.label}</span><input type="hidden" id="${id}" value="" /><div class="fm-color-swatch">${swatches}</div>${renderPrice(id, productType)}</div></div>`;
+        }
+
+        if (f.type === 'color') {
+          return `<div class="fm-row"><div class="fm-field"><span class="fm-label">${f.label}</span><input type="color" id="${id}" value="#D4C5A9" style="width:60px;height:40px;padding:2px;cursor:pointer;" />${f.price !== false ? renderPrice(id, productType) : ''}</div></div>`;
+        }
+
+        if (f.type === 'dimension') {
+          return `<div class="fm-row"><div class="fm-field"><span class="fm-label">${f.label}</span>
+            <div style="display:flex;gap:12px;">
+              <div style="flex:1;"><input type="text" id="${f.sub1.id}" placeholder="${f.sub1.label}" /></div>
+              <div style="flex:1;"><input type="text" id="${f.sub2.id}" placeholder="${f.sub2.label}" /></div>
+            </div>${renderPrice(id, productType)}</div></div>`;
+        }
+
+        if (f.type === 'dim_table') {
+          let th = (f.cols || []).map(c => `<th>${c.label}</th>`).join('');
+          let tr = '';
+          for (let i = 0; i < (f.defaultRows || 1); i++) {
+            tr += '<tr>';
+            (f.cols || []).forEach(c => {
+              tr += `<td><input type="text" class="dt-${c.id}" data-row="${i}" /></td>`;
+            });
+            tr += `<td><input type="number" class="dt-price" data-row="${i}" style="width:80px;text-align:right;" placeholder="€" oninput="onFormChange()" /></td>`;
+            tr += '</tr>';
+          }
+          return `<div class="fm-row"><div class="fm-field"><span class="fm-label">${f.label}</span>
+            <div class="fm-table-wrap"><table class="fm-table"><thead><tr>${th}<th style="text-align:right;">Unit Price (€)</th></tr></thead><tbody id="dimTableBody_${id}">${tr}</tbody></table></div>
+            <div class="fm-table-extras"><button onclick="addDimRow('${id}')"><i class="fa-solid fa-plus me-1"></i> Add Row</button></div>
+            </div></div>`;
+        }
+
+        if (f.type === 'structure') {
+          return `<div class="fm-row"><div class="fm-field"><span class="fm-label">${f.label}</span>
+            <div class="fm-structure">
+              <div class="strut-item"><input type="text" id="struct_glas1" placeholder="Glass (mm)" /></div>
+              <span class="strut-plus">+</span>
+              <div class="strut-item"><input type="text" id="struct_spouw" placeholder="Cavity/Spouw (mm)" /></div>
+              <span class="strut-plus">+</span>
+              <div class="strut-item"><input type="text" id="struct_glas2" placeholder="Glass (mm)" /></div>
+            </div>
+            <div class="fm-price-wrap" style="margin-top:8px;">
+              <span class="fm-price-sign">€</span>
+              <input type="number" id="price_structuur" placeholder="Price per m²" min="0" step="0.01" style="width:140px;" oninput="onFormChange()" />
+            </div>
+            </div></div>`;
+        }
+
+        return '';
+      }
+
+      function renderInput(f, id) {
+        const inputType = f.type === 'textarea' ? 'textarea' : f.type;
+        if (inputType === 'textarea') return `<textarea id="${id}" rows="3" placeholder="${f.placeholder || ''}"></textarea>`;
+        if (inputType === 'select') {
+          const opts = (f.options || []).map(o => `<option value="${o.v}">${o.l}</option>`).join('');
+          return `<select id="${id}">${opts}</select>`;
+        }
+        return `<input type="${inputType}" id="${id}" placeholder="${f.placeholder || ''}" />`;
+      }
+
+      function renderPrice(fieldId, productType) {
+        return `
+          <div class="fm-price-wrap">
+            <span class="fm-price-sign">€</span>
+            <input type="number" id="price_${fieldId}" placeholder="Price" min="0" step="0.01" oninput="onFormChange()" />
+          </div>`;
+      }
+
+      function selectSwatch(el, id) {
+        document.querySelectorAll(`.cs-item[data-val]`).forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById(id).value = el.dataset.val;
+        onFormChange();
+      }
+
+      let dimRowCounters = {};
+
+      function addDimRow(tableId) {
+        if (!dimRowCounters[tableId]) dimRowCounters[tableId] = 0;
+        dimRowCounters[tableId]++;
+        const tbody = document.querySelector(`#dimTableBody_${tableId}`);
+        if (!tbody) return;
+        const cols = FORM_DEFS.glas ? FORM_DEFS.glas.groups[0].fields[0].cols : [];
+        let td = '<tr>';
+        (cols || []).forEach(c => {
+          td += `<td><input type="text" class="dt-${c.id}" data-row="${dimRowCounters[tableId]}" /></td>`;
+        });
+        td += `<td><input type="number" class="dt-price" data-row="${dimRowCounters[tableId]}" style="width:80px;text-align:right;" placeholder="€" oninput="onFormChange()" /></td>`;
+        td += '</tr>';
+        tbody.insertAdjacentHTML('beforeend', td);
+      }
+
+      function onFormChange() {
+        calcFormTotal();
+      }
+
+      function calcFormTotal() {
+        let subtotal = 0;
+
+        // Gather all price inputs
+        document.querySelectorAll('#formModalBody input[type="number"]').forEach(inp => {
+          const val = parseFloat(inp.value) || 0;
+          if (inp.id.startsWith('price_') && !inp.id.includes('ps') && !inp.id.includes('discount') && !inp.id.includes('tax')) {
+            subtotal += val;
+          }
+        });
+
+        // dim table prices
+        document.querySelectorAll('.dt-price').forEach(inp => {
+          subtotal += parseFloat(inp.value) || 0;
+        });
+
+        // structure price
+        const structPrice = parseFloat(document.getElementById('price_structuur')?.value) || 0;
+        subtotal += structPrice;
+
+        const discount = parseFloat(document.getElementById('psDiscount')?.value) || 0;
+        const tax = parseFloat(document.getElementById('psTax')?.value) || 0;
+        const discountAmt = subtotal * discount / 100;
+        const taxable = subtotal - discountAmt;
+        const taxAmt = taxable * tax / 100;
+        const grandTotal = taxable + taxAmt;
+
+        document.getElementById('psSubtotal').textContent = formatCurrency(subtotal);
+        document.getElementById('psGrandTotal').textContent = formatCurrency(grandTotal);
+      }
+
+      function formatCurrency(amount) {
+        return '\u20ac' + amount.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      // ═══════════════════════════════════════════════════════
+      // MODAL ACTIONS
+      // ═══════════════════════════════════════════════════════
+      function openFormModal(id) {
+        const q = quotes.find(x => x.id === id);
+        if (!q) return;
+        activeQuoteId = id;
+
+        const def = FORM_DEFS[q.productType];
+        document.getElementById('formModalTitle').innerHTML = `<i class="${(FORM_META[q.productType] || {}).icon || 'fa-regular fa-file-lines'} me-2"></i>${def ? def.title : 'Price Quote'}`;
+        document.getElementById('formModalBody').innerHTML = renderForm(q.productType, q);
+
+        // Prefill saved form data if any
+        if (q.formData) {
+          Object.keys(q.formData).forEach(key => {
+            const el = document.getElementById(key);
+            if (el) el.value = q.formData[key];
+          });
+          const lastTotal = (q.pricing && q.pricing.grandTotal) || 0;
+          if (lastTotal > 0) {
+            document.getElementById('psSubtotal').textContent = formatCurrency(lastTotal);
+            document.getElementById('psGrandTotal').textContent = formatCurrency(lastTotal);
+          }
+        }
+
+        const modal = new bootstrap.Modal(document.getElementById('formModal'));
+        modal.show();
+      }
+
+      function collectFormData() {
+        const data = {};
+        document.querySelectorAll('#formModalBody input:not([type="hidden"]):not([type="radio"]):not([type="checkbox"]), #formModalBody textarea, #formModalBody select').forEach(el => {
+          if (el.id && !el.id.startsWith('price_') && el.id !== 'psDiscount' && el.id !== 'psTax') {
+            data[el.id] = el.value;
+          }
+        });
+        document.querySelectorAll('#formModalBody input[type="radio"]:checked').forEach(el => {
+          if (el.name) data[el.name] = el.value;
+        });
+        document.querySelectorAll('#formModalBody input[type="checkbox"]:checked').forEach(el => {
+          if (el.name) {
+            if (!data[el.name]) data[el.name] = [];
+            data[el.name].push(el.value);
+          }
+        });
+        // Hidden fields (swatches)
+        document.querySelectorAll('#formModalBody input[type="hidden"]').forEach(el => {
+          if (el.id && el.value) data[el.id] = el.value;
+        });
+        return data;
+      }
+
+      function collectPricing() {
+        let subtotal = 0;
+        document.querySelectorAll('#formModalBody input[type="number"]').forEach(inp => {
+          const val = parseFloat(inp.value) || 0;
+          if (inp.id.startsWith('price_') && inp.id !== 'price_' && !inp.id.includes('ps') && inp.id !== 'price_structuur') {
+            subtotal += val;
+          }
+        });
+        document.querySelectorAll('.dt-price').forEach(inp => {
+          subtotal += parseFloat(inp.value) || 0;
+        });
+        const structPrice = parseFloat(document.getElementById('price_structuur')?.value) || 0;
+        subtotal += structPrice;
+
+        const discount = parseFloat(document.getElementById('psDiscount')?.value) || 0;
+        const tax = parseFloat(document.getElementById('psTax')?.value) || 0;
+        const discountAmt = subtotal * discount / 100;
+        const taxable = subtotal - discountAmt;
+        const taxAmt = taxable * tax / 100;
+        const grandTotal = taxable + taxAmt;
+
+        return { subtotal, discount, tax, grandTotal };
+      }
+
+      function saveFormDraft() {
+        bootstrap.Modal.getInstance(document.getElementById('formModal')).hide();
+        Swal.fire({ icon: 'success', title: 'Draft Saved', timer: 1500, showConfirmButton: false, toast: true, position: 'top-end' });
+      }
+
+      function sendFormQuote() {
+        const q = quotes.find(x => x.id === activeQuoteId);
+        if (!q) return;
+
+        const pricing = collectPricing();
+        if (pricing.subtotal <= 0) {
+          Swal.fire({ icon: 'warning', title: 'Add at least one price', timer: 1500, showConfirmButton: false });
+          return;
+        }
+
+        q.formData = collectFormData();
+        q.pricing = pricing;
+        q.status = 'priced';
+        q.statusLabel = 'Quoted';
+        q.statusClass = 'priced';
+
+        bootstrap.Modal.getInstance(document.getElementById('formModal')).hide();
+        renderQuotes();
+
+        Swal.fire({
+          icon: 'success', title: 'Quote Sent!',
+          text: 'Quote for ' + q.customer + ' has been sent.',
+          showConfirmButton: false, timer: 2000, toast: true, position: 'top-end',
+        });
+      }
+
+      // ═══════════════════════════════════════════════════════
+      // DETAIL MODAL
+      // ═══════════════════════════════════════════════════════
+      function openDetailModal(id) {
+        const q = quotes.find(x => x.id === id);
+        if (!q) return;
+        activeQuoteId = id;
+
+        const def = FORM_DEFS[q.productType];
+        let body = '';
+
+        body += `
+          <div class="fm-cust-info">
+            <div class="ci-avatar" style="background:${q.bg};">${q.initials}</div>
+            <div class="ci-meta">
+              <p>${q.customer}</p>
+              <span>${q.company}</span>
+              <span style="margin:0 6px;color:#e2e8f0;">·</span>
+              <span>${q.product}</span>
+            </div>
+          </div>
+          <div style="margin-bottom:16px;">
+            <span style="font-size:12px;color:#94a3b8;">Status:</span>
+            <span class="badge-${q.statusClass}" style="font-size:11px;font-weight:600;padding:4px 14px;border-radius:50px;margin-left:8px;">${q.statusLabel}</span>
+            <span style="margin-left:20px;font-size:12px;color:#94a3b8;">Date:</span>
+            <span style="font-size:12px;font-weight:600;color:var(--v-primary);margin-left:6px;">${q.date}</span>
+          </div>`;
+
+        if (def && q.formData) {
+          body += `<div style="margin-bottom:16px;">
+            <span style="font-weight:600;font-size:14px;color:var(--v-primary);">${def.title}</span>
+            <span class="qc-prod-lang ${q.lang === 'nl' ? 'lang-nl' : 'lang-tr'}" style="margin-left:8px;display:inline-block;padding:2px 10px;border-radius:50px;font-size:10px;font-weight:600;">${def.lang}</span>
+          </div>`;
+
+          def.groups.forEach(g => {
+            body += `<div class="fm-group">
+              <div class="fm-group-header"><i class="fa-solid ${g.icon || 'fa-file'}"></i> ${g.title}</div>
+              <div class="fm-group-body"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">`;
+
+            g.fields.forEach(f => {
+              let val = q.formData[f.id] || '';
+              if (Array.isArray(val)) val = val.join(', ');
+              if (f.type === 'color_swatch') {
+                const matched = (f.options || []).find(o => o.v === val);
+                val = matched ? matched.l : val;
+              }
+              if (f.type === 'radios' || f.type === 'select') {
+                const matched = (f.options || []).find(o => o.v === val);
+                if (matched) val = matched.l;
+              }
+              if (val) {
+                body += `<div><span style="font-size:11px;color:#94a3b8;display:block;">${f.label}</span><span style="font-size:13px;font-weight:500;color:var(--v-primary);">${val}</span></div>`;
+              }
+            });
+
+            body += `</div></div></div>`;
+          });
+        }
+
+        // Pricing summary
+        if (q.pricing) {
+          body += `
+            <div class="fm-pricing-summary">
+              <div class="ps-row"><label>Subtotal</label><span class="ps-value">${formatCurrency(q.pricing.subtotal)}</span></div>
+              <div class="ps-row"><label>Discount (%)</label><span class="ps-value">${q.pricing.discount}%</span></div>
+              <div class="ps-row"><label>Tax Rate (%)</label><span class="ps-value">${q.pricing.tax}%</span></div>
+              <div class="ps-divider"></div>
+              <div class="ps-row"><label style="font-weight:700;font-size:16px;color:var(--v-primary);">Grand Total</label><span class="ps-value ps-total">${formatCurrency(q.pricing.grandTotal)}</span></div>
+            </div>`;
+        }
+
+        document.getElementById('detailModalBody').innerHTML = body;
+        document.getElementById('reviseBtn').style.display = q.status === 'priced' ? 'inline-block' : 'none';
+        document.getElementById('reopenBtn').style.display = q.status === 'declined' ? 'inline-block' : 'none';
+
+        const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+        modal.show();
+      }
+
+      function reviseQuote() {
+        bootstrap.Modal.getInstance(document.getElementById('detailModal')).hide();
+        openFormModal(activeQuoteId);
+      }
+
+      function reopenQuote() {
+        const q = quotes.find(x => x.id === activeQuoteId);
+        if (!q) return;
+        q.status = 'new';
+        q.statusLabel = 'New';
+        q.statusClass = 'new';
+        bootstrap.Modal.getInstance(document.getElementById('detailModal')).hide();
+        renderQuotes();
+        Swal.fire({ icon: 'success', title: 'Request Re-opened', text: 'Quote for ' + q.customer + ' has been re-opened.', showConfirmButton: false, timer: 2000, toast: true, position: 'top-end' });
+      }
+
+      // Init
+      renderQuotes();
+    </script>
+  </body>
+</html>

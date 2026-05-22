@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maintenance Guide | AZ Aluminium</title>
+    <meta name="description" content="Keep your AZ Aluminium products in peak condition with our expert maintenance guides for doors, windows, pergolas, and more." />
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <style>
+      .mt-hero {
+        background: linear-gradient(135deg, #0a1929 0%, #1a365d 50%, #0a1929 100%);
+        padding: 80px 0 70px; text-align: center; position: relative; overflow: hidden;
+      }
+      .mt-hero::before {
+        content: ''; position: absolute; inset: 0;
+        background: radial-gradient(circle at 20% 50%, rgba(255,107,0,0.08) 0%, transparent 50%),
+          radial-gradient(circle at 80% 30%, rgba(0,150,200,0.06) 0%, transparent 50%);
+        pointer-events: none;
+      }
+      .mt-hero .mt-icon { font-size: 60px; color: var(--cta-orange); margin-bottom: 18px; opacity: .85; }
+      .mt-hero h1 { color: #fff; font-size: 40px; font-weight: 800; margin-bottom: 12px; }
+      .mt-hero p { color: rgba(255,255,255,.7); max-width: 560px; margin: 0 auto; font-size: 16px; line-height: 1.7; }
+
+      .mt-section { padding: 70px 0; }
+      .mt-section.bg-fade { background: #f8fafc; }
+      .mt-section h2.section-title { font-size: 30px; font-weight: 700; color: var(--primary-blue); margin-bottom: 14px; }
+      .mt-section .section-sub { color: #94a3b8; font-size: 15px; margin-bottom: 40px; }
+
+      .mt-tabs .nav-pills { justify-content: center; gap: 10px; margin-bottom: 44px; flex-wrap: wrap; }
+      .mt-tabs .nav-pills .nav-link {
+        padding: 11px 26px; border-radius: 50px; font-weight: 500; font-size: 14px;
+        color: var(--primary-blue); border: 1px solid #e2e8f0; background: #fff; transition: .3s;
+      }
+      .mt-tabs .nav-pills .nav-link:hover { border-color: var(--cta-orange); color: var(--cta-orange); }
+      .mt-tabs .nav-pills .nav-link.active { background: var(--primary-blue); color: #fff; border-color: var(--primary-blue); }
+
+      .mt-card {
+        background: #fff; border-radius: 18px; padding: 30px 28px; height: 100%;
+        border: 1px solid #edf2f7; transition: .3s;
+      }
+      .mt-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,.04); border-color: #e2e8f0; }
+      .mt-card .mc-icon { font-size: 34px; color: var(--cta-orange); margin-bottom: 14px; }
+      .mt-card h5 { font-weight: 600; color: var(--primary-blue); margin-bottom: 14px; font-size: 17px; }
+      .mt-card ul { list-style: none; padding: 0; margin: 0; }
+      .mt-card ul li { padding: 7px 0; font-size: 13px; color: #64748b; border-bottom: 1px dashed #f0f0f0; display: flex; align-items: flex-start; gap: 10px; }
+      .mt-card ul li:last-child { border-bottom: none; }
+      .mt-card ul li i { color: var(--primary-blue); margin-top: 4px; flex-shrink: 0; font-size: 12px; }
+
+      .season-grid .sc-card {
+        background: #fff; border-radius: 18px; padding: 30px 24px; height: 100%;
+        border: 1px solid #edf2f7; text-align: center; transition: .35s;
+      }
+      .season-grid .sc-card:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(0,0,0,.05); }
+      .season-grid .sc-card .sc-icon { font-size: 42px; margin-bottom: 14px; }
+      .season-grid .sc-card h5 { font-weight: 600; color: var(--primary-blue); margin-bottom: 12px; }
+      .season-grid .sc-card ul { text-align: left; list-style: none; padding: 0; margin: 12px 0 0; }
+      .season-grid .sc-card ul li { padding: 5px 0; font-size: 13px; color: #64748b; display: flex; align-items: center; gap: 8px; }
+      .season-grid .sc-card ul li i { font-size: 10px; }
+
+      .mt-tips .tip-item { display: flex; gap: 20px; padding: 22px 0; border-bottom: 1px solid #edf2f7; }
+      .mt-tips .tip-item:last-child { border-bottom: none; }
+      .mt-tips .tip-item .tip-num {
+        width: 46px; height: 46px; min-width: 46px;
+        background: linear-gradient(135deg, var(--primary-blue), #1a365d); color: #fff;
+        border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;
+      }
+      .mt-tips .tip-item .tip-content h6 { font-weight: 600; color: var(--primary-blue); margin-bottom: 4px; }
+      .mt-tips .tip-item .tip-content p { font-size: 13px; color: #64748b; margin: 0; line-height: 1.7; }
+
+      .mt-cta { padding: 70px 0; text-align: center; }
+      .mt-cta h2 { font-size: 30px; font-weight: 700; color: var(--primary-blue); margin-bottom: 10px; }
+      .mt-cta p { color: #94a3b8; max-width: 480px; margin: 0 auto 28px; font-size: 15px; }
+      .mt-cta .btn-cta {
+        padding: 16px 44px; border-radius: 14px; font-weight: 600; font-size: 15px;
+        background: var(--primary-blue); color: #fff; text-decoration: none;
+        display: inline-flex; align-items: center; gap: 10px; transition: .3s;
+      }
+      .mt-cta .btn-cta:hover { background: #15304a; transform: translateY(-2px); }
+
+      @media (max-width: 768px) {
+        .mt-hero { padding: 60px 0 50px; }
+        .mt-hero h1 { font-size: 28px; }
+        .mt-hero .mt-icon { font-size: 48px; }
+        .mt-section { padding: 50px 0; }
+        .mt-section h2.section-title { font-size: 24px; }
+        .mt-card { padding: 24px 20px; }
+        .mt-tabs .nav-pills .nav-link { padding: 9px 18px; font-size: 13px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="az-navbar navbar navbar-expand-lg sticky-top bg-white">
+      <div class="container-fluid px-lg-5">
+        <a class="navbar-brand az-brand" href="index.html">
+          <img src="images/logo.png" alt="AZ Aluminium Logo" height="55" />
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+          <i class="fa-solid fa-bars-staggered" style="color:var(--primary-blue);"></i>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="products.html">Products</a></li>
+            <li><a class="nav-link" href="tech-specs.html">Technical Specs</a></li>
+            <li><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link" href="projects.html">Projects</a></li>
+            <li><a class="nav-link" href="about.html">About Us</a></li>
+            <li><a class="nav-link" href="contact.html">Contact</a></li>
+          </ul>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-globe header-icon" onclick="switchLanguage()" title="Language"></i>
+            <i class="fa-regular fa-clock header-icon"></i>
+            <i class="fa-solid fa-phone header-icon"></i>
+            <a href="quote.html" class="btn btn-quote ms-4">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="offcanvas offcanvas-start" id="sidebarMenu">
+      <div class="offcanvas-header pt-4">
+        <h5 class="text-white px-3">Menu</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+      </div>
+      <div class="offcanvas-body px-4">
+        <a class="nav-link" href="products.html">Products</a>
+        <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+        <a class="nav-link" href="gallery.html">Gallery</a>
+        <a class="nav-link" href="projects.html">Projects</a>
+        <a class="nav-link" href="about.html">About Us</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+        <a href="quote.html" class="btn btn-quote w-100 mt-4">Get a Quote</a>
+      </div>
+    </div>
+
+    <main>
+      <section class="mt-hero">
+        <div class="container">
+          <div class="mt-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          <h1>Maintenance Guide</h1>
+          <p>Expert care instructions to keep your aluminium systems looking pristine and performing at their best for decades.</p>
+        </div>
+      </section>
+
+      <section class="mt-section mt-tabs">
+        <div class="container">
+          <h2 class="section-title text-center">Product Care Guides</h2>
+          <p class="section-sub text-center">Select a product category for detailed maintenance instructions</p>
+          <ul class="nav nav-pills" id="maintTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#doors">Doors &amp; Windows</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pergolas">Pergolas &amp; Verandas</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="pill" data-bs-target="#glass">Glass Walls</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="pill" data-bs-target="#shutters">Roller Shutters</button>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="doors">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-regular fa-door-open"></i></div>
+                    <h5>Cleaning</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Wipe frames with mild soap and warm water using a soft cloth</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Rinse thoroughly with clean water — avoid harsh chemicals</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Clean glass with a standard glass cleaner and lint-free cloth</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Dry all surfaces to prevent water spots</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-solid fa-oil-can"></i></div>
+                    <h5>Lubrication</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Apply silicone-based lubricant to hinges and tracks twice a year</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Avoid oil-based lubricants that attract dust</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Wipe excess lubricant after application</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Check and lubricate locking mechanisms annually</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-regular fa-eye"></i></div>
+                    <h5>Inspection</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Check weather seals for cracks or wear every 6 months</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Test all moving parts for smooth operation</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Inspect drainage channels for blockages</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Tighten any loose screws or fittings</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h5>Common Issues &amp; Fixes</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Sticky operation → clean tracks and apply silicone lubricant</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Drafts → inspect and replace worn weather seals</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Condensation → check drainage and improve ventilation</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Loose handle → tighten internal fixing screws</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pergolas">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-solid fa-umbrella"></i></div>
+                    <h5>Frame &amp; Louvres</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Clean aluminium profiles with mild detergent and water</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Remove debris from louvre drainage tracks</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Check louvre alignment and adjust if needed</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Inspect all bolts and brackets for tightness</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h5>Motor &amp; Electronics</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Test motorised operation monthly</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Keep control unit dry and free from dust</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Replace remote batteries annually</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Check wind/rain sensor function before storm seasons</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-regular fa-snowflake"></i></div>
+                    <h5>Winter Care</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Clear snow accumulation from louvres promptly</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Check for ice buildup in drainage channels</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Store removable cushions and accessories indoors</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Ensure LED lighting seals are intact</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-regular fa-calendar"></i></div>
+                    <h5>Annual Service</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Schedule a professional inspection yearly</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Lubricate all pivot points and moving joints</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Tighten all structural connections</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Update firmware for smart pergola systems</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="glass">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-regular fa-window-restore"></i></div>
+                    <h5>Glass Care</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Clean glass with non-abrasive cleaners and soft cloth</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Avoid hard water — use deionised water for streak-free finish</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Check for chips or cracks after storms</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Keep glass edge seals clean and dry</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-solid fa-arrows-left-right"></i></div>
+                    <h5>Sliding Mechanism</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Keep bottom tracks clean from dirt and grit</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Apply silicone lubricant to rollers annually</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Check roller alignment for smooth gliding</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Adjust roller height if door drags</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-solid fa-shield"></i></div>
+                    <h5>Seals &amp; Weatherproofing</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Inspect perimeter seals for wear every 6 months</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Replace damaged brush seals promptly</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Check drainage weep holes are clear</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Test water tightness after heavy rain</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-solid fa-lock"></i></div>
+                    <h5>Locking Systems</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Test multi-point locks regularly</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Lubricate lock mechanism with graphite powder</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Check that all locking points engage fully</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Tighten any loose strike plates</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="shutters">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-regular fa-rectangle-list"></i></div>
+                    <h5>Slats &amp; Guides</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Clean slats with a damp cloth and mild detergent</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Keep side guide tracks free of debris</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Check for bent or damaged slats after storms</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Ensure bottom bar is level and secure</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-solid fa-motorcycle"></i></div>
+                    <h5>Motor &amp; Controls</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Test motor operation weekly during heavy use periods</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Listen for unusual noises during operation</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Keep control switches clean and dry</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Check emergency manual override function</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-solid fa-weight-scale"></i></div>
+                    <h5>Belt &amp; Spring Tension</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Check belt tension every 6 months</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Listen for clicking or slipping sounds</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Adjust spring tension if shutter drops under its own weight</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Professional servicing recommended every 2 years</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mt-card">
+                    <div class="mc-icon"><i class="fa-regular fa-clipboard"></i></div>
+                    <h5>Seasonal Checks</h5>
+                    <ul>
+                      <li><i class="fa-regular fa-circle-check"></i> Check drainage at bottom of shutter box</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Remove ice buildup gently — never force operation</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Inspect housing for water ingress after heavy rain</li>
+                      <li><i class="fa-regular fa-circle-check"></i> Test photocell sensors for safety function</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-section bg-fade season-grid">
+        <div class="container">
+          <h2 class="section-title text-center">Seasonal Maintenance Checklist</h2>
+          <p class="section-sub text-center">Stay on top of your product care throughout the year</p>
+          <div class="row g-4">
+            <div class="col-md-3">
+              <div class="sc-card">
+                <div class="sc-icon" style="color:#38a169;"><i class="fa-solid fa-seedling"></i></div>
+                <h5>Spring</h5>
+                <ul>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Clean all tracks and guides</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Test motorised systems</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Check seals after winter</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Lubricate moving parts</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="sc-card">
+                <div class="sc-icon" style="color:#ed8936;"><i class="fa-solid fa-sun"></i></div>
+                <h5>Summer</h5>
+                <ul>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Clean glass surfaces regularly</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Check insect screens</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Test pergola louvre operation</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Inspect external fittings</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="sc-card">
+                <div class="sc-icon" style="color:#dd6b20;"><i class="fa-solid fa-leaf"></i></div>
+                <h5>Autumn</h5>
+                <ul>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Clear leaves from drainage</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Check weather seals</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Prepare for winter storms</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Test wind sensors</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="sc-card">
+                <div class="sc-icon" style="color:#3182ce;"><i class="fa-solid fa-snowflake"></i></div>
+                <h5>Winter</h5>
+                <ul>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Remove snow from louvres</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Check for ice damage</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Avoid forcing frozen parts</li>
+                  <li><i class="fa-regular fa-circle" style="color:var(--primary-blue);"></i> Monitor condensation levels</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-section mt-tips">
+        <div class="container">
+          <h2 class="section-title text-center">Pro Tips for Long-Lasting Performance</h2>
+          <p class="section-sub text-center">Simple habits that extend the life of your aluminium systems</p>
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <div class="tip-item">
+                <div class="tip-num">1</div>
+                <div class="tip-content">
+                  <h6>Use the Right Cleaning Products</h6>
+                  <p>Never use abrasive cleaners, bleach, or acidic products on aluminium surfaces. Stick to pH-neutral detergents and soft microfiber cloths to protect the anodised or powder-coated finish.</p>
+                </div>
+              </div>
+              <div class="tip-item">
+                <div class="tip-num">2</div>
+                <div class="tip-content">
+                  <h6>Catch Issues Early</h6>
+                  <p>A small squeak or stiff operation today is a bigger problem tomorrow. Address minor issues as soon as you notice them — a drop of lubricant now can save a costly repair later.</p>
+                </div>
+              </div>
+              <div class="tip-item">
+                <div class="tip-num">3</div>
+                <div class="tip-content">
+                  <h6>Don't Force Stuck Parts</h6>
+                  <p>If a door, window, or shutter becomes difficult to operate, don't force it. Check for obstructions in tracks, inspect seals, and contact our support team if the issue persists.</p>
+                </div>
+              </div>
+              <div class="tip-item">
+                <div class="tip-num">4</div>
+                <div class="tip-content">
+                  <h6>Keep Documentation Handy</h6>
+                  <p>Save your product manuals, warranty certificates, and maintenance records. They contain model-specific care instructions and will be useful for future servicing or warranty claims.</p>
+                </div>
+              </div>
+              <div class="tip-item">
+                <div class="tip-num">5</div>
+                <div class="tip-content">
+                  <h6>Schedule Professional Servicing</h6>
+                  <p>While regular DIY care is essential, we recommend a professional inspection every 2 years to keep motorised systems, seals, and structural fittings in optimal condition.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-cta">
+        <div class="container">
+          <h2>Need Help With Maintenance?</h2>
+          <p>Our support team is ready to assist with advice, spare parts, or servicing requests.</p>
+          <a href="contact.html" class="btn-cta"><i class="fa-solid fa-headset"></i> Contact Support</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container px-lg-5">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="footer-logo mb-4">
+              <img src="images/logo-white.png" alt="AZ Aluminium Logo" height="80" />
+            </div>
+            <p class="footer-desc">Precision engineering meeting architectural elegance for your lifetime investment.</p>
+          </div>
+          <div class="col-6 col-lg-2 ms-auto">
+            <div class="footer-title">Resources</div>
+            <a href="tech-specs.html" class="footer-link">Technical Specs</a>
+            <a href="installation-support.html" class="footer-link">Installation Support</a>
+            <a href="maintenance-guide.html" class="footer-link">Maintenance Guide</a>
+            <a href="warranty.html" class="footer-link">Warranty</a>
+          </div>
+          <div class="col-6 col-lg-2">
+            <div class="footer-title">Support</div>
+            <a href="contact.html" class="footer-link">Contact Support</a>
+            <a href="faq.html" class="footer-link">FAQs</a>
+            <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+          </div>
+          <div class="col-lg-3">
+            <div class="footer-title">Office</div>
+            <p class="office-text">Precision Square 42</p>
+            <p class="office-text">Architectural District</p>
+            <p class="office-text">NL-1011 Amsterdam</p>
+            <div class="mt-4">
+              <i class="fa-solid fa-medal footer-social-icon"></i>
+              <i class="fa-solid fa-share-nodes footer-social-icon"></i>
+              <i class="fa-solid fa-globe footer-social-icon"></i>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="row align-items-center text-center text-md-start">
+            <div class="col-md-6 mb-3 mb-md-0">&copy; 2026 AZ Aluminium. Precision Engineering &amp; Architectural Elegance.</div>
+            <div class="col-md-6 text-md-end">
+              <span class="mx-2 opacity-50 small">ISO 9001 CERTIFIED</span>
+              <span class="mx-2 opacity-50 small border-start ps-2">CE MARKED</span>
+              <span class="ms-2 badge-eu">MADE IN EU</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <nav class="mobile-bottom-nav">
+      <a href="index.html" class="m-nav-item active"><i class="fa-solid fa-home"></i><span>Home</span></a>
+      <a href="products.html" class="m-nav-item"><i class="fa-solid fa-boxes-stacked"></i><span>Products</span></a>
+      <a href="quote.html" class="m-nav-cta text-decoration-none"><i class="fa-solid fa-paper-plane"></i></a>
+      <a href="projects.html" class="m-nav-item"><i class="fa-solid fa-hard-hat"></i><span>Projects</span></a>
+      <a href="gallery.html" class="m-nav-item"><i class="fa-solid fa-images"></i><span>Gallery</span></a>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;color:var(--primary-blue);">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#eef2f7;box-shadow:0 4px 16px rgba(27,64,94,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: 'Language set to ' + r.value.toUpperCase(), icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
+</html>

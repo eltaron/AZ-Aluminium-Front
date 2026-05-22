@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Invoices | Customer Portal — AZ Aluminium</title>
+    <meta name="description" content="View and download your AZ Aluminium invoices, track payments, and manage billing." />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/customer.css" />
+    <style>
+      /* ── Summary Bar ── */
+      .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+      .summary-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px 24px; transition: .3s;
+      }
+      .summary-card .sc-label { font-size: 12px; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: .3px; }
+      .summary-card .sc-value { font-size: 24px; font-weight: 700; color: var(--primary-blue); margin-top: 4px; }
+      .summary-card .sc-sub { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+      .summary-card .sc-icon { float: right; font-size: 24px; color: #e2e8f0; }
+
+      /* ── Controls ── */
+      .controls-bar {
+        display: flex; justify-content: space-between; align-items: center;
+        flex-wrap: wrap; gap: 16px; margin-bottom: 24px;
+      }
+      .controls-bar .search-box { position: relative; max-width: 340px; width: 100%; }
+      .controls-bar .search-box input {
+        width: 100%; padding: 12px 18px 12px 46px; border-radius: 14px;
+        border: 2px solid #e2e8f0; font-size: 14px; background: #fff; transition: .3s;
+      }
+      .controls-bar .search-box input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(10,25,41,0.08); outline: none; }
+      .controls-bar .search-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+      .controls-bar .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
+      .controls-bar .filter-group .fil-btn {
+        padding: 10px 20px; border-radius: 50px; border: 2px solid #e2e8f0;
+        background: #fff; font-size: 13px; font-weight: 500; color: #64748b;
+        cursor: pointer; transition: .25s;
+      }
+      .controls-bar .filter-group .fil-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+      .controls-bar .filter-group .fil-btn.active { background: var(--primary-blue); border-color: var(--primary-blue); color: #fff; }
+
+      /* ── Invoice Card ── */
+      .inv-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 18px;
+        padding: 24px 28px; transition: .3s; cursor: pointer;
+      }
+      .inv-card:hover { border-color: var(--primary-blue); box-shadow: 0 6px 24px rgba(0,0,0,0.04); }
+      .inv-card .ic-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+      .inv-card .ic-top .ic-ref { font-weight: 700; color: var(--primary-blue); font-size: 16px; }
+      .inv-card .ic-top .ic-date { font-size: 13px; color: #94a3b8; }
+      .inv-card .ic-badge {
+        padding: 5px 16px; border-radius: 50px; font-size: 12px; font-weight: 600;
+      }
+      .ic-badge.paid { background: #d4edda; color: #155724; }
+      .ic-badge.pending { background: #fff3cd; color: #856404; }
+      .ic-badge.overdue { background: #f8d7da; color: #721c24; }
+      .ic-badge.cancelled { background: #e2e8f0; color: #64748b; }
+      .ic-badge.partial { background: #cce5ff; color: #004085; }
+
+      .inv-card .ic-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 14px; }
+      .inv-card .ic-meta span { font-size: 13px; color: #64748b; }
+      .inv-card .ic-meta strong { color: var(--primary-blue); }
+      .inv-card .ic-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 14px; border-top: 1px solid #f1f5f9; }
+      .inv-card .ic-bottom .ic-total { font-size: 20px; font-weight: 700; color: var(--primary-blue); }
+      .inv-card .ic-bottom .ic-actions { display: flex; gap: 8px; }
+      .inv-card .ic-bottom .ic-actions button, .inv-card .ic-bottom .ic-actions a {
+        padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 600;
+        border: none; transition: .25s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+      }
+      .inv-card .ic-bottom .ic-actions .btn-dl { background: #eef2f7; color: var(--primary-blue); }
+      .inv-card .ic-bottom .ic-actions .btn-dl:hover { background: #e2e8f0; }
+      .inv-card .ic-bottom .ic-actions .btn-pay { background: #d4edda; color: #155724; }
+      .inv-card .ic-bottom .ic-actions .btn-pay:hover { background: #c3e6cb; }
+
+      /* ── Modal ── */
+      .modal-content { border-radius: 20px; border: none; padding: 8px; }
+      .modal-header { border-bottom: 1px solid #f1f5f9; padding: 20px 24px 16px; }
+      .modal-header .modal-title { font-weight: 700; color: var(--primary-blue); }
+      .modal-body { padding: 24px; }
+      .inv-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+      .inv-detail-grid .idg-item label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; display: block; }
+      .inv-detail-grid .idg-item p { font-size: 15px; color: var(--primary-blue); font-weight: 500; margin: 4px 0 0; }
+      .inv-detail-table { width: 100%; border-collapse: collapse; }
+      .inv-detail-table th { font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; padding: 10px 0; border-bottom: 2px solid #f1f5f9; text-align: left; }
+      .inv-detail-table td { padding: 12px 0; font-size: 14px; color: var(--primary-blue); border-bottom: 1px solid #f8fafc; }
+      .inv-detail-table .idt-sub td { font-weight: 500; color: #64748b; font-size: 13px; border-bottom: none; }
+      .inv-detail-table .idt-total td { font-weight: 700; font-size: 18px; border-bottom: none; padding-top: 16px; }
+      .modal-footer { border-top: 1px solid #f1f5f9; padding: 16px 24px; }
+      .modal-footer .btn-modal { padding: 12px 28px; border-radius: 12px; font-weight: 600; font-size: 14px; border: none; transition: .25s; }
+
+      @media (max-width: 576px) {
+        .inv-card { padding: 20px; }
+        .inv-detail-grid { grid-template-columns: 1fr; }
+        .controls-bar { flex-direction: column; align-items: stretch; }
+        .controls-bar .search-box { max-width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">3</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="c-sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../images/logo.png" alt="AZ Aluminium" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Customer Portal</span>
+        </div>
+      </div>
+      <div class="sidebar-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">3</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="orders.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Orders</a>
+        <a href="quotes.html" class="nav-item"><i class="fa-regular fa-file-lines"></i> Quotes</a>
+        <a href="invoices.html" class="nav-item active"><i class="fa-solid fa-file-invoice"></i> Invoices</a>
+        <a href="tickets.html" class="nav-item"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Appointments</a>
+        <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="avatar">AH</div>
+          <div>
+            <p class="u-name">Alex Harrison</p>
+            <p class="u-role">Premium Member</p>
+          </div>
+          <i class="fa-solid fa-chevron-right u-arrow"></i>
+        </div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="c-main">
+      <div class="page-header">
+        <h2>My Invoices</h2>
+        <p>View, download, and pay your invoices.</p>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-row">
+        <div class="summary-card">
+          <i class="fa-solid fa-file-invoice sc-icon"></i>
+          <div class="sc-label">Total Invoices</div>
+          <div class="sc-value">08</div>
+        </div>
+        <div class="summary-card">
+          <i class="fa-solid fa-circle-check sc-icon" style="color:#d4edda;"></i>
+          <div class="sc-label">Paid</div>
+          <div class="sc-value">€58,200</div>
+          <div class="sc-sub">5 invoices</div>
+        </div>
+        <div class="summary-card">
+          <i class="fa-solid fa-clock sc-icon" style="color:#fff3cd;"></i>
+          <div class="sc-label">Pending</div>
+          <div class="sc-value">€19,450</div>
+          <div class="sc-sub">2 invoices</div>
+        </div>
+        <div class="summary-card">
+          <i class="fa-solid fa-exclamation-circle sc-icon" style="color:#f8d7da;"></i>
+          <div class="sc-label">Overdue</div>
+          <div class="sc-value">€7,200</div>
+          <div class="sc-sub">1 invoice</div>
+        </div>
+      </div>
+
+      <div class="controls-bar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Search by invoice or order ref..." oninput="filterInvoices()" />
+        </div>
+        <div class="filter-group">
+          <span class="fil-btn active" data-filter="all" onclick="setFilter(this,'all')">All</span>
+          <span class="fil-btn" data-filter="paid" onclick="setFilter(this,'paid')">Paid</span>
+          <span class="fil-btn" data-filter="pending" onclick="setFilter(this,'pending')">Pending</span>
+          <span class="fil-btn" data-filter="overdue" onclick="setFilter(this,'overdue')">Overdue</span>
+        </div>
+      </div>
+
+      <div id="invoicesContainer" class="d-flex flex-column gap-3"></div>
+      <footer class="c-footer">
+        <span>© 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Made with <i class="fa-solid fa-heart" style="color:var(--cta-orange);"></i> for architectural excellence</span>
+      </footer>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal fade" id="invModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="invModalContent"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      const invoices = [
+        { ref: 'INV-2024-0042', orderRef: 'AZ-2024-0042', date: '12 May 2026', dueDate: '11 Jun 2026', status: 'pending', badge: 'Pending', badgeClass: 'pending',
+          items: [{ name: 'Bioclimatic Pergola 4×3m', qty: 1, price: '€12,500' }, { name: 'Sliding Glass Wall 6m', qty: 1, price: '€5,950' }],
+          subtotal: '€18,450', taxRate: '21%', tax: '€3,874.50', total: '€22,324.50', note: 'Payment due within 30 days.' },
+        { ref: 'INV-2024-0058', orderRef: 'AZ-2024-0058', date: '02 Apr 2026', dueDate: '02 May 2026', status: 'paid', badge: 'Paid', badgeClass: 'paid',
+          items: [{ name: 'Winter Garden 5×4m', qty: 1, price: '€22,000' }, { name: 'Aluminium Doors (x3)', qty: 3, price: '€10,200' }],
+          subtotal: '€32,200', taxRate: '19%', tax: '€6,118', total: '€38,318', paidDate: '28 Apr 2026', note: 'Paid via bank transfer.' },
+        { ref: 'INV-2024-0071', orderRef: 'AZ-2024-0071', date: '20 May 2026', dueDate: '19 Jun 2026', status: 'pending', badge: 'Pending', badgeClass: 'pending',
+          items: [{ name: 'Motorised Pergola 5×5m', qty: 1, price: '€16,500' }, { name: 'LED Lighting Kit', qty: 1, price: '€2,100' }, { name: 'Side Screens (x3)', qty: 3, price: '€6,200' }],
+          subtotal: '€24,800', taxRate: '21%', tax: '€5,208', total: '€30,008', note: 'Payment due within 30 days.' },
+        { ref: 'INV-2024-0033', orderRef: 'AZ-2024-0033', date: '15 Jan 2026', dueDate: '14 Feb 2026', status: 'overdue', badge: 'Overdue', badgeClass: 'overdue',
+          items: [{ name: 'Glass Wall System 8m', qty: 1, price: '€11,200' }],
+          subtotal: '€11,200', taxRate: '10.5%', tax: '€1,176', total: '€12,376', note: 'Overdue — late fee may apply.' },
+        { ref: 'INV-2024-0065', orderRef: 'AZ-2024-0065', date: '10 May 2026', dueDate: '09 Jun 2026', status: 'paid', badge: 'Paid', badgeClass: 'paid',
+          items: [{ name: 'Aluminium Sliding Door 3m', qty: 2, price: '€5,800' }, { name: 'Roller Shutter 2.5×2m', qty: 1, price: '€4,050' }],
+          subtotal: '€9,850', taxRate: '19%', tax: '€1,871.50', total: '€11,721.50', paidDate: '02 Jun 2026', note: 'Paid via credit card.' },
+        { ref: 'INV-2024-0021', orderRef: 'AZ-2024-0021', date: '10 Dec 2025', dueDate: '09 Jan 2026', status: 'paid', badge: 'Paid', badgeClass: 'paid',
+          items: [{ name: 'Bioclimatic Pergola 6×4m', qty: 1, price: '€18,000' }, { name: 'Installation Service', qty: 1, price: '€3,500' }],
+          subtotal: '€21,500', taxRate: '21%', tax: '€4,515', total: '€26,015', paidDate: '05 Jan 2026', note: 'Paid via bank transfer.' },
+        { ref: 'INV-2024-0082', orderRef: 'AZ-2024-0082', date: '28 May 2026', dueDate: '27 Jun 2026', status: 'paid', badge: 'Paid', badgeClass: 'paid',
+          items: [{ name: 'Aluminium Front Door', qty: 1, price: '€3,200' }],
+          subtotal: '€3,200', taxRate: '10.5%', tax: '€336', total: '€3,536', paidDate: '30 May 2026', note: 'Paid via PayPal.' },
+        { ref: 'INV-2024-0095', orderRef: 'AZ-2024-0095', date: '01 Jun 2026', dueDate: '01 Jul 2026', status: 'cancelled', badge: 'Cancelled', badgeClass: 'cancelled',
+          items: [{ name: 'Glass Railing 15m', qty: 1, price: '€8,400' }],
+          subtotal: '€8,400', taxRate: '21%', tax: '€1,764', total: '€10,164', note: 'Order cancelled by customer.' },
+      ];
+
+      let currentFilter = 'all', currentSearch = '';
+
+      function renderInvoices(data) {
+        const container = document.getElementById('invoicesContainer');
+        if (!data.length) {
+          container.innerHTML = `<div class="text-center py-5" style="color:#94a3b8;"><i class="fa-solid fa-file-invoice" style="font-size:48px;margin-bottom:16px;display:block;"></i><h5 style="color:var(--primary-blue);">No invoices found</h5><p>Try a different filter or search term.</p></div>`;
+          return;
+        }
+        container.innerHTML = data.map(inv => {
+          const taxInfo = inv.status === 'paid'
+            ? `<span>Paid <strong>${inv.paidDate}</strong></span>`
+            : `<span>Due <strong>${inv.dueDate}</strong></span>`;
+          const actions = inv.status === 'pending'
+            ? `<button class="btn-pay" onclick="event.stopPropagation();payInvoice('${inv.ref}')"><i class="fa-regular fa-credit-card me-1"></i> Pay Now</button><a class="btn-dl" onclick="event.stopPropagation();downloadInv('${inv.ref}')"><i class="fa-solid fa-download me-1"></i> PDF</a>`
+            : inv.status === 'overdue'
+            ? `<button class="btn-pay" onclick="event.stopPropagation();payInvoice('${inv.ref}')"><i class="fa-regular fa-credit-card me-1"></i> Pay Now</button><a class="btn-dl" onclick="event.stopPropagation();downloadInv('${inv.ref}')"><i class="fa-solid fa-download me-1"></i> PDF</a>`
+            : `<a class="btn-dl" onclick="event.stopPropagation();downloadInv('${inv.ref}')"><i class="fa-solid fa-download me-1"></i> PDF</a>`;
+          return `<div class="inv-card" onclick="openInvDetail('${inv.ref}')">
+            <div class="ic-top">
+              <div>
+                <div class="ic-ref">${inv.ref}</div>
+                <div class="ic-date">Issued: ${inv.date}</div>
+              </div>
+              <span class="ic-badge ${inv.badgeClass}">${inv.badge}</span>
+            </div>
+            <div class="ic-meta">
+              <span>Order: <strong>${inv.orderRef}</strong></span>
+              ${taxInfo}
+              <span>Tax: <strong>${inv.taxRate}</strong></span>
+            </div>
+            <div class="ic-bottom">
+              <div class="ic-total">${inv.total}</div>
+              <div class="ic-actions">${actions}</div>
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      function filterInvoices() { currentSearch = document.getElementById('searchInput').value.toLowerCase().trim(); applyFilters(); }
+      function setFilter(el, f) { document.querySelectorAll('.fil-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); currentFilter = f; applyFilters(); }
+      function applyFilters() {
+        let filtered = invoices;
+        if (currentFilter !== 'all') filtered = filtered.filter(i => i.status === currentFilter);
+        if (currentSearch) filtered = filtered.filter(i => i.ref.toLowerCase().includes(currentSearch) || i.orderRef.toLowerCase().includes(currentSearch));
+        renderInvoices(filtered);
+      }
+
+      function downloadInv(ref) {
+        Swal.fire({ title: 'Download Started', text: `${ref}.pdf is being generated.`, icon: 'success', timer: 1800, showConfirmButton: false });
+      }
+
+      function payInvoice(ref) {
+        Swal.fire({
+          title: 'Pay Invoice',
+          text: `You are about to pay ${ref}. You will be redirected to the payment gateway.`,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#155724',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: '<i class="fa-regular fa-credit-card me-1"></i> Proceed to Payment',
+          cancelButtonText: 'Cancel',
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Redirecting...', text: 'You will be redirected to our secure payment page.', icon: 'info', confirmButtonColor: 'var(--primary-blue)' }); });
+      }
+
+      function openInvDetail(ref) {
+        const inv = invoices.find(x => x.ref === ref);
+        if (!inv) return;
+        const itemsHtml = inv.items.map(i => `<tr><td>${i.name}</td><td style="text-align:center;">${i.qty}</td><td style="text-align:right;">${i.price}</td></tr>`).join('');
+        const taxLabel = inv.status === 'paid' ? `<div class="idg-item"><label>Paid On</label><p style="color:#155724;">${inv.paidDate}</p></div>` : `<div class="idg-item"><label>Due Date</label><p>${inv.dueDate}</p></div>`;
+        const statusIcon = inv.status === 'paid' ? 'fa-regular fa-circle-check' : inv.status === 'overdue' ? 'fa-solid fa-exclamation-triangle' : 'fa-regular fa-clock';
+
+        document.getElementById('invModalContent').innerHTML = `
+          <div class="modal-header">
+            <h5 class="modal-title">${inv.ref}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:24px;">
+              <span style="font-size:13px;color:#94a3b8;">Order: <strong>${inv.orderRef}</strong> • Issued: ${inv.date}</span>
+              <span class="ic-badge ${inv.badgeClass}" style="padding:5px 18px;">${inv.badge}</span>
+            </div>
+            <div class="inv-detail-grid">
+              <div class="idg-item"><label>Order Reference</label><p>${inv.orderRef}</p></div>
+              <div class="idg-item"><label>Status</label><p><i class="${statusIcon}" style="color:${inv.status === 'paid' ? '#155724' : inv.status === 'overdue' ? '#e53e3e' : '#856404'};margin-right:6px;"></i>${inv.badge}</p></div>
+              <div class="idg-item"><label>Issue Date</label><p>${inv.date}</p></div>
+              ${taxLabel}
+              <div class="idg-item"><label>Tax Rate</label><p>${inv.taxRate}</p></div>
+              <div class="idg-item"><label>Payment Method</label><p>${inv.paidDate ? 'Bank Transfer' : '—'}</p></div>
+            </div>
+            <table class="inv-detail-table">
+              <thead><tr><th>Item</th><th style="text-align:center;">Qty</th><th style="text-align:right;">Price</th></tr></thead>
+              <tbody>
+                ${itemsHtml}
+                <tr class="idt-sub"><td colspan="2">Subtotal</td><td style="text-align:right;">${inv.subtotal}</td></tr>
+                <tr class="idt-sub"><td colspan="2">Tax (${inv.taxRate})</td><td style="text-align:right;">${inv.tax}</td></tr>
+                <tr class="idt-total"><td colspan="2">Total</td><td style="text-align:right;">${inv.total}</td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:16px;padding:14px 18px;background:#f8fafc;border-radius:12px;font-size:13px;color:#64748b;">
+              <strong style="color:var(--primary-blue);">Note:</strong> ${inv.note}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-modal" style="background:#e2e8f0;color:var(--primary-blue);" data-bs-dismiss="modal">Close</button>
+            <a class="btn-modal" style="background:var(--primary-blue);color:#fff;cursor:pointer;" onclick="downloadInv('${inv.ref}');"><i class="fa-solid fa-download me-1"></i> Download PDF</a>
+            ${inv.status === 'pending' || inv.status === 'overdue' ? `<button class="btn-modal" style="background:#d4edda;color:#155724;" onclick="payInvoice('${inv.ref}');"><i class="fa-regular fa-credit-card me-1"></i> Pay Now</button>` : ''}
+          </div>`;
+        new bootstrap.Modal(document.getElementById('invModal')).show();
+      }
+
+      renderInvoices(invoices);
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#f8faff;box-shadow:0 4px 16px rgba(10,25,41,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Details — AZ Aluminium</title>
+    <meta name="description" content="Explore a premium AZ Aluminium installation in detail." />
+    <meta name="author" content="AZ Aluminium" />
+    <meta property="og:title" content="AZ Aluminium — Project Detail" />
+    <meta property="og:description" content="Real installations. Real quality. Explore our premium aluminium work." />
+    <meta property="og:image" content="../images/og-image.jpg" />
+    <meta property="og:url" content="https://az-aluminium.com/project-detail" />
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <style>
+      /* ── Hero ── */
+      .pd-hero {
+        position: relative; height: 70vh; min-height: 480px; overflow: hidden;
+      }
+      .pd-hero img {
+        width: 100%; height: 100%; object-fit: cover;
+      }
+      .pd-hero .pd-overlay {
+        position: absolute; inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.7) 100%);
+      }
+      .pd-hero .pd-hero-content {
+        position: absolute; bottom: 60px; left: 0; right: 0;
+      }
+      .pd-hero .pd-hero-content .bread-cr {
+        font-size: 13px; letter-spacing: 1px; margin-bottom: 16px;
+      }
+      .pd-hero .pd-hero-content .bread-cr a {
+        color: rgba(255,255,255,0.6); text-decoration: none; transition: .3s;
+      }
+      .pd-hero .pd-hero-content .bread-cr a:hover { color: #fff; }
+      .pd-hero .pd-hero-content .bread-cr span { color: #fff; font-weight: 600; }
+      .pd-hero .pd-hero-content h1 {
+        font-size: 52px; font-weight: 700; color: #fff; margin: 0 0 12px; line-height: 1.1;
+      }
+      .pd-hero .pd-hero-content .pd-meta {
+        display: flex; flex-wrap: wrap; gap: 20px; align-items: center;
+      }
+      .pd-hero .pd-hero-content .pd-meta span {
+        font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 500;
+      }
+      .pd-hero .pd-hero-content .pd-meta .pd-cat-badge {
+        background: var(--footer-orange); color: #fff; padding: 4px 16px;
+        border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+        letter-spacing: .5px;
+      }
+      .pd-hero .pd-hero-content .pd-meta i { margin-right: 6px; }
+
+      /* ── Content ── */
+      .pd-body { padding: 60px 0 80px; background: #fff; }
+      .pd-body .pd-description {
+        font-size: 16px; line-height: 1.8; color: #475569; max-width: 720px; margin-bottom: 40px;
+      }
+
+      .pd-gallery { margin-bottom: 50px; }
+      .pd-gallery h3 { font-size: 20px; font-weight: 700; color: var(--primary-blue); margin-bottom: 20px; }
+      .pd-gallery .gallery-grid {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      }
+      .pd-gallery .gallery-grid .gal-item {
+        border-radius: 16px; overflow: hidden; cursor: pointer; position: relative;
+        aspect-ratio: 4/3; transition: .4s;
+      }
+      .pd-gallery .gallery-grid .gal-item:hover { transform: scale(1.02); }
+      .pd-gallery .gallery-grid .gal-item img {
+        width: 100%; height: 100%; object-fit: cover; transition: .6s;
+      }
+      .pd-gallery .gallery-grid .gal-item:hover img { transform: scale(1.06); }
+      .pd-gallery .gallery-grid .gal-item .gal-overlay {
+        position: absolute; inset: 0; background: rgba(0,0,0,0.3);
+        display: flex; align-items: center; justify-content: center; opacity: 0;
+        transition: .3s;
+      }
+      .pd-gallery .gallery-grid .gal-item:hover .gal-overlay { opacity: 1; }
+      .pd-gallery .gallery-grid .gal-item .gal-overlay i {
+        color: #fff; font-size: 32px; text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      }
+      .pd-gallery .gallery-grid .gal-item.gal-featured {
+        grid-column: span 2; grid-row: span 2;
+      }
+
+      .pd-details { margin-bottom: 50px; }
+      .pd-details .row-gap { margin-bottom: 40px; }
+      .pd-details .info-card {
+        background: #f8fafc; border: 1px solid #edf2f7; border-radius: 16px;
+        padding: 24px; height: 100%;
+      }
+      .pd-details .info-card .ic-icon {
+        width: 44px; height: 44px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 18px; margin-bottom: 14px;
+      }
+      .pd-details .info-card h6 { font-size: 14px; font-weight: 700; color: var(--primary-blue); margin-bottom: 4px; }
+      .pd-details .info-card p { font-size: 13px; color: #64748b; margin: 0; }
+
+      .pd-details .spec-list { list-style: none; padding: 0; margin: 0; }
+      .pd-details .spec-list li {
+        display: flex; align-items: center; gap: 12px; padding: 12px 0;
+        border-bottom: 1px solid #f1f5f9; font-size: 14px; color: #475569;
+      }
+      .pd-details .spec-list li:last-child { border-bottom: none; }
+      .pd-details .spec-list li i { color: var(--cta-orange); font-size: 14px; width: 20px; text-align: center; }
+      .pd-details .spec-list li .spec-label { font-weight: 600; color: var(--primary-blue); min-width: 120px; }
+
+      .pd-details .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+      .pd-details .tag-list span {
+        background: #f1f4f9; color: var(--header-gray); padding: 6px 16px;
+        border-radius: 50px; font-size: 12px; font-weight: 500;
+      }
+
+      .pd-related { margin-bottom: 50px; }
+      .pd-related h3 { font-size: 20px; font-weight: 700; color: var(--primary-blue); margin-bottom: 20px; }
+      .pd-related .rel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      .pd-related .rel-card {
+        border-radius: 16px; overflow: hidden; cursor: pointer;
+        border: 1px solid #edf2f7; transition: .4s;
+      }
+      .pd-related .rel-card:hover { transform: translateY(-6px); box-shadow: 0 15px 35px rgba(0,0,0,0.06); }
+      .pd-related .rel-card img { width: 100%; height: 200px; object-fit: cover; }
+      .pd-related .rel-card .rc-body { padding: 16px 18px; }
+      .pd-related .rel-card .rc-body h6 { font-size: 14px; font-weight: 700; color: var(--primary-blue); margin: 0 0 4px; }
+      .pd-related .rel-card .rc-body span { font-size: 12px; color: var(--header-gray); }
+      .pd-related .rel-card .rc-body span i { margin-right: 4px; color: var(--cta-orange); }
+
+      /* ── Lightbox ── */
+      .pd-lightbox {
+        display: none; position: fixed; inset: 0; z-index: 9999;
+        background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+      }
+      .pd-lightbox.show { display: flex; }
+      .pd-lightbox .lb-close {
+        position: absolute; top: 20px; right: 30px; width: 50px; height: 50px;
+        border-radius: 50%; border: none; background: rgba(255,255,255,0.1); color: #fff;
+        font-size: 24px; cursor: pointer; transition: .25s; display: flex;
+        align-items: center; justify-content: center;
+      }
+      .pd-lightbox .lb-close:hover { background: rgba(255,255,255,0.2); }
+      .pd-lightbox .lb-nav {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        width: 50px; height: 50px; border-radius: 50%; border: none;
+        background: rgba(255,255,255,0.1); color: #fff; font-size: 22px;
+        cursor: pointer; transition: .25s; display: flex; align-items: center; justify-content: center;
+      }
+      .pd-lightbox .lb-nav:hover { background: rgba(255,255,255,0.2); }
+      .pd-lightbox .lb-prev { left: 20px; }
+      .pd-lightbox .lb-next { right: 20px; }
+      .pd-lightbox .lb-img-wrap {
+        max-width: 85vw; max-height: 85vh; display: flex; align-items: center; justify-content: center;
+      }
+      .pd-lightbox .lb-img-wrap img {
+        max-width: 100%; max-height: 85vh; border-radius: 12px; object-fit: contain;
+      }
+      .pd-lightbox .lb-counter {
+        position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+        color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 500;
+      }
+
+      /* ── CTA ── */
+      .pd-cta {
+        padding: 60px 0; background: #f8fafc;
+      }
+      .pd-cta .cta-inner {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, #0d122b 100%);
+        padding: 60px 50px; border-radius: 24px; color: #fff; text-align: center; position: relative; overflow: hidden;
+      }
+      .pd-cta .cta-inner::before {
+        content: ""; position: absolute; inset: 0;
+        background-image: radial-gradient(#ffffff0a 1px, transparent 0);
+        background-size: 25px 25px; pointer-events: none;
+      }
+      .pd-cta .cta-inner h2 { font-size: 32px; font-weight: 700; position: relative; z-index: 1; }
+      .pd-cta .cta-inner p { opacity: .8; max-width: 520px; margin: 12px auto 28px; position: relative; z-index: 1; }
+
+      @media (max-width: 991px) {
+        .pd-hero { height: 50vh; min-height: 360px; }
+        .pd-hero .pd-hero-content h1 { font-size: 34px; }
+        .pd-hero .pd-hero-content { bottom: 30px; }
+        .pd-gallery .gallery-grid { grid-template-columns: 1fr 1fr; }
+        .pd-gallery .gallery-grid .gal-item.gal-featured { grid-column: span 2; }
+        .pd-related .rel-grid { grid-template-columns: 1fr 1fr; }
+      }
+      @media (max-width: 576px) {
+        .pd-hero { height: 40vh; min-height: 300px; }
+        .pd-hero .pd-hero-content h1 { font-size: 26px; }
+        .pd-gallery .gallery-grid { grid-template-columns: 1fr; }
+        .pd-gallery .gallery-grid .gal-item.gal-featured { grid-column: span 1; grid-row: span 1; }
+        .pd-related .rel-grid { grid-template-columns: 1fr; }
+        .pd-details .info-card { padding: 18px; }
+        .pd-lightbox .lb-nav { width: 40px; height: 40px; font-size: 16px; }
+        .pd-lightbox .lb-prev { left: 8px; }
+        .pd-lightbox .lb-next { right: 8px; }
+        .pd-cta .cta-inner { padding: 36px 24px; }
+        .pd-cta .cta-inner h2 { font-size: 24px; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ═══ Navbar ═══ -->
+    <header class="az-navbar navbar navbar-expand-lg sticky-top bg-white">
+      <div class="container-fluid px-lg-5">
+        <a class="navbar-brand az-brand" href="index.html">
+          <img src="images/logo.png" alt="AZ Aluminium Logo" height="55" />
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+          <i class="fa-solid fa-bars-staggered" style="color: var(--primary-blue)"></i>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+          <ul class="navbar-nav">
+            <li><a class="nav-link" href="products.html">Products</a></li>
+            <li><a class="nav-link" href="tech-specs.html">Technical Specs</a></li>
+            <li><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link active" href="projects.html">Projects</a></li>
+            <li><a class="nav-link" href="about.html">About Us</a></li>
+            <li><a class="nav-link" href="contact.html">Contact</a></li>
+          </ul>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-globe header-icon" onclick="switchLanguage()" title="Language"></i>
+            <i class="fa-regular fa-clock header-icon"></i>
+            <i class="fa-solid fa-phone header-icon"></i>
+            <a href="quote.html" class="btn btn-quote ms-4">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="offcanvas offcanvas-start" id="sidebarMenu">
+      <div class="offcanvas-header pt-4">
+        <h5 class="text-white px-3">Menu</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+      </div>
+      <div class="offcanvas-body px-4">
+        <a class="nav-link" href="products.html">Products</a>
+        <a class="nav-link" href="tech-specs.html">Technical Specs</a>
+        <a class="nav-link" href="gallery.html">Gallery</a>
+        <a class="nav-link" href="projects.html">Projects</a>
+        <a class="nav-link" href="about.html">About Us</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+        <a href="quote.html" class="btn btn-quote w-100 mt-4">Get a Quote</a>
+      </div>
+    </div>
+
+    <main id="app">
+      <!-- ═══ Hero (filled by JS) ═══ -->
+      <section class="pd-hero" id="pdHero"></section>
+
+      <!-- ═══ Body (filled by JS) ═══ -->
+      <section class="pd-body" id="pdBody"></section>
+
+      <!-- ═══ CTA ═══ -->
+      <section class="pd-cta">
+        <div class="container px-lg-5">
+          <div class="cta-inner">
+            <h2>Start Your Own Project Today</h2>
+            <p>Let's turn your vision into a stunning reality. Get a free consultation and quotation from our expert team.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+              <a href="quote.html" class="btn btn-quote btn-lg px-5 py-3">
+                Get a Free Quote <i class="fa-solid fa-arrow-right ms-2"></i>
+              </a>
+              <a href="https://wa.me/31642035804" target="_blank" class="btn btn-quote btn-lg px-5 py-3" style="background:#25d366;border-radius:50px;">
+                <i class="fa-brands fa-whatsapp me-2"></i> Chat on WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ═══ Footer ═══ -->
+    <footer>
+      <div class="container px-lg-5">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="footer-logo mb-4">
+              <img src="images/logo-white.png" alt="AZ Aluminium Logo" height="80" />
+            </div>
+            <p class="footer-desc">Precision engineering meeting architectural elegance for your lifetime investment.</p>
+          </div>
+          <div class="col-6 col-lg-2 ms-auto">
+            <div class="footer-title">Resources</div>
+            <a href="tech-specs.html" class="footer-link">Technical Specs</a>
+            <a href="installation-support.html" class="footer-link">Installation Support</a>
+            <a href="maintenance-guide.html" class="footer-link">Maintenance Guide</a>
+            <a href="warranty.html" class="footer-link">Warranty</a>
+          </div>
+          <div class="col-6 col-lg-2">
+            <div class="footer-title">Support</div>
+            <a href="contact.html" class="footer-link">Contact Support</a>
+            <a href="faq.html" class="footer-link">FAQs</a>
+            <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+          </div>
+          <div class="col-lg-3">
+            <div class="footer-title">Office</div>
+            <p class="office-text">Precision Square 42</p>
+            <p class="office-text">Architectural District</p>
+            <p class="office-text">NL-1011 Amsterdam</p>
+            <div class="mt-4">
+              <a href="contact.html" class="text-decoration-none"><i class="fa-solid fa-medal footer-social-icon"></i></a>
+              <i class="fa-solid fa-share-nodes footer-social-icon"></i>
+              <i class="fa-solid fa-globe footer-social-icon"></i>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="row align-items-center text-center text-md-start">
+            <div class="col-md-6 mb-3 mb-md-0">
+              &copy; 2026 AZ Aluminium. Precision Engineering & Architectural Elegance.
+            </div>
+            <div class="col-md-6 text-md-end">
+              <span class="mx-2 opacity-50 small">ISO 9001 CERTIFIED</span>
+              <span class="mx-2 opacity-50 small border-start ps-2">CE MARKED</span>
+              <span class="ms-2 badge-eu">MADE IN EU</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <nav class="mobile-bottom-nav">
+      <a href="index.html" class="m-nav-item"><i class="fa-solid fa-home"></i><span>Home</span></a>
+      <a href="products.html" class="m-nav-item"><i class="fa-solid fa-boxes-stacked"></i><span>Products</span></a>
+      <a href="quote.html" class="m-nav-cta text-decoration-none"><i class="fa-solid fa-paper-plane"></i></a>
+      <a href="projects.html" class="m-nav-item active"><i class="fa-solid fa-hard-hat"></i><span>Projects</span></a>
+      <a href="gallery.html" class="m-nav-item"><i class="fa-solid fa-images"></i><span>Gallery</span></a>
+    </nav>
+
+    <!-- ═══ Lightbox ═══ -->
+    <div class="pd-lightbox" id="lightbox">
+      <button class="lb-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
+      <button class="lb-nav lb-prev" onclick="prevImage()"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="lb-img-wrap"><img id="lbImage" src="" alt="" /></div>
+      <button class="lb-nav lb-next" onclick="nextImage()"><i class="fa-solid fa-chevron-right"></i></button>
+      <span class="lb-counter" id="lbCounter"></span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // ═══════════════════════════════════════════════════════
+      // Project Data (matches front/projects.html)
+      // ═══════════════════════════════════════════════════════
+      const PROJECTS = [
+        {
+          id: 1, title: 'Private Luxury Villa Pergola',
+          location: 'Amsterdam, NL', category: 'pergola', categoryLabel: 'Bioclimatic Pergola',
+          hero: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1400',
+          description: 'A fully motorised bioclimatic pergola with integrated LED lighting, rain sensors, and Somfy smart home control. This project showcases the perfect blend of technology and design. The client wanted a luxurious outdoor living space that could be enjoyed year-round, regardless of weather conditions.',
+          tags: ['Motorised Louvers', 'Smart Home', 'LED Lighting'],
+          specs: [
+            { label: 'Material', value: 'Aluminium 6063-T5' },
+            { label: 'Finish', value: 'RAL 7016 Anthracite' },
+            { label: 'Dimensions', value: '6.0 × 4.5 m' },
+            { label: 'Louvers', value: 'Bioclimatic, 180° rotatable' },
+            { label: 'Lighting', value: 'LED RGBW Strip, 24V' },
+            { label: 'Automation', value: 'Somfy io-homecontrol' },
+            { label: 'Sensors', value: 'Rain & Wind (auto-close)' },
+            { label: 'Warranty', value: '15 years structure' },
+          ],
+          details: [
+            { icon: 'fa-calendar', label: 'Completed', value: 'March 2026' },
+            { icon: 'fa-clock', label: 'Duration', value: '14 days' },
+            { icon: 'fa-user-gear', label: 'Team Lead', value: 'Jan de Vries' },
+            { icon: 'fa-hard-hat', label: 'Crew Size', value: '4 installers' },
+          ],
+          gallery: [
+            { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000', caption: 'Full front view', featured: true },
+            { src: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=800', caption: 'Louvers detail' },
+            { src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800', caption: 'Evening ambiance' },
+            { src: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=800', caption: 'LED lighting at night' },
+            { src: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800', caption: 'Smart control panel' },
+            { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800', caption: 'Integration with garden' },
+            { src: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=800', caption: 'Rain sensor detail' },
+          ],
+        },
+        {
+          id: 2, title: 'Modern Lakefront Winter Garden',
+          location: 'Antwerp, BE', category: 'veranda', categoryLabel: 'Winter Garden',
+          hero: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1400',
+          description: 'A stunning glass veranda overlooking the lake, featuring floor-to-ceiling sliding glass walls and a thermally broken aluminium frame. Designed for year-round comfort with integrated heating and natural ventilation.',
+          tags: ['Sliding Glass', 'Thermal Break', 'Lake View'],
+          specs: [
+            { label: 'Material', value: 'Aluminium 6060-T66' },
+            { label: 'Finish', value: 'RAL 9016 White' },
+            { label: 'Dimensions', value: '5.0 × 4.0 m' },
+            { label: 'Glass', value: 'Double 4.15.5 Argon' },
+            { label: 'Sliding Panels', value: '3 panels, 2.5 m each' },
+            { label: 'Heating', value: 'Underfloor + IR panels' },
+            { label: 'Ventilation', value: 'Automatic roof window' },
+          ],
+          details: [
+            { icon: 'fa-calendar', label: 'Completed', value: 'January 2026' },
+            { icon: 'fa-clock', label: 'Duration', value: '18 days' },
+            { icon: 'fa-user-gear', label: 'Team Lead', value: 'Pieter Janssens' },
+            { icon: 'fa-hard-hat', label: 'Crew Size', value: '5 installers' },
+          ],
+          gallery: [
+            { src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000', caption: 'Lakefront view', featured: true },
+            { src: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=800', caption: 'Interior with lake view' },
+            { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800', caption: 'Full opening panels' },
+            { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800', caption: 'Thermal break detail' },
+            { src: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800', caption: 'Roof window open' },
+            { src: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=800', caption: 'Evening lighting' },
+          ],
+        },
+        {
+          id: 3, title: 'Corporate Executive Garden',
+          location: 'Berlin, DE', category: 'glass', categoryLabel: 'Glass Wall',
+          hero: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1400',
+          description: 'Ultra-slim aluminium framed sliding walls that seamlessly connect the indoor executive lounge with an outdoor garden terrace. The minimal sightline design maximizes natural light and provides unobstructed views.',
+          tags: ['Minimal Frame', 'Commercial', 'Executive'],
+          specs: [
+            { label: 'System', value: 'Sliding Glass Wall' },
+            { label: 'Frame', value: 'Ultra-slim 45 mm' },
+            { label: 'Height', value: '3.0 m panels' },
+            { label: 'Glass', value: 'Triple 4.12.5.12.4' },
+            { label: 'U-value', value: '0.8 W/m²K' },
+            { label: 'Capacity', value: '6 sliding panels' },
+          ],
+          details: [
+            { icon: 'fa-calendar', label: 'Completed', value: 'November 2025' },
+            { icon: 'fa-clock', label: 'Duration', value: '21 days' },
+            { icon: 'fa-user-gear', label: 'Team Lead', value: 'Klaus Richter' },
+          ],
+          gallery: [
+            { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000', caption: 'Executive lounge', featured: true },
+            { src: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=800', caption: 'Glass wall detail' },
+            { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800', caption: 'Full opening position' },
+            { src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800', caption: 'Garden terrace view' },
+            { src: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800', caption: 'Slim frame close-up' },
+          ],
+        },
+        {
+          id: 4, title: 'Sustainable Home Garage Set',
+          location: 'Rotterdam, NL', category: 'doors', categoryLabel: 'Garage Doors',
+          hero: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=1400',
+          description: 'Insulated aluminium garage doors with whisper-quiet automatic openers, custom RAL 7016 finish, and smart home integration. This sustainable home project features solar-ready automation and superior thermal performance.',
+          tags: ['Insulated', 'Automatic', 'RAL 7016', 'Smart Home'],
+          specs: [
+            { label: 'Type', value: 'Sectional garage door' },
+            { label: 'Material', value: 'Aluminium + PIR core' },
+            { label: 'Finish', value: 'RAL 7016 Anthracite' },
+            { label: 'Insulation', value: 'U=0.5 W/m²K' },
+            { label: 'Motor', value: 'Somfy Lift 800' },
+            { label: 'Control', value: 'App + remote + keypad' },
+          ],
+          details: [
+            { icon: 'fa-calendar', label: 'Completed', value: 'October 2025' },
+            { icon: 'fa-clock', label: 'Duration', value: '5 days' },
+            { icon: 'fa-user-gear', label: 'Team Lead', value: 'Bram Smit' },
+          ],
+          gallery: [
+            { src: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=1000', caption: 'Front view', featured: true },
+            { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800', caption: 'Open position' },
+            { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800', caption: 'Interior insulation layer' },
+            { src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800', caption: 'Motor and rail system' },
+          ],
+        },
+        {
+          id: 5, title: 'Smart Zonwering Pergola',
+          location: 'Utrecht, NL', category: 'pergola', categoryLabel: 'Pergola',
+          hero: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=1400',
+          description: 'Automated sun protection system with adjustable louvers that adapt to weather conditions, complete with integrated heating elements. The pergola creates a comfortable outdoor microclimate for this modern family home.',
+          tags: ['Smart Sensors', 'Heating', 'Automated'],
+          specs: [
+            { label: 'Dimensions', value: '4.0 × 3.5 m' },
+            { label: 'Louvers', value: 'Motorised 160° rotation' },
+            { label: 'Heating', value: '2× IR panels 1500W' },
+            { label: 'Sensors', value: 'Sun/Wind/Rain' },
+            { label: 'Frame', value: 'Aluminium RAL 9005' },
+          ],
+          details: [
+            { icon: 'fa-calendar', label: 'Completed', value: 'August 2025' },
+            { icon: 'fa-clock', label: 'Duration', value: '12 days' },
+            { icon: 'fa-user-gear', label: 'Team Lead', value: 'Tom van der Berg' },
+          ],
+          gallery: [
+            { src: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=1000', caption: 'Pergola in garden', featured: true },
+            { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800', caption: 'Louvers closed position' },
+            { src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800', caption: 'Evening with heating' },
+            { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800', caption: 'Sensor installation' },
+            { src: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=800', caption: 'Living room connection' },
+          ],
+        },
+        {
+          id: 6, title: 'Family Garden Veranda',
+          location: 'Eindhoven, NL', category: 'veranda', categoryLabel: 'Veranda',
+          hero: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=1400',
+          description: 'A spacious aluminium veranda designed for year-round use with retractable glass panels and integrated blinds for privacy control. The family can enjoy their garden in any season.',
+          tags: ['Retractable', 'Family Home', 'Privacy'],
+          specs: [
+            { label: 'Dimensions', value: '6.0 × 3.5 m' },
+            { label: 'Roof', value: 'Polycarbonate Opal' },
+            { label: 'Panels', value: 'Retractable glass, 4-panel' },
+            { label: 'Blinds', value: 'Integrated zip screens' },
+            { label: 'Frame', value: 'Aluminium RAL 9001' },
+          ],
+          details: [
+            { icon: 'fa-calendar', label: 'Completed', value: 'July 2025' },
+            { icon: 'fa-clock', label: 'Duration', value: '16 days' },
+            { icon: 'fa-user-gear', label: 'Team Lead', value: 'Daan Meijer' },
+          ],
+          gallery: [
+            { src: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=1000', caption: 'Garden veranda full view', featured: true },
+            { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800', caption: 'Retractable panels open' },
+            { src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800', caption: 'Interior with blinds down' },
+            { src: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800', caption: 'Roof detail' },
+            { src: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=800', caption: 'Evening family gathering' },
+            { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800', caption: 'Privacy screen detail' },
+          ],
+        },
+        {
+          id: 7, title: 'Commercial Automatic Entrance',
+          location: 'Hamburg, DE', category: 'doors', categoryLabel: 'Automatic Doors',
+          hero: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1400',
+          description: 'High-traffic automatic sliding doors with motion sensors, safety breakaway technology, and a sleek aluminium profile finish. Installed at a corporate headquarters in Hamburg.',
+          tags: ['Commercial', 'Motion Sensor', 'High Traffic'],
+          specs: [
+            { label: 'Type', value: 'Automatic sliding door' },
+            { label: 'Width', value: '3.0 m (paired)' },
+            { label: 'Height', value: '2.8 m' },
+            { label: 'Glass', value: 'Tempered 10 mm' },
+            { label: 'Motor', value: 'Dormakaba ES 200' },
+            { label: 'Safety', value: 'Breakaway + sensors' },
+          ],
+          details: [
+            { icon: 'fa-calendar', label: 'Completed', value: 'June 2025' },
+            { icon: 'fa-clock', label: 'Duration', value: '8 days' },
+            { icon: 'fa-user-gear', label: 'Team Lead', value: 'Hans Mueller' },
+          ],
+          gallery: [
+            { src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000', caption: 'Entrance front view', featured: true },
+            { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800', caption: 'Open position' },
+            { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800', caption: 'Motion sensor detail' },
+            { src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800', caption: 'Lobby integration' },
+          ],
+        },
+        {
+          id: 8, title: 'Residential Roller Shutter Package',
+          location: 'Brussels, BE', category: 'shutters', categoryLabel: 'Roller Shutters',
+          hero: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1400',
+          description: 'Precision-engineered roller shutters for windows and patio doors with electric operation, providing privacy and energy efficiency. Package included 8 windows and 2 patio doors.',
+          tags: ['Electric', 'Privacy', 'Energy Efficient'],
+          specs: [
+            { label: 'Coverage', value: '8 windows + 2 doors' },
+            { label: 'Material', value: 'Aluminium foam-filled' },
+            { label: 'Finish', value: 'RAL 7016 Anthracite' },
+            { label: 'Operation', value: 'Electric + remote' },
+            { label: 'Control', value: 'Somfy Situo 5' },
+            { label: 'U-value', value: '1.2 W/m²K (closed)' },
+          ],
+          details: [
+            { icon: 'fa-calendar', label: 'Completed', value: 'May 2025' },
+            { icon: 'fa-clock', label: 'Duration', value: '6 days' },
+            { icon: 'fa-user-gear', label: 'Team Lead', value: 'Luc Dubois' },
+          ],
+          gallery: [
+            { src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1000', caption: 'Front elevation', featured: true },
+            { src: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=800', caption: 'Shutter detail' },
+            { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800', caption: 'Motor housing' },
+            { src: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800', caption: 'Patio door shutter' },
+          ],
+        },
+        {
+          id: 9, title: 'Penthouse Panoramic Sliders',
+          location: 'Den Haag, NL', category: 'glass', categoryLabel: 'Glass Wall',
+          hero: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=1400',
+          description: 'Floor-to-ceiling sliding glass walls offering unobstructed city skyline views with ultra-thin aluminium profiles and thermal insulation. This penthouse project maximises the panoramic view.',
+          tags: ['Panoramic', 'Penthouse', 'City View'],
+          specs: [
+            { label: 'System', value: 'Minimal sliding wall' },
+            { label: 'Frame', value: 'Ultra-slim 35 mm' },
+            { label: 'Height', value: '3.2 m panels' },
+            { label: 'Width', value: '6.0 m total opening' },
+            { label: 'Glass', value: 'Laminated 8.8.2 + Argon' },
+            { label: 'U-value', value: '0.9 W/m²K' },
+          ],
+          details: [
+            { icon: 'fa-calendar', label: 'Completed', value: 'April 2025' },
+            { icon: 'fa-clock', label: 'Duration', value: '10 days' },
+            { icon: 'fa-user-gear', label: 'Team Lead', value: 'Mark de Wit' },
+          ],
+          gallery: [
+            { src: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=1000', caption: 'Skyline view', featured: true },
+            { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800', caption: 'Full open position' },
+            { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800', caption: 'Slim profile detail' },
+            { src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800', caption: 'Terrace integration' },
+            { src: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800', caption: 'Living room with view' },
+            { src: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=800', caption: 'Lock mechanism detail' },
+          ],
+        },
+      ];
+
+      // ═══════════════════════════════════════════════════════
+      // Lightbox state
+      // ═══════════════════════════════════════════════════════
+      let currentImages = [];
+      let currentIndex = 0;
+
+      function openLightbox(images, index) {
+        currentImages = images;
+        currentIndex = index;
+        updateLightbox();
+        document.getElementById('lightbox').classList.add('show');
+        document.body.style.overflow = 'hidden';
+        document.addEventListener('keydown', lbKeydown);
+      }
+
+      function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('show');
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', lbKeydown);
+      }
+
+      function updateLightbox() {
+        if (!currentImages.length) return;
+        const img = currentImages[currentIndex];
+        document.getElementById('lbImage').src = img.src;
+        document.getElementById('lbImage').alt = img.caption || '';
+        document.getElementById('lbCounter').textContent = (currentIndex + 1) + ' / ' + currentImages.length;
+      }
+
+      function nextImage() {
+        if (currentIndex < currentImages.length - 1) { currentIndex++; updateLightbox(); }
+      }
+
+      function prevImage() {
+        if (currentIndex > 0) { currentIndex--; updateLightbox(); }
+      }
+
+      function lbKeydown(e) {
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') nextImage();
+        if (e.key === 'ArrowLeft') prevImage();
+      }
+
+      // ═══════════════════════════════════════════════════════
+      // Page Render
+      // ═══════════════════════════════════════════════════════
+      function renderProject() {
+        const params = new URLSearchParams(window.location.search);
+        const id = parseInt(params.get('id')) || 1;
+        const proj = PROJECTS.find(p => p.id === id);
+        if (!proj) {
+          document.getElementById('pdHero').innerHTML = '<div style="padding:120px 20px;text-align:center;"><h2>Project not found</h2><a href="projects.html" class="btn btn-quote mt-3">Back to Projects</a></div>';
+          return;
+        }
+
+        // Update page title
+        document.title = proj.title + ' — AZ Aluminium';
+
+        // Hero
+        document.getElementById('pdHero').innerHTML = `
+          <img src="${proj.hero}" alt="${proj.title}" />
+          <div class="pd-overlay"></div>
+          <div class="pd-hero-content">
+            <div class="container px-lg-5">
+              <div class="bread-cr">
+                <a href="index.html">HOME</a> / <a href="projects.html">PROJECTS</a> / <span>${proj.title.toUpperCase()}</span>
+              </div>
+              <h1>${proj.title}</h1>
+              <div class="pd-meta">
+                <span class="pd-cat-badge">${proj.categoryLabel}</span>
+                <span><i class="fa-solid fa-location-dot"></i>${proj.location}</span>
+              </div>
+            </div>
+          </div>`;
+
+        // Gallery HTML
+        window._pgallery = proj.gallery;
+        let galleryHtml = proj.gallery.map((g, i) => `
+          <div class="gal-item ${g.featured ? 'gal-featured' : ''}" onclick="openLightbox(window._pgallery, ${i})">
+            <img src="${g.src}" alt="${g.caption}" />
+            <div class="gal-overlay"><i class="fa-regular fa-eye"></i></div>
+          </div>
+        `).join('');
+
+        // Specs HTML
+        let specsHtml = proj.specs.map(s => `
+          <li><i class="fa-solid fa-check"></i><span class="spec-label">${s.label}</span><span>${s.value}</span></li>
+        `).join('');
+
+        // Details cards
+        let detailsHtml = proj.details.map(d => `
+          <div class="col-6 col-md-3">
+            <div class="info-card">
+              <div class="ic-icon" style="background:#dbeafe;color:#1e40af;"><i class="fa-regular ${d.icon}"></i></div>
+              <h6>${d.label}</h6>
+              <p>${d.value}</p>
+            </div>
+          </div>
+        `).join('');
+
+        // Related projects (same category, exclude current)
+        const related = PROJECTS.filter(p => p.category === proj.category && p.id !== proj.id).slice(0, 3);
+        let relatedHtml = related.map(p => `
+          <div class="rel-card" onclick="location.href='project-detail.html?id=${p.id}'">
+            <img src="${p.hero}" alt="${p.title}" />
+            <div class="rc-body">
+              <h6>${p.title}</h6>
+              <span><i class="fa-solid fa-location-dot"></i>${p.location}</span>
+            </div>
+          </div>
+        `).join('');
+
+        // Tags
+        let tagsHtml = proj.tags.map(t => `<span>${t}</span>`).join('');
+
+        document.getElementById('pdBody').innerHTML = `
+          <div class="container px-lg-5">
+            <p class="pd-description">${proj.description}</p>
+
+            <!-- Gallery -->
+            <div class="pd-gallery">
+              <h3><i class="fa-regular fa-images me-2" style="color:var(--cta-orange);"></i>Project Gallery</h3>
+              <div class="gallery-grid">${galleryHtml}</div>
+            </div>
+
+            <!-- Details + Specs -->
+            <div class="pd-details">
+              <div class="row row-gap g-4">
+                ${detailsHtml}
+              </div>
+
+              <div class="row g-4" style="margin-top:20px;">
+                <div class="col-lg-7">
+                  <h3 style="font-size:18px;font-weight:700;color:var(--primary-blue);margin-bottom:16px;">
+                    <i class="fa-solid fa-list me-2" style="color:var(--cta-orange);"></i>Technical Specifications
+                  </h3>
+                  <ul class="spec-list">${specsHtml}</ul>
+                </div>
+                <div class="col-lg-5">
+                  <h3 style="font-size:18px;font-weight:700;color:var(--primary-blue);margin-bottom:16px;">
+                    <i class="fa-solid fa-tags me-2" style="color:var(--cta-orange);"></i>Project Tags
+                  </h3>
+                  <div class="tag-list">${tagsHtml}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Related -->
+            ${related.length ? `
+            <div class="pd-related">
+              <h3><i class="fa-regular fa-folder-open me-2" style="color:var(--cta-orange);"></i>Similar Projects</h3>
+              <div class="rel-grid">${relatedHtml}</div>
+            </div>` : ''}
+
+            <!-- Back link -->
+            <div style="text-align:center;">
+              <a href="projects.html" class="btn btn-quote px-5 py-3">
+                <i class="fa-solid fa-arrow-left me-2"></i> Back to All Projects
+              </a>
+            </div>
+          </div>`;
+      }
+
+      renderProject();
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;color:var(--primary-blue);">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#eef2f7;box-shadow:0 4px 16px rgba(27,64,94,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: 'Language set to ' + r.value.toUpperCase(), icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
+</html>

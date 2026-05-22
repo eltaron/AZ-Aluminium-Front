@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Orders | Customer Portal — AZ Aluminium</title>
+    <meta name="description" content="Track your AZ Aluminium orders — view status, timeline, and delivery updates." />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/customer.css" />
+    <style>
+      .controls-bar {
+        display: flex; justify-content: space-between; align-items: center;
+        flex-wrap: wrap; gap: 16px; margin-bottom: 28px;
+      }
+      .controls-bar .search-box { position: relative; max-width: 340px; width: 100%; }
+      .controls-bar .search-box input {
+        width: 100%; padding: 12px 18px 12px 46px; border-radius: 14px;
+        border: 2px solid #e2e8f0; font-size: 14px; background: #fff; transition: 0.3s;
+      }
+      .controls-bar .search-box input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(10,25,41,0.08); outline: none; }
+      .controls-bar .search-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+      .controls-bar .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
+      .controls-bar .filter-group .fil-btn {
+        padding: 10px 20px; border-radius: 50px; border: 2px solid #e2e8f0;
+        background: #fff; font-size: 13px; font-weight: 500; color: #64748b;
+        cursor: pointer; transition: 0.25s;
+      }
+      .controls-bar .filter-group .fil-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+      .controls-bar .filter-group .fil-btn.active { background: var(--primary-blue); border-color: var(--primary-blue); color: #fff; }
+
+      .order-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 18px;
+        padding: 24px 28px; transition: 0.3s; cursor: pointer;
+      }
+      .order-card:hover { border-color: var(--primary-blue); box-shadow: 0 6px 24px rgba(0,0,0,0.04); }
+      .order-card .oc-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+      .order-card .oc-top .oc-ref { font-weight: 700; color: var(--primary-blue); font-size: 16px; }
+      .order-card .oc-top .oc-date { font-size: 13px; color: #94a3b8; }
+      .order-card .oc-badge {
+        padding: 5px 16px; border-radius: 50px; font-size: 12px; font-weight: 600;
+      }
+      .oc-badge.processing { background: #cce5ff; color: #004085; }
+      .oc-badge.shipped { background: #e8daef; color: #6c3483; }
+      .oc-badge.completed { background: #d4edda; color: #155724; }
+      .oc-badge.cancelled { background: #f8d7da; color: #721c24; }
+      .oc-badge.pending { background: #fff3cd; color: #856404; }
+      .oc-badge.installing { background: #d1ecf1; color: #0c5460; }
+
+      .order-card .oc-items { margin-bottom: 12px; }
+      .order-card .oc-items .oi-tag {
+        display: inline-block; padding: 4px 14px; border-radius: 50px; background: #f1f5f9;
+        font-size: 12px; color: var(--primary-blue); font-weight: 500; margin: 2px 4px 2px 0;
+      }
+      .order-card .oc-progress { margin: 16px 0 14px; }
+      .order-card .oc-progress .ocp-bar {
+        height: 6px; border-radius: 50px; background: #e2e8f0; overflow: hidden; margin-bottom: 6px;
+      }
+      .order-card .oc-progress .ocp-bar .ocp-fill { height: 100%; border-radius: 50px; background: var(--primary-blue); transition: width 0.6s; }
+      .order-card .oc-progress .ocp-label { font-size: 12px; color: #64748b; display: flex; justify-content: space-between; }
+      .order-card .oc-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 14px; border-top: 1px solid #f1f5f9; }
+      .order-card .oc-bottom .oc-total { font-size: 18px; font-weight: 700; color: var(--primary-blue); }
+      .order-card .oc-bottom .oc-actions { display: flex; gap: 8px; }
+      .order-card .oc-bottom .oc-actions button {
+        padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 600;
+        border: none; transition: 0.25s;
+      }
+      .order-card .oc-bottom .oc-actions .btn-track { background: #eef2f7; color: var(--primary-blue); }
+      .order-card .oc-bottom .oc-actions .btn-track:hover { background: #e2e8f0; }
+      .order-card .oc-bottom .oc-actions .btn-contact { background: var(--primary-blue); color: #fff; }
+      .order-card .oc-bottom .oc-actions .btn-contact:hover { background: #15304a; }
+
+      /* ── Timeline Modal ── */
+      .modal-content { border-radius: 20px; border: none; padding: 8px; }
+      .modal-header { border-bottom: 1px solid #f1f5f9; padding: 20px 24px 16px; }
+      .modal-header .modal-title { font-weight: 700; color: var(--primary-blue); }
+      .modal-body { padding: 24px; }
+      .order-timeline { position: relative; padding-left: 0; }
+      .order-timeline::before { content: ""; position: absolute; left: 20px; top: 10px; bottom: 10px; width: 2px; background: #e2e8f0; }
+      .order-timeline .ot-item { display: flex; gap: 18px; padding: 16px 0; position: relative; }
+      .order-timeline .ot-item .ot-dot {
+        width: 42px; height: 42px; min-width: 42px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; z-index: 1; position: relative;
+      }
+      .order-timeline .ot-item .ot-dot.done { background: var(--primary-blue); }
+      .order-timeline .ot-item .ot-dot.active { background: var(--cta-orange); box-shadow: 0 0 0 6px rgba(255,107,0,0.15); }
+      .order-timeline .ot-item .ot-dot.pending { background: #e2e8f0; color: #94a3b8; }
+      .order-timeline .ot-item .ot-c { flex: 1; padding-top: 4px; }
+      .order-timeline .ot-item .ot-c h6 { font-size: 15px; font-weight: 600; color: var(--primary-blue); margin: 0 0 2px; }
+      .order-timeline .ot-item .ot-c p { font-size: 13px; color: #64748b; margin: 0; }
+      .order-timeline .ot-item .ot-c .ot-date { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+      .modal-footer { border-top: 1px solid #f1f5f9; padding: 16px 24px; }
+      .modal-footer .btn-modal { padding: 12px 28px; border-radius: 12px; font-weight: 600; font-size: 14px; border: none; transition: 0.25s; }
+
+      @media (max-width: 576px) {
+        .order-card { padding: 20px; }
+        .controls-bar { flex-direction: column; align-items: stretch; }
+        .controls-bar .search-box { max-width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">3</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ═══ Sidebar ═══ -->
+    <aside class="c-sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../images/logo.png" alt="AZ Aluminium" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Customer Portal</span>
+        </div>
+      </div>
+      <div class="sidebar-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">3</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="projects.html" class="nav-item"><i class="fa-solid fa-hard-hat"></i> Projects</a>
+        <a href="orders.html" class="nav-item active"><i class="fa-solid fa-hard-hat"></i> Orders</a>
+        <a href="quotes.html" class="nav-item"><i class="fa-regular fa-file-lines"></i> Quotes</a>
+        <a href="invoices.html" class="nav-item"><i class="fa-solid fa-file-invoice"></i> Invoices</a>
+        <a href="tickets.html" class="nav-item"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Appointments</a>
+        <a href="profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="avatar">AH</div>
+          <div>
+            <p class="u-name">Alex Harrison</p>
+            <p class="u-role">Premium Member</p>
+          </div>
+          <i class="fa-solid fa-chevron-right u-arrow"></i>
+        </div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <!-- ═══ Main ═══ -->
+    <main class="c-main">
+      <div class="page-header">
+        <h2>My Orders</h2>
+        <p>Track progress and view details for all your orders.</p>
+      </div>
+
+      <div class="controls-bar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Search by order ref or item..." oninput="filterOrders()" />
+        </div>
+        <div class="filter-group">
+          <span class="fil-btn active" data-filter="all" onclick="setFilter(this,'all')">All</span>
+          <span class="fil-btn" data-filter="processing" onclick="setFilter(this,'processing')">Processing</span>
+          <span class="fil-btn" data-filter="shipped" onclick="setFilter(this,'shipped')">Shipped</span>
+          <span class="fil-btn" data-filter="installing" onclick="setFilter(this,'installing')">Installing</span>
+          <span class="fil-btn" data-filter="completed" onclick="setFilter(this,'completed')">Completed</span>
+        </div>
+      </div>
+
+      <div id="ordersContainer" class="d-flex flex-column gap-3"></div>
+      <footer class="c-footer">
+        <span>© 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Made with <i class="fa-solid fa-heart" style="color:var(--cta-orange);"></i> for architectural excellence</span>
+      </footer>
+    </main>
+
+    <!-- Detail Modal -->
+    <div class="modal fade" id="orderModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="orderModalContent"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      const toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      const orders = [
+        { ref: 'AZ-2024-0042', date: '12 May 2026', status: 'processing', badge: 'Processing', badgeClass: 'processing', progress: 40, items: [{ name: 'Bioclimatic Pergola 4×3m', qty: 1 }, { name: 'Sliding Glass Wall 6m', qty: 1 }], total: '€18,450', eta: '28 May 2026',
+          timeline: [
+            { icon: 'fa-regular fa-circle-check', dot: 'done', title: 'Order Placed', desc: 'Order received and confirmed.', date: '12 May 2026' },
+            { icon: 'fa-solid fa-cubes', dot: 'done', title: 'Materials Prepared', desc: 'Aluminium profiles cut and finished.', date: '16 May 2026' },
+            { icon: 'fa-solid fa-truck', dot: 'active', title: 'In Production', desc: 'Your order is being manufactured.', date: 'Expected: 28 May 2026' },
+            { icon: 'fa-regular fa-building', dot: 'pending', title: 'Ready for Installation', desc: 'Awaiting installation schedule.', date: '' },
+            { icon: 'fa-regular fa-circle-check', dot: 'pending', title: 'Completed', desc: 'Installation finished and signed off.', date: '' }
+          ]
+        },
+        { ref: 'AZ-2024-0058', date: '02 Apr 2026', status: 'completed', badge: 'Completed', badgeClass: 'completed', progress: 100, items: [{ name: 'Winter Garden 5×4m', qty: 1 }, { name: 'Aluminium Doors (x3)', qty: 3 }], total: '€32,200', eta: '—',
+          timeline: [
+            { icon: 'fa-regular fa-circle-check', dot: 'done', title: 'Order Placed', desc: 'Order received and confirmed.', date: '02 Apr 2026' },
+            { icon: 'fa-solid fa-cubes', dot: 'done', title: 'Materials Prepared', desc: 'Aluminium profiles cut and finished.', date: '07 Apr 2026' },
+            { icon: 'fa-solid fa-truck', dot: 'done', title: 'Manufactured', desc: 'Order produced and quality checked.', date: '18 Apr 2026' },
+            { icon: 'fa-regular fa-building', dot: 'done', title: 'Installation Done', desc: 'Professionally installed on site.', date: '26 Apr 2026' },
+            { icon: 'fa-regular fa-circle-check', dot: 'done', title: 'Completed', desc: 'Project completed and signed off.', date: '26 Apr 2026' }
+          ]
+        },
+        { ref: 'AZ-2024-0071', date: '20 May 2026', status: 'installing', badge: 'Installation', badgeClass: 'installing', progress: 70, items: [{ name: 'Motorised Pergola 5×5m', qty: 1 }, { name: 'LED Lighting Kit', qty: 1 }, { name: 'Side Screens (x3)', qty: 3 }], total: '€24,800', eta: '05 Jun 2026',
+          timeline: [
+            { icon: 'fa-regular fa-circle-check', dot: 'done', title: 'Order Placed', desc: 'Order received and confirmed.', date: '20 May 2026' },
+            { icon: 'fa-solid fa-cubes', dot: 'done', title: 'Materials Prepared', desc: 'Aluminium profiles cut and finished.', date: '24 May 2026' },
+            { icon: 'fa-solid fa-truck', dot: 'done', title: 'Manufactured', desc: 'Order produced and quality checked.', date: '28 May 2026' },
+            { icon: 'fa-regular fa-building', dot: 'active', title: 'Installation in Progress', desc: 'On-site installation underway.', date: 'Started: 30 May 2026' },
+            { icon: 'fa-regular fa-circle-check', dot: 'pending', title: 'Completed', desc: 'Awaiting final inspection.', date: '' }
+          ]
+        },
+        { ref: 'AZ-2024-0033', date: '15 Jan 2026', status: 'cancelled', badge: 'Cancelled', badgeClass: 'cancelled', progress: 0, items: [{ name: 'Glass Wall System 8m', qty: 1 }], total: '€11,200', eta: '—',
+          timeline: [
+            { icon: 'fa-regular fa-circle-check', dot: 'done', title: 'Order Placed', desc: 'Order received and confirmed.', date: '15 Jan 2026' },
+            { icon: 'fa-solid fa-cubes', dot: 'done', title: 'Materials Prepared', desc: 'Aluminium profiles cut and finished.', date: '18 Jan 2026' },
+            { icon: 'fa-solid fa-ban', dot: 'active', title: 'Cancelled', desc: 'Order cancelled at customer request.', date: '20 Jan 2026' },
+            { icon: 'fa-regular fa-building', dot: 'pending', title: 'Refund Issued', desc: 'Full refund processed.', date: '' },
+            { icon: 'fa-regular fa-circle-check', dot: 'pending', title: 'Closed', desc: 'Order closed.', date: '' }
+          ]
+        },
+        { ref: 'AZ-2024-0065', date: '10 May 2026', status: 'shipped', badge: 'Shipped', badgeClass: 'shipped', progress: 60, items: [{ name: 'Aluminium Sliding Door 3m', qty: 2 }, { name: 'Roller Shutter 2.5×2m', qty: 1 }], total: '€9,850', eta: '15 Jun 2026',
+          timeline: [
+            { icon: 'fa-regular fa-circle-check', dot: 'done', title: 'Order Placed', desc: 'Order received and confirmed.', date: '10 May 2026' },
+            { icon: 'fa-solid fa-cubes', dot: 'done', title: 'Materials Prepared', desc: 'Aluminium profiles cut and finished.', date: '14 May 2026' },
+            { icon: 'fa-solid fa-truck', dot: 'done', title: 'Manufactured', desc: 'Order produced and quality checked.', date: '22 May 2026' },
+            { icon: 'fa-regular fa-building', dot: 'active', title: 'Shipped', desc: 'In transit to your location.', date: 'Shipped: 25 May 2026' },
+            { icon: 'fa-regular fa-circle-check', dot: 'pending', title: 'Delivered', desc: 'Awaiting delivery confirmation.', date: '' }
+          ]
+        },
+      ];
+
+      let currentFilter = 'all', currentSearch = '';
+
+      function renderOrders(data) {
+        const container = document.getElementById('ordersContainer');
+        if (data.length === 0) {
+          container.innerHTML = `<div class="text-center py-5" style="color:#94a3b8;"><i class="fa-solid fa-truck" style="font-size:48px;margin-bottom:16px;display:block;"></i><h5 style="color:var(--primary-blue);">No orders found</h5><p>Try a different filter or search term.</p></div>`;
+          return;
+        }
+        container.innerHTML = data.map(o => {
+          const tags = o.items.map(i => `<span class="oi-tag">${i.qty}× ${i.name}</span>`).join('');
+          return `<div class="order-card" onclick="openOrderDetail('${o.ref}')">
+            <div class="oc-top">
+              <div>
+                <div class="oc-ref">${o.ref}</div>
+                <div class="oc-date">Ordered: ${o.date} • ETA: ${o.eta}</div>
+              </div>
+              <span class="oc-badge ${o.badgeClass}">${o.badge}</span>
+            </div>
+            <div class="oc-items">${tags}</div>
+            <div class="oc-progress">
+              <div class="ocp-bar"><div class="ocp-fill" style="width:${o.progress}%"></div></div>
+              <div class="ocp-label"><span>${o.progress}% complete</span><span style="color:var(--primary-blue);font-weight:600;">${o.total}</span></div>
+            </div>
+            <div class="oc-bottom">
+              <div style="font-size:13px;color:#64748b;">${o.status === 'completed' ? '✓ Delivered and signed off' : o.status === 'cancelled' ? '✕ Order cancelled' : o.status === 'installing' ? '🔧 Installation in progress' : o.status === 'shipped' ? '🚚 In transit' : '🏭 In production'}</div>
+              <div class="oc-actions">
+                ${o.status !== 'cancelled' && o.status !== 'completed' ? `<button class="btn-contact" onclick="event.stopPropagation();contactOrder('${o.ref}')"><i class="fa-regular fa-message me-1"></i> Contact</button>` : ''}
+                <button class="btn-track" onclick="event.stopPropagation();openOrderDetail('${o.ref}')"><i class="fa-regular fa-eye me-1"></i> Track</button>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      function filterOrders() { currentSearch = document.getElementById('searchInput').value.toLowerCase().trim(); applyFilters(); }
+      function setFilter(el, f) { document.querySelectorAll('.fil-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); currentFilter = f; applyFilters(); }
+      function applyFilters() {
+        let filtered = orders;
+        if (currentFilter !== 'all') filtered = filtered.filter(o => o.status === currentFilter);
+        if (currentSearch) filtered = filtered.filter(o => o.ref.toLowerCase().includes(currentSearch) || o.items.some(i => i.name.toLowerCase().includes(currentSearch)));
+        renderOrders(filtered);
+      }
+
+      function contactOrder(ref) {
+        Swal.fire({ title: 'Contact Support', text: `A support representative will follow up on order ${ref} within 24 hours.`, icon: 'info', confirmButtonColor: 'var(--primary-blue)' });
+      }
+
+      function openOrderDetail(ref) {
+        const o = orders.find(x => x.ref === ref);
+        if (!o) return;
+        const tlHtml = o.timeline.map(t => `
+          <div class="ot-item">
+            <div class="ot-dot ${t.dot}"><i class="${t.icon}"></i></div>
+            <div class="ot-c">
+              <h6>${t.title}</h6>
+              <p>${t.desc}</p>
+              ${t.date ? '<div class="ot-date">' + t.date + '</div>' : ''}
+            </div>
+          </div>`).join('');
+        const itemsHtml = o.items.map(i => `<tr><td>${i.name}</td><td style="text-align:center;">${i.qty}</td></tr>`).join('');
+        const modal = document.getElementById('orderModalContent');
+        modal.innerHTML = `
+          <div class="modal-header">
+            <h5 class="modal-title">${o.ref}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+              <span style="font-size:13px;color:#94a3b8;">Ordered: ${o.date} • ETA: ${o.eta}</span>
+              <span class="oc-badge ${o.badgeClass}" style="padding:5px 18px;">${o.badge}</span>
+            </div>
+            <div style="margin-bottom:24px;">
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:6px;">
+                <span>Progress: ${o.progress}%</span>
+                <span style="font-weight:700;color:var(--primary-blue);">${o.total}</span>
+              </div>
+              <div style="height:6px;border-radius:50px;background:#e2e8f0;overflow:hidden;">
+                <div style="height:100%;border-radius:50px;background:var(--primary-blue);width:${o.progress}%;transition:width 0.6s;"></div>
+              </div>
+            </div>
+            <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
+              <thead><tr><th style="font-size:12px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;padding:8px 0;border-bottom:2px solid #f1f5f9;text-align:left;">Item</th><th style="font-size:12px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;padding:8px 0;border-bottom:2px solid #f1f5f9;text-align:center;">Qty</th></tr></thead>
+              <tbody>${itemsHtml}</tbody>
+            </table>
+            <h6 style="font-weight:600;color:var(--primary-blue);margin-bottom:16px;font-size:14px;">TIMELINE</h6>
+            <div class="order-timeline">${tlHtml}</div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-modal" style="background:#e2e8f0;color:var(--primary-blue);" data-bs-dismiss="modal">Close</button>
+            ${o.status !== 'cancelled' && o.status !== 'completed' ? `<button class="btn-modal" style="background:var(--primary-blue);color:#fff;" onclick="contactOrder('${o.ref}');bootstrap.Modal.getInstance(document.getElementById('orderModal')).hide();"><i class="fa-regular fa-message me-1"></i> Contact Support</button>` : ''}
+            ${o.status === 'completed' ? `<button class="btn-modal" style="background:var(--cta-orange);color:#fff;" onclick="Swal.fire({title:'Thank You!',text:'We appreciate your business. Please leave a review.',icon:'success',confirmButtonColor:'var(--primary-blue)'});bootstrap.Modal.getInstance(document.getElementById('orderModal')).hide();"><i class="fa-regular fa-star me-1"></i> Leave a Review</button>` : ''}
+          </div>`;
+        new bootstrap.Modal(document.getElementById('orderModal')).show();
+      }
+
+      renderOrders(orders);
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--primary-blue);background:#f8faff;box-shadow:0 4px 16px rgba(10,25,41,.12)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--primary-blue)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+    </script>
+  </body>
+</html>

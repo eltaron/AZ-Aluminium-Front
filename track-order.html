@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Track Your Order | AZ Aluminium</title>
+    <meta name="description" content="Track your AZ Aluminium order status in real time using your order number and email address." />
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <style>
+      .track-hero {
+        background: linear-gradient(135deg, #0a1929 0%, #1a365d 50%, #0a1929 100%);
+        padding: 100px 0 80px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .track-hero::before {
+        content: ""; position: absolute; inset: 0;
+        background-image: radial-gradient(circle at 25% 50%, rgba(255,107,0,0.08) 0%, transparent 50%),
+          radial-gradient(circle at 75% 50%, rgba(0,150,200,0.06) 0%, transparent 50%);
+        pointer-events: none;
+      }
+      .track-hero h1 { color: #fff; font-size: 42px; font-weight: 800; margin-bottom: 16px; }
+      .track-hero p { color: rgba(255,255,255,0.7); max-width: 560px; margin: 0 auto; font-size: 17px; }
+      .track-hero .hero-icon { font-size: 64px; color: var(--cta-orange); margin-bottom: 20px; opacity: 0.8; }
+      .track-form-section { padding: 80px 0; }
+      .track-form-card {
+        max-width: 640px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 24px;
+        padding: 48px 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        border: 1px solid #edf2f7;
+        position: relative;
+        z-index: 2;
+        margin-top: -50px;
+      }
+      .track-form-card .form-label { font-weight: 600; color: var(--primary-blue); font-size: 14px; }
+      .track-form-card .form-control {
+        border-radius: 12px; padding: 14px 18px; border: 2px solid #e2e8f0;
+        font-size: 15px; transition: 0.3s;
+      }
+      .track-form-card .form-control:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(10,25,41,0.08); }
+      .track-form-card .btn-track {
+        width: 100%; padding: 16px; border-radius: 14px; font-weight: 600; font-size: 16px;
+        background: var(--primary-blue); color: #fff; border: none; transition: 0.3s;
+      }
+      .track-form-card .btn-track:hover { background: #15304a; transform: translateY(-2px); }
+      .track-result { padding: 0 0 80px; display: none; }
+      .track-result.show { display: block; }
+      .track-result .status-card {
+        background: #fff; border-radius: 24px; padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.05); border: 1px solid #edf2f7;
+      }
+      .track-result .order-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; }
+      .track-result .order-header h4 { font-weight: 700; color: var(--primary-blue); margin: 0; }
+      .track-result .order-header .order-badge { padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: 600; }
+      .track-result .order-header .badge-pending { background: #fef3cd; color: #856404; }
+      .track-result .order-header .badge-processing { background: #cce5ff; color: #004085; }
+      .track-result .order-header .badge-completed { background: #d4edda; color: #155724; }
+      .track-result .order-header .badge-cancelled { background: #f8d7da; color: #721c24; }
+      .track-result .badge-shipped { background: #e8daef; color: #6c3483; }
+      .timeline { position: relative; padding: 0; margin: 0; }
+      .timeline::before {
+        content: ""; position: absolute; left: 23px; top: 12px; bottom: 12px;
+        width: 2px; background: #e2e8f0;
+      }
+      .timeline-item { display: flex; gap: 20px; padding: 18px 0; position: relative; }
+      .timeline-item .tl-dot {
+        width: 48px; height: 48px; min-width: 48px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 18px; color: #fff; z-index: 1; position: relative;
+      }
+      .timeline-item .tl-dot.done { background: var(--primary-blue); }
+      .timeline-item .tl-dot.active { background: var(--cta-orange); box-shadow: 0 0 0 6px rgba(255,107,0,0.15); }
+      .timeline-item .tl-dot.pending { background: #e2e8f0; color: #94a3b8; }
+      .timeline-item .tl-content { flex: 1; padding-top: 4px; }
+      .timeline-item .tl-content h6 { font-weight: 600; color: var(--primary-blue); margin-bottom: 4px; font-size: 15px; }
+      .timeline-item .tl-content p { font-size: 13px; color: var(--header-gray); margin: 0; }
+      .timeline-item .tl-content .tl-date { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+      .order-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 32px; padding-top: 32px; border-top: 1px solid #edf2f7; }
+      .order-details-grid .od-item label { font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+      .order-details-grid .od-item p { font-size: 15px; color: var(--primary-blue); font-weight: 500; margin: 4px 0 0; }
+      .no-result { text-align: center; padding: 40px; color: var(--header-gray); }
+      .no-result i { font-size: 48px; color: #e2e8f0; margin-bottom: 16px; }
+      .no-result h5 { color: var(--primary-blue); margin-bottom: 8px; }
+      @media (max-width: 768px) {
+        .track-hero h1 { font-size: 28px; }
+        .track-hero { padding: 70px 0 50px; }
+        .track-form-card { padding: 32px 24px; margin-top: -30px; }
+        .order-details-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="navbar-placeholder"></div>
+
+    <main>
+      <section class="track-hero">
+        <div class="container">
+          <div class="hero-icon"><i class="fa-solid fa-truck"></i></div>
+          <h1>Track Your Order</h1>
+          <p>Enter your order number and email address to view real-time status and delivery updates.</p>
+        </div>
+      </section>
+
+      <section class="track-form-section">
+        <div class="container">
+          <div class="track-form-card">
+            <form id="trackForm" onsubmit="return trackOrder(event)">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <label class="form-label">Order Number</label>
+                  <input type="text" class="form-control" id="orderNumber" placeholder="e.g. AZ-2024-0042" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" class="form-control" id="orderEmail" placeholder="your@email.com" required />
+                </div>
+              </div>
+              <button type="submit" class="btn-track mt-4"><i class="fa-solid fa-magnifying-glass me-2"></i>Track Order</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="track-result" id="trackResult">
+        <div class="container">
+          <div class="status-card" id="statusCard">
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      fetch('base.html')
+        .then(r => r.text())
+        .then(html => {
+          const navbar = html.match(/<header[\s\S]*?<\/header>/);
+          const footer = html.match(/<footer[\s\S]*?<\/footer>/);
+          const mobileNav = html.match(/<nav class="mobile-bottom-nav"[\s\S]*?<\/nav>/);
+          if (navbar) document.getElementById('navbar-placeholder').innerHTML = navbar[0];
+          if (footer) document.getElementById('footer-placeholder').innerHTML = footer[0] + (mobileNav ? mobileNav[0] : '');
+        });
+
+      const orders = {
+        'AZ-2024-0042': {
+          status: 'processing', badge: 'Processing', badgeClass: 'badge-processing',
+          items: [{ name: 'Bioclimatic Pergola 4×3m', qty: 1 }, { name: 'Sliding Glass Wall 6m', qty: 1 }],
+          total: '€18,450',
+          date: '12 May 2026',
+          timeline: [
+            { dot: 'done', icon: 'fa-regular fa-circle-check', title: 'Order Placed', desc: 'Your order has been received.', date: '12 May 2026' },
+            { dot: 'done', icon: 'fa-solid fa-cubes', title: 'Materials Prepared', desc: 'Aluminium profiles cut and finished.', date: '16 May 2026' },
+            { dot: 'active', icon: 'fa-solid fa-truck', title: 'In Production', desc: 'Your order is being manufactured.', date: 'Expected: 28 May 2026' },
+            { dot: 'pending', icon: 'fa-regular fa-building', title: 'Ready for Installation', desc: 'Awaiting installation schedule.', date: '' },
+            { dot: 'pending', icon: 'fa-regular fa-circle-check', title: 'Completed', desc: 'Installation finished and signed off.', date: '' }
+          ]
+        },
+        'AZ-2024-0058': {
+          status: 'completed', badge: 'Completed', badgeClass: 'badge-completed',
+          items: [{ name: 'Winter Garden 5×4m', qty: 1 }, { name: 'Aluminium Doors (x3)', qty: 3 }],
+          total: '€32,200',
+          date: '02 Apr 2026',
+          timeline: [
+            { dot: 'done', icon: 'fa-regular fa-circle-check', title: 'Order Placed', desc: 'Your order has been received.', date: '02 Apr 2026' },
+            { dot: 'done', icon: 'fa-solid fa-cubes', title: 'Materials Prepared', desc: 'Aluminium profiles cut and finished.', date: '07 Apr 2026' },
+            { dot: 'done', icon: 'fa-solid fa-truck', title: 'Manufactured', desc: 'Order produced and quality checked.', date: '18 Apr 2026' },
+            { dot: 'done', icon: 'fa-regular fa-building', title: 'Installation Done', desc: 'Professionally installed on site.', date: '26 Apr 2026' },
+            { dot: 'done', icon: 'fa-regular fa-circle-check', title: 'Completed', desc: 'Project completed and signed off.', date: '26 Apr 2026' }
+          ]
+        }
+      };
+
+      function trackOrder(e) {
+        e.preventDefault();
+        const num = document.getElementById('orderNumber').value.trim();
+        const email = document.getElementById('orderEmail').value.trim();
+        const card = document.getElementById('statusCard');
+        const result = document.getElementById('trackResult');
+
+        const order = orders[num];
+
+        if (!order) {
+          card.innerHTML = `
+            <div class="no-result">
+              <i class="fa-regular fa-circle-question"></i>
+              <h5>Order Not Found</h5>
+              <p>No order matches the number <strong>${num}</strong>. Please check the order number and try again. If the issue persists, <a href="contact.html" style="color:var(--cta-orange);">contact our support team</a>.</p>
+            </div>`;
+          result.classList.add('show');
+          return;
+        }
+
+        let timelineHtml = order.timeline.map(t => `
+          <div class="timeline-item">
+            <div class="tl-dot ${t.dot}"><i class="${t.icon}"></i></div>
+            <div class="tl-content">
+              <h6>${t.title}</h6>
+              <p>${t.desc}</p>
+              ${t.date ? '<div class="tl-date">' + t.date + '</div>' : ''}
+            </div>
+          </div>`).join('');
+
+        let itemsHtml = order.items.map(i => `<span class="d-block"><strong>${i.qty}x</strong> ${i.name}</span>`).join('');
+
+        card.innerHTML = `
+          <div class="order-header">
+            <div>
+              <h4>Order #${num}</h4>
+              <small style="color:var(--header-gray);">Placed on ${order.date}</small>
+            </div>
+            <span class="order-badge ${order.badgeClass}">${order.badge}</span>
+          </div>
+          <div class="timeline">${timelineHtml}</div>
+          <div class="order-details-grid">
+            <div class="od-item">
+              <label>Items</label>
+              <p>${itemsHtml}</p>
+            </div>
+            <div class="od-item">
+              <label>Total Amount</label>
+              <p style="font-size:20px;font-weight:700;">${order.total}</p>
+            </div>
+          </div>`;
+
+        result.classList.add('show');
+        result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return false;
+      }
+    </script>
+  </body>
+</html>

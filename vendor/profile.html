@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings — AZ Aluminium</title>
+    <meta name="description" content="Vendor profile settings for AZ Aluminium" />
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/vendor.css" />
+    <style>
+      /* --- Page Specific --- */
+      .section-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 32px 36px; margin-bottom: 24px; }
+      .section-card h5 { font-weight: 700; color: var(--v-primary); font-size: 17px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+      .section-card h5 i { color: var(--v-accent); }
+
+      .profile-cover {
+        background: var(--v-sidebar-bg); border-radius: 18px; padding: 40px 36px;
+        position: relative; overflow: hidden; margin-bottom: 24px;
+      }
+      .profile-cover::before {
+        content: ''; position: absolute; top: -50%; right: -20%;
+        width: 400px; height: 400px; border-radius: 50%;
+        background: rgba(16,185,129,.08);
+      }
+      .profile-cover::after {
+        content: ''; position: absolute; bottom: -30%; left: 10%;
+        width: 250px; height: 250px; border-radius: 50%;
+        background: rgba(16,185,129,.05);
+      }
+      .pc-content { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
+      .pc-avatar {
+        width: 72px; height: 72px; border-radius: 50%;
+        background: var(--v-accent); color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 26px; flex-shrink: 0;
+        box-shadow: 0 4px 20px rgba(16,185,129,.3);
+      }
+      .pc-info { color: #fff; }
+      .pc-info .pc-name { font-size: 22px; font-weight: 700; margin: 0; }
+      .pc-info .pc-detail { font-size: 13px; color: #94a3b8; margin: 2px 0 0; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+      .pc-info .pc-detail span { display: flex; align-items: center; gap: 5px; }
+      .pc-info .pc-detail .pc-tier { background: rgba(16,185,129,.2); color: var(--v-accent); padding: 2px 12px; border-radius: 50px; font-size: 11px; font-weight: 600; }
+
+      .form-custom {
+        border-radius: 12px; border: 2px solid #e2e8f0; padding: 11px 16px;
+        font-size: 13px; font-weight: 500; transition: .25s; outline: none;
+        font-family: 'Poppins', sans-serif; width: 100%;
+      }
+      .form-custom:focus { border-color: var(--v-accent); box-shadow: 0 0 0 3px rgba(16,185,129,.1); }
+      .form-custom-lg { padding: 13px 18px; font-size: 14px; }
+      textarea.form-custom { resize: vertical; min-height: 80px; }
+      label.form-label { font-size: 12px; font-weight: 600; color: var(--v-primary); margin-bottom: 5px; }
+
+      .btn-emerald {
+        background: var(--v-accent); color: #fff; border: none; padding: 11px 28px;
+        border-radius: 12px; font-size: 13px; font-weight: 600; transition: .25s;
+        font-family: 'Poppins', sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+      }
+      .btn-emerald:hover { background: var(--v-accent-hover); color: #fff; }
+      .btn-outline-custom {
+        background: transparent; color: var(--v-primary); border: 2px solid #e2e8f0;
+        padding: 11px 28px; border-radius: 12px; font-size: 13px; font-weight: 600;
+        transition: .25s; font-family: 'Poppins', sans-serif; cursor: pointer;
+        display: inline-flex; align-items: center; gap: 8px;
+      }
+      .btn-outline-custom:hover { border-color: var(--v-accent); color: var(--v-accent); }
+      .btn-danger-outline {
+        background: transparent; color: #ef4444; border: 2px solid #fecaca;
+        padding: 11px 28px; border-radius: 12px; font-size: 13px; font-weight: 600;
+        transition: .25s; font-family: 'Poppins', sans-serif; cursor: pointer;
+        display: inline-flex; align-items: center; gap: 8px;
+      }
+      .btn-danger-outline:hover { background: #fef2f2; border-color: #ef4444; }
+
+      .toggle-wrap { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+      .toggle-wrap:last-child { border-bottom: none; }
+      .toggle-wrap .toggle-label { font-size: 13px; font-weight: 500; color: var(--v-primary); }
+      .toggle-wrap .toggle-desc { font-size: 11px; color: #94a3b8; margin: 0; }
+      .toggle-switch { position: relative; width: 48px; height: 26px; flex-shrink: 0; }
+      .toggle-switch input { opacity: 0; width: 0; height: 0; }
+      .toggle-switch .slider {
+        position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+        background: #cbd5e1; border-radius: 26px; transition: .3s;
+      }
+      .toggle-switch .slider::before {
+        content: ''; position: absolute; height: 20px; width: 20px;
+        left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .3s;
+      }
+      .toggle-switch input:checked + .slider { background: var(--v-accent); }
+      .toggle-switch input:checked + .slider::before { transform: translateX(22px); }
+
+      .security-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+      .security-grid .btn-emerald, .security-grid .btn-outline-custom { flex: 1; justify-content: center; min-width: 160px; }
+
+      @media (max-width: 576px) {
+        .section-card { padding: 20px 18px; }
+        .profile-cover { padding: 24px 20px; }
+        .pc-content { flex-direction: column; text-align: center; }
+        .pc-info .pc-detail { justify-content: center; }
+        .security-grid { flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <div class="mh-left">
+        <button class="mh-toggle" id="sidebarToggle" type="button"><i class="fa-solid fa-bars"></i></button>
+        <img src="../images/logo-white.png" alt="" />
+        <span class="mh-brand">AZ Aluminium</span>
+      </div>
+      <div class="mh-right">
+        <button class="mh-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="mh-badge">5</span>
+        </button>
+        <button class="mh-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="v-sidebar" id="sidebar">
+      <div class="sb-brand">
+        <img src="../images/logo-white.png" alt="AZ Aluminium" onerror="this.src='../images/logo.png'" />
+        <div class="sb-text">
+          <span class="sb-title">AZ Aluminium</span>
+          <span class="sb-sub">Vendor Portal</span>
+        </div>
+      </div>
+      <div class="sb-toolbar">
+        <button class="tb-btn" onclick="location.href='notifications.html'" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="tb-badge">5</span>
+        </button>
+        <button class="tb-btn" onclick="switchLanguage()" title="Language">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+      </div>
+      <nav>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Overview</a>
+        <a href="quote-requests.html" class="nav-item"><i class="fa-regular fa-file-lines"></i> Quote Requests</a>
+        <a href="orders.html" class="nav-item"><i class="fa-solid fa-truck"></i> Orders</a>
+        <a href="tickets.html" class="nav-item"><i class="fa-regular fa-message"></i> Support</a>
+        <a href="profile.html" class="nav-item active"><i class="fa-solid fa-gear"></i> Settings</a>
+      </nav>
+      <div class="sb-footer">
+        <div class="user-card">
+          <div class="avatar">SC</div>
+          <div>
+            <p class="u-name">SteelCraft Supplies</p>
+            <p class="u-role">Premium Vendor</p>
+          </div>
+          <i class="fa-solid fa-chevron-right u-arrow"></i>
+        </div>
+        <a href="../index.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="v-main">
+      <div class="main-content">
+        <div class="page-header">
+          <h2>Settings</h2>
+          <p>Manage your vendor profile, business details, and preferences.</p>
+        </div>
+
+        <!-- Profile Cover -->
+        <div class="profile-cover">
+          <div class="pc-content">
+            <div class="pc-avatar">SC</div>
+            <div class="pc-info">
+              <h3 class="pc-name">SteelCraft Supplies</h3>
+              <div class="pc-detail">
+                <span><i class="fa-regular fa-calendar"></i> Member since Jan 2024</span>
+                <span class="pc-tier"><i class="fa-solid fa-crown"></i> Premium Vendor</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Business Information -->
+        <div class="section-card">
+          <h5><i class="fa-solid fa-building"></i> Business Information</h5>
+          <form id="bizForm" onsubmit="saveBiz(event)">
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">Company Name</label><input type="text" class="form-custom" value="SteelCraft Supplies B.V." /></div>
+              <div class="col-md-6"><label class="form-label">Contact Person</label><input type="text" class="form-custom" value="Jan de Vries" /></div>
+              <div class="col-md-6"><label class="form-label">Email</label><input type="email" class="form-custom" value="info@steelcraftsupplies.nl" /></div>
+              <div class="col-md-6"><label class="form-label">Phone</label><input type="text" class="form-custom" value="+31 20 123 4567" /></div>
+              <div class="col-md-6"><label class="form-label">Website</label><input type="text" class="form-custom" value="https://steelcraftsupplies.nl" /></div>
+              <div class="col-md-6"><label class="form-label">VAT Number</label><input type="text" class="form-custom" value="NL123456789B01" /></div>
+            </div>
+            <div class="mt-3"><button type="submit" class="btn-emerald"><i class="fa-regular fa-floppy-disk"></i> Save Changes</button></div>
+          </form>
+        </div>
+
+        <!-- Contact & Address -->
+        <div class="section-card">
+          <h5><i class="fa-solid fa-location-dot"></i> Contact &amp; Address</h5>
+          <form id="addressForm" onsubmit="saveAddress(event)">
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">Street</label><input type="text" class="form-custom" value="Industrieweg 42" /></div>
+              <div class="col-md-6"><label class="form-label">City</label><input type="text" class="form-custom" value="Rotterdam" /></div>
+              <div class="col-md-6"><label class="form-label">Country</label><input type="text" class="form-custom" value="Netherlands" /></div>
+              <div class="col-md-6"><label class="form-label">Postal Code</label><input type="text" class="form-custom" value="3014 AB" /></div>
+            </div>
+            <div class="mt-3"><button type="submit" class="btn-emerald"><i class="fa-regular fa-floppy-disk"></i> Save Changes</button></div>
+          </form>
+        </div>
+
+        <!-- Login & Security -->
+        <div class="section-card">
+          <h5><i class="fa-solid fa-lock"></i> Login &amp; Security</h5>
+          <form id="passwordForm" onsubmit="updatePassword(event)">
+            <div class="row g-3 mb-3">
+              <div class="col-md-4"><label class="form-label">Current Password</label><input type="password" class="form-custom" placeholder="Enter current password" /></div>
+              <div class="col-md-4"><label class="form-label">New Password</label><input type="password" class="form-custom" placeholder="Enter new password" /></div>
+              <div class="col-md-4"><label class="form-label">Confirm New Password</label><input type="password" class="form-custom" placeholder="Confirm new password" /></div>
+            </div>
+            <div class="security-grid">
+              <button type="submit" class="btn-emerald"><i class="fa-solid fa-key"></i> Update Password</button>
+              <button type="button" class="btn-outline-custom" onclick="setup2FA()"><i class="fa-solid fa-shield-halved"></i> Enable 2FA</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Notification Preferences -->
+        <div class="section-card">
+          <h5><i class="fa-regular fa-bell"></i> Notification Preferences</h5>
+          <div>
+            <div class="toggle-wrap">
+              <div><div class="toggle-label">Email Notifications</div><div class="toggle-desc">Receive updates via email</div></div>
+              <label class="toggle-switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="toggle-wrap">
+              <div><div class="toggle-label">SMS Alerts</div><div class="toggle-desc">Get important alerts via SMS</div></div>
+              <label class="toggle-switch"><input type="checkbox" /><span class="slider"></span></label>
+            </div>
+            <div class="toggle-wrap">
+              <div><div class="toggle-label">New Quote Request Alerts</div><div class="toggle-desc">When a customer submits a new quote request</div></div>
+              <label class="toggle-switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="toggle-wrap">
+              <div><div class="toggle-label">Order Updates</div><div class="toggle-desc">Order status changes and shipping notifications</div></div>
+              <label class="toggle-switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="toggle-wrap">
+              <div><div class="toggle-label">Weekly Summary</div><div class="toggle-desc">Receive a weekly digest of your activity</div></div>
+              <label class="toggle-switch"><input type="checkbox" /><span class="slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account -->
+        <div class="section-card">
+          <h5><i class="fa-solid fa-user-gear"></i> Account</h5>
+          <div class="d-flex gap-3 flex-wrap">
+            <button class="btn-outline-custom" onclick="downloadData()"><i class="fa-solid fa-download"></i> Download My Data</button>
+            <button class="btn-danger-outline" onclick="deleteAccount()"><i class="fa-solid fa-trash-can"></i> Delete Account</button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="v-footer">
+        <span>&copy; 2026 AZ Aluminium. All rights reserved.</span>
+        <span>Vendor Portal <i class="fa-solid fa-circle" style="font-size:6px;color:var(--v-accent);margin:0 6px;"></i> Powered by AZ Platform</span>
+      </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), toggle = document.getElementById('sidebarToggle');
+      function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+      function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+      toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      function switchLanguage() {
+        const langs = [
+          { code: 'en', name: 'English', flag: '🇬🇧' },
+          { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+          { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+          { code: 'fr', name: 'Français', flag: '🇫🇷' },
+          { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+          { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+        ];
+        Swal.fire({
+          title: '<span style="font-size:20px;font-weight:700;">Choose Your Language</span>',
+          html: `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:4px 0;">${langs.map(l => `<div class="swl-card" onclick="document.querySelectorAll('.swl-card').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById('swlVal').value='${l.code}';" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border:2px solid #e2e8f0;border-radius:16px;cursor:pointer;transition:.25s;background:#fff;"><span style="font-size:36px;line-height:1;">${l.flag}</span><span style="font-size:13px;font-weight:600;color:#1e293b;">${l.name}</span></div>`).join('')}<input type="hidden" id="swlVal" value="en" /></div><style>.swl-card:hover{border-color:var(--v-accent);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}.swl-card.active{border-color:var(--v-accent);background:#f0fdf4;box-shadow:0 4px 16px rgba(16,185,129,.15)}</style>`,
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa-regular fa-check me-1"></i> Select',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: 'var(--v-accent)',
+          cancelButtonColor: '#64748b',
+          preConfirm: () => { const v = document.getElementById('swlVal')?.value; if (!v) { Swal.showValidationMessage('Select a language'); return false; } return v; }
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Language Changed', text: `Language set to ${r.value.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false }); });
+      }
+
+      function saveBiz(e) { e.preventDefault(); Swal.fire({ title: 'Saved!', text: 'Business information updated.', icon: 'success', timer: 1500, showConfirmButton: false }); }
+      function saveAddress(e) { e.preventDefault(); Swal.fire({ title: 'Saved!', text: 'Address updated.', icon: 'success', timer: 1500, showConfirmButton: false }); }
+      function updatePassword(e) { e.preventDefault(); Swal.fire({ title: 'Password Updated', text: 'Your password has been changed.', icon: 'success', timer: 1500, showConfirmButton: false }); }
+
+      function setup2FA() {
+        Swal.fire({
+          title: 'Enable 2FA?',
+          text: 'Two-factor authentication adds an extra layer of security.',
+          icon: 'question', showCancelButton: true, confirmButtonColor: 'var(--v-accent)', cancelButtonColor: '#64748b',
+          confirmButtonText: 'Enable', cancelButtonText: 'Cancel'
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: '2FA Enabled', text: 'Two-factor authentication has been activated.', icon: 'success', timer: 2000, showConfirmButton: false }); });
+      }
+
+      function downloadData() {
+        Swal.fire({ title: 'Download Started', text: 'Your data export is being prepared.', icon: 'info', timer: 2000, showConfirmButton: false });
+      }
+
+      function deleteAccount() {
+        Swal.fire({
+          title: 'Delete Account?',
+          text: 'This action is permanent and cannot be undone!',
+          icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#64748b',
+          confirmButtonText: 'Yes, Delete', cancelButtonText: 'Cancel'
+        }).then(r => { if (r.isConfirmed) Swal.fire({ title: 'Account Deleted', text: 'Your vendor account has been removed.', icon: 'error', timer: 2000, showConfirmButton: false }); });
+      }
+    </script>
+  </body>
+</html>
