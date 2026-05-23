@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AZ Aluminium Technician Portal — Manage appointments, projects, and site tasks.">
+  <meta name="keywords" content="AZ Aluminium, technician, field service, aluminium, pergola, glass, installation">
+  <meta name="author" content="AZ Aluminium">
+  <meta property="og:title" content="Dashboard — Technician · AZ Aluminium">
+  <meta property="og:description" content="AZ Aluminium Technician Portal">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230891b2'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9v2c0 1.66-1.34 3-3 3v2h20v-2c-1.66 0-3-1.34-3-3V9c0-3.87-3.13-7-7-7z'/%3E%3Cpath d='M3 16h18v3H3z'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230891b2'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9v2c0 1.66-1.34 3-3 3v2h20v-2c-1.66 0-3-1.34-3-3V9c0-3.87-3.13-7-7-7z'/%3E%3Cpath d='M3 16h18v3H3z'/%3E%3C/svg%3E">
   <title>Dashboard — Technician · AZ Aluminium</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -126,10 +134,10 @@
             <div class="st-card">
               <div class="st-time">08:00 – 10:00</div>
               <div class="st-info">
-                <span class="st-project">Villa Park Installatie</span>
-                <div class="st-meta">
-                  <span><i class="fa-solid fa-location-dot"></i> Sloten</span>
-                  <span><i class="fa-solid fa-user"></i> De Jong Residence</span>
+                  <span class="st-project">Private Luxury Villa Pergola</span>
+                  <div class="st-meta">
+                    <span><i class="fa-solid fa-location-dot"></i> Amsterdam</span>
+                    <span><i class="fa-solid fa-user"></i> De Jong Residence</span>
                 </div>
               </div>
               <div class="st-status"><span class="status-pill in-progress">In Progress</span></div>
@@ -140,10 +148,10 @@
             <div class="st-card">
               <div class="st-time">10:30 – 12:30</div>
               <div class="st-info">
-                <span class="st-project">Glasgevel Montage</span>
-                <div class="st-meta">
-                  <span><i class="fa-solid fa-location-dot"></i> Amsterdam</span>
-                  <span><i class="fa-solid fa-user"></i> Green Office B.V.</span>
+                  <span class="st-project">Modern Lakefront Winter Garden</span>
+                  <div class="st-meta">
+                    <span><i class="fa-solid fa-location-dot"></i> Antwerp, BE</span>
+                    <span><i class="fa-solid fa-user"></i> Green Office B.V.</span>
                 </div>
               </div>
               <div class="st-status"><span class="status-pill pending">Pending</span></div>
@@ -154,10 +162,10 @@
             <div class="st-card">
               <div class="st-time">14:00 – 16:00</div>
               <div class="st-info">
-                <span class="st-project">Pergola Onderhoud</span>
-                <div class="st-meta">
-                  <span><i class="fa-solid fa-location-dot"></i> Utrecht</span>
-                  <span><i class="fa-solid fa-user"></i> Van der Berg Family</span>
+                  <span class="st-project">Corporate Executive Garden</span>
+                  <div class="st-meta">
+                    <span><i class="fa-solid fa-location-dot"></i> Berlin, DE</span>
+                    <span><i class="fa-solid fa-user"></i> Van der Berg Family</span>
                 </div>
               </div>
               <div class="st-status"><span class="status-pill completed">Completed</span></div>
@@ -233,15 +241,15 @@
           <h3 class="section-title"><i class="fa-solid fa-bolt"></i> Quick Actions</h3>
         </div>
         <div class="quick-actions">
-          <a href="appointments.html" class="quick-btn">
+          <div class="quick-btn" onclick="openNewVisit()" style="cursor:pointer">
             <i class="fa-solid fa-play"></i> Start New Visit
-          </a>
-          <a href="projects.html" class="quick-btn qb-alt">
+          </div>
+          <div class="quick-btn qb-alt" onclick="openProgressReport()" style="cursor:pointer">
             <i class="fa-solid fa-pen"></i> Submit Progress Report
-          </a>
-          <a href="messages.html" class="quick-btn qb-amber">
+          </div>
+          <div class="quick-btn qb-amber" onclick="openContactAdmin()" style="cursor:pointer">
             <i class="fa-solid fa-headset"></i> Contact Admin
-          </a>
+          </div>
         </div>
       </section>
 
@@ -280,6 +288,89 @@
     const now = new Date();
     const opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
     document.getElementById('currentDate').textContent = now.toLocaleDateString('en-GB', opts);
+
+    // --- Quick Action Modals ---
+    function openNewVisit() {
+      Swal.fire({
+        title: 'Start New Visit',
+        html: `<div style="text-align:left">
+          <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">Select Project</label>
+          <select id="sv-project" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-family:inherit;font-size:13px;outline:none;background:#fff;margin-bottom:12px;">
+            <option>Private Luxury Villa Pergola</option>
+            <option>Modern Lakefront Winter Garden</option>
+            <option>Sustainable Home Garage Set</option>
+            <option>Smart Zonwering Pergola</option>
+          </select>
+          <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">Date & Time</label>
+          <input type="datetime-local" id="sv-datetime" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-family:inherit;font-size:13px;outline:none;background:#fff;">
+        </div>`,
+        confirmButtonText: '<i class="fa-solid fa-play"></i> Start Visit',
+        confirmButtonColor: '#0891b2',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        cancelButtonColor: '#64748b',
+        background: '#fff',
+        borderRadius: '16px'
+      }).then(r => {
+        if (r.isConfirmed) {
+          Swal.fire({ icon: 'success', title: 'Visit Created!', text: 'New site visit has been scheduled.', timer: 2000, showConfirmButton: false, background: '#fff', borderRadius: '16px' });
+        }
+      });
+    }
+    function openProgressReport() {
+      Swal.fire({
+        title: 'Submit Progress Report',
+        html: `<div style="text-align:left">
+          <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">Project</label>
+          <select id="pr-project" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-family:inherit;font-size:13px;outline:none;background:#fff;margin-bottom:12px;">
+            <option>Private Luxury Villa Pergola</option>
+            <option>Modern Lakefront Winter Garden</option>
+            <option>Corporate Executive Garden</option>
+            <option>Sustainable Home Garage Set</option>
+            <option>Smart Zonwering Pergola</option>
+            <option>Family Garden Veranda</option>
+          </select>
+          <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">Progress %</label>
+          <input type="range" id="pr-range" min="0" max="100" value="50" style="width:100%;margin-bottom:4px;" oninput="document.getElementById('pr-val').textContent=this.value+'%'">
+          <div style="text-align:center;font-size:18px;font-weight:700;color:var(--t-accent);margin-bottom:12px;" id="pr-val">50%</div>
+          <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">Notes</label>
+          <textarea style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:none;min-height:70px;outline:none;" placeholder="Progress update notes..."></textarea>
+        </div>`,
+        confirmButtonText: '<i class="fa-solid fa-paper-plane"></i> Submit Report',
+        confirmButtonColor: '#0891b2',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        cancelButtonColor: '#64748b',
+        background: '#fff',
+        borderRadius: '16px'
+      }).then(r => {
+        if (r.isConfirmed) {
+          Swal.fire({ icon: 'success', title: 'Report Submitted!', text: 'Progress report has been saved.', timer: 2000, showConfirmButton: false, background: '#fff', borderRadius: '16px' });
+        }
+      });
+    }
+    function openContactAdmin() {
+      Swal.fire({
+        title: 'Contact Admin',
+        html: `<div style="text-align:left">
+          <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">Subject</label>
+          <input id="ca-subject" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-family:inherit;font-size:13px;outline:none;background:#fff;margin-bottom:12px;" placeholder="e.g. Schedule change request">
+          <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">Message</label>
+          <textarea id="ca-msg" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:none;min-height:100px;outline:none;" placeholder="Write your message to admin..."></textarea>
+        </div>`,
+        confirmButtonText: '<i class="fa-solid fa-paper-plane"></i> Send Message',
+        confirmButtonColor: '#f59e0b',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        cancelButtonColor: '#64748b',
+        background: '#fff',
+        borderRadius: '16px'
+      }).then(r => {
+        if (r.isConfirmed) {
+          Swal.fire({ icon: 'success', title: 'Message Sent!', text: 'Admin will respond within 24 hours.', timer: 2000, showConfirmButton: false, background: '#fff', borderRadius: '16px' });
+        }
+      });
+    }
 
     // --- Language Switcher (SweetAlert2) ---
     function switchLanguage() {

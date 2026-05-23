@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AZ Aluminium Technician Portal — Manage appointments, projects, and site tasks.">
+  <meta name="keywords" content="AZ Aluminium, technician, field service, aluminium, pergola, glass, installation">
+  <meta name="author" content="AZ Aluminium">
+  <meta property="og:title" content="My Appointments — Technician · AZ Aluminium">
+  <meta property="og:description" content="AZ Aluminium Technician Portal">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230891b2'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9v2c0 1.66-1.34 3-3 3v2h20v-2c-1.66 0-3-1.34-3-3V9c0-3.87-3.13-7-7-7z'/%3E%3Cpath d='M3 16h18v3H3z'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230891b2'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9v2c0 1.66-1.34 3-3 3v2h20v-2c-1.66 0-3-1.34-3-3V9c0-3.87-3.13-7-7-7z'/%3E%3Cpath d='M3 16h18v3H3z'/%3E%3C/svg%3E">
   <title>My Appointments — Technician · AZ Aluminium</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -193,8 +201,8 @@
             <div class="ac-meta"><span><i class="fa-solid fa-location-dot"></i> Sloten</span><span><i class="fa-solid fa-user"></i> De Jong Residence</span></div>
           </div>
           <div class="ac-actions">
-            <button class="ac-btn primary"><i class="fa-solid fa-play"></i> Start</button>
-            <button class="ac-btn ghost"><i class="fa-solid fa-flag"></i> Issue</button>
+            <button class="ac-btn primary" onclick="startVisit('Private Luxury Villa Pergola','08:00 – 10:00')"><i class="fa-solid fa-play"></i> Start</button>
+            <button class="ac-btn ghost" onclick="reportIssue('Private Luxury Villa Pergola')"><i class="fa-solid fa-flag"></i> Issue</button>
           </div>
         </div>
 
@@ -205,8 +213,8 @@
             <div class="ac-meta"><span><i class="fa-solid fa-location-dot"></i> Amsterdam</span><span><i class="fa-solid fa-user"></i> Green Office B.V.</span></div>
           </div>
           <div class="ac-actions">
-            <button class="ac-btn primary"><i class="fa-solid fa-play"></i> Start</button>
-            <button class="ac-btn ghost"><i class="fa-solid fa-flag"></i> Issue</button>
+            <button class="ac-btn primary" onclick="startVisit('Modern Lakefront Winter Garden','10:30 – 12:30')"><i class="fa-solid fa-play"></i> Start</button>
+            <button class="ac-btn ghost" onclick="reportIssue('Modern Lakefront Winter Garden')"><i class="fa-solid fa-flag"></i> Issue</button>
           </div>
         </div>
 
@@ -228,8 +236,8 @@
             <div class="ac-meta"><span><i class="fa-solid fa-location-dot"></i> Amsterdam</span><span><i class="fa-solid fa-user"></i> Gemeente Amsterdam</span></div>
           </div>
           <div class="ac-actions">
-            <button class="ac-btn primary"><i class="fa-solid fa-play"></i> Start</button>
-            <button class="ac-btn ghost"><i class="fa-solid fa-flag"></i> Issue</button>
+            <button class="ac-btn primary" onclick="startVisit('Sustainable Home Garage Set','09:00 – 11:00')"><i class="fa-solid fa-play"></i> Start</button>
+            <button class="ac-btn ghost" onclick="reportIssue('Sustainable Home Garage Set')"><i class="fa-solid fa-flag"></i> Issue</button>
           </div>
         </div>
 
@@ -240,8 +248,8 @@
             <div class="ac-meta"><span><i class="fa-solid fa-location-dot"></i> Haarlem</span><span><i class="fa-solid fa-user"></i> Bakkerij Centrum</span></div>
           </div>
           <div class="ac-actions">
-            <button class="ac-btn primary"><i class="fa-solid fa-play"></i> Start</button>
-            <button class="ac-btn ghost"><i class="fa-solid fa-flag"></i> Issue</button>
+            <button class="ac-btn primary" onclick="startVisit('Smart Zonwering Pergola','13:00 – 15:00')"><i class="fa-solid fa-play"></i> Start</button>
+            <button class="ac-btn ghost" onclick="reportIssue('Smart Zonwering Pergola')"><i class="fa-solid fa-flag"></i> Issue</button>
           </div>
         </div>
 
@@ -298,6 +306,80 @@
     const d=new Date();document.getElementById('aptDate').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
 
     document.querySelectorAll('.af-btn').forEach(b=>{b.addEventListener('click',function(){document.querySelectorAll('.af-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');});});
+
+    function startVisit(name, time) {
+      Swal.fire({
+        title: 'Start Visit',
+        html: `<p style="margin-bottom:8px;color:#64748b;font-size:14px;">Starting visit for:</p>
+               <p style="font-weight:600;font-size:16px;color:var(--t-primary);margin-bottom:4px;">${name}</p>
+               <p style="color:#94a3b8;font-size:13px;">${time}</p>
+               <div style="margin-top:16px;padding:12px;background:#f8fafc;border-radius:10px;">
+                 <label style="display:block;text-align:left;font-size:12px;font-weight:600;color:#64748b;margin-bottom:6px;">Check-in Note (optional)</label>
+                 <textarea id="swal-note" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:none;min-height:60px;outline:none;" placeholder="Any notes before starting..."></textarea>
+               </div>`,
+        confirmButtonText: '<i class="fa-solid fa-play"></i> Start Now',
+        confirmButtonColor: '#0891b2',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        cancelButtonColor: '#64748b',
+        background: '#fff',
+        borderRadius: '16px',
+        customClass: { confirmButton: 'swal-btn-cyan', cancelButton: 'swal-btn-ghost' }
+      }).then(r => {
+        if (r.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Visit Started!',
+            text: `You have started ${name}`,
+            timer: 2000,
+            showConfirmButton: false,
+            background: '#fff',
+            borderRadius: '16px'
+          });
+        }
+      });
+    }
+
+    function reportIssue(name) {
+      Swal.fire({
+        title: 'Report Issue',
+        html: `<p style="margin-bottom:12px;color:#64748b;font-size:14px;">Report an issue for <strong>${name}</strong></p>
+               <div style="margin-bottom:12px;">
+                 <label style="display:block;text-align:left;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">Issue Type</label>
+                 <select id="swal-issue-type" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-family:inherit;font-size:13px;outline:none;background:#fff;">
+                   <option>Material Defect</option>
+                   <option>Site Access Issue</option>
+                   <option>Client Concern</option>
+                   <option>Safety Hazard</option>
+                   <option>Equipment Problem</option>
+                   <option>Other</option>
+                 </select>
+               </div>
+               <div>
+                 <label style="display:block;text-align:left;font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">Description</label>
+                 <textarea id="swal-issue-desc" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:none;min-height:80px;outline:none;" placeholder="Describe the issue..."></textarea>
+               </div>`,
+        confirmButtonText: '<i class="fa-solid fa-flag"></i> Submit Issue',
+        confirmButtonColor: '#ef4444',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        cancelButtonColor: '#64748b',
+        background: '#fff',
+        borderRadius: '16px'
+      }).then(r => {
+        if (r.isConfirmed) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Issue Reported',
+            text: 'Your issue has been logged. Admin will review it shortly.',
+            timer: 2500,
+            showConfirmButton: false,
+            background: '#fff',
+            borderRadius: '16px'
+          });
+        }
+      });
+    }
 
     function switchLanguage(){const lang=localStorage.getItem('az-lang')||'en';Swal.fire({title:'Select Language',html:'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:340px;margin:0 auto">'+[['en','&#127468;&#127463;','English'],['nl','&#127475;&#127473;','Nederlands'],['de','&#127465;&#127466;','Deutsch'],['fr','&#127467;&#127479;','Fran&ccedil;ais'],['tr','&#127481;&#127479;','T&uuml;rk&ccedil;e'],['ar','&#127462;&#127465;','العربية']].map(([c,f,t])=>'<div onclick="setLang(\''+c+'\')" style="cursor:pointer;padding:12px 8px;border-radius:12px;border:2px solid '+(c===lang?'var(--t-accent)':'#e2e8f0')+';background:'+(c===lang?'var(--t-accent-light)':'#fff')+';transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:'+(c===lang?'600':'400')+';color:var(--t-primary)"><span style="font-size:28px">'+f+'</span>'+t+'</div>').join('')+'</div>',showConfirmButton:false,background:'#fff',borderRadius:'20px'});}
     function setLang(c){localStorage.setItem('az-lang',c);Swal.close();location.reload();}

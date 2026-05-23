@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AZ Aluminium Technician Portal — Manage appointments, projects, and site tasks.">
+  <meta name="keywords" content="AZ Aluminium, technician, field service, aluminium, pergola, glass, installation">
+  <meta name="author" content="AZ Aluminium">
+  <meta property="og:title" content="Project Detail — Technician · AZ Aluminium">
+  <meta property="og:description" content="AZ Aluminium Technician Portal">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230891b2'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9v2c0 1.66-1.34 3-3 3v2h20v-2c-1.66 0-3-1.34-3-3V9c0-3.87-3.13-7-7-7z'/%3E%3Cpath d='M3 16h18v3H3z'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230891b2'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9v2c0 1.66-1.34 3-3 3v2h20v-2c-1.66 0-3-1.34-3-3V9c0-3.87-3.13-7-7-7z'/%3E%3Cpath d='M3 16h18v3H3z'/%3E%3C/svg%3E">
   <title>Project Detail — Technician · AZ Aluminium</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,11 +93,18 @@
     .btn-upload:hover { background: var(--t-accent-hover); }
     .btn-upload i { margin-right: 6px; }
 
-    .timeline-milestones { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .milestone-card { background: #fff; border-radius: 12px; padding: 18px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
-    .milestone-card .ms-name { font-size: 13px; font-weight: 600; color: var(--t-primary); }
-    .milestone-card .ms-date { font-size: 11px; color: #94a3b8; margin: 4px 0 8px; }
-    .milestone-card .ms-status { font-size: 20px; }
+    .ms-steps { display: flex; align-items: flex-start; justify-content: space-between; position: relative; padding: 10px 0; }
+    .ms-steps::before { content: ''; position: absolute; top: 26px; left: 40px; right: 40px; height: 3px; background: #e2e8f0; z-index: 0; }
+    .ms-step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; flex: 1; text-align: center; }
+    .ms-step .ms-circle { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; margin-bottom: 8px; transition: .3s; position: relative; }
+    .ms-step .ms-circle.done { background: var(--t-success); color: #fff; box-shadow: 0 0 0 4px rgba(16,185,129,.15); }
+    .ms-step .ms-circle.active { background: var(--t-accent); color: #fff; box-shadow: 0 0 0 4px rgba(8,145,178,.15); animation: ms-pulse 2s infinite; }
+    .ms-step .ms-circle.pending { background: #f1f5f9; color: #94a3b8; border: 2px dashed #cbd5e1; }
+    @keyframes ms-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(8,145,178,.15); } 50% { box-shadow: 0 0 0 10px rgba(8,145,178,.05); } }
+    .ms-step .ms-label { font-size: 12px; font-weight: 600; color: var(--t-primary); margin-bottom: 2px; }
+    .ms-step .ms-label.done-label { color: var(--t-success); }
+    .ms-step .ms-label.active-label { color: var(--t-accent); }
+    .ms-step .ms-date-sm { font-size: 10px; color: #94a3b8; }
 
     .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--t-accent); text-decoration: none; margin-bottom: 16px; font-weight: 500; }
     .back-link:hover { color: var(--t-accent-hover); }
@@ -100,10 +115,12 @@
     @media (max-width: 768px) {
       .top-row { flex-direction: column; }
       .middle-grid { grid-template-columns: 1fr; }
-      .timeline-milestones { grid-template-columns: 1fr 1fr; }
+      .ms-steps { flex-direction: column; gap: 16px; padding: 0; }
+      .ms-steps::before { display: none; }
+      .ms-step { flex-direction: row; gap: 14px; text-align: left; }
+      .ms-step .ms-circle { margin-bottom: 0; flex-shrink: 0; }
     }
     @media (max-width: 480px) {
-      .timeline-milestones { grid-template-columns: 1fr; }
       .info-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -176,7 +193,7 @@
       <div class="middle-grid" id="middleGrid"></div>
 
       <section class="section-block">
-        <h3 class="section-title" style="font-size:16px;font-weight:600;color:var(--t-primary);margin-bottom:14px;">Project Timeline</h3>
+        <h3 class="section-title" style="font-size:16px;font-weight:600;color:var(--t-primary);margin-bottom:20px;"><i class="fas fa-road" style="color:var(--t-accent);margin-right:8px;"></i> Project Timeline</h3>
         <div class="timeline-milestones" id="milestones"></div>
       </section>
     </div>
@@ -295,12 +312,47 @@
       ] },
     ];
 
-    const milestones = [
-      { name: 'Site Survey', date: 'Mar 10', done: true },
-      { name: 'Materials Ordered', date: 'Apr 5', done: true },
-      { name: 'Installation Start', date: 'May 1', done: true },
-      { name: 'Final Inspection', date: 'Jun 15', done: false },
-    ];
+    function getProjectMilestones(id) {
+      const all = {
+        1: [
+          { name: 'Site Survey', date: 'Mar 10', done: true },
+          { name: 'Materials Ordered', date: 'Apr 5', done: true },
+          { name: 'Installation Start', date: 'May 1', done: true },
+          { name: 'Final Inspection', date: 'Jun 15', done: false },
+        ],
+        2: [
+          { name: 'Site Survey', date: 'Feb 20', done: true },
+          { name: 'Materials Ordered', date: 'Mar 15', done: true },
+          { name: 'Installation Start', date: 'Apr 10', done: false },
+          { name: 'Final Inspection', date: 'Jul 1', done: false },
+        ],
+        3: [
+          { name: 'Site Survey', date: 'Apr 5', done: true },
+          { name: 'Materials Ordered', date: 'Apr 15', done: true },
+          { name: 'Installation Start', date: 'Apr 25', done: true },
+          { name: 'Final Inspection', date: 'May 15', done: true },
+        ],
+        4: [
+          { name: 'Site Survey', date: 'May 5', done: true },
+          { name: 'Materials Ordered', date: 'Jun 1', done: false },
+          { name: 'Installation Start', date: 'Jul 1', done: false },
+          { name: 'Final Inspection', date: 'Aug 30', done: false },
+        ],
+        5: [
+          { name: 'Site Survey', date: 'Apr 22', done: true },
+          { name: 'Materials Ordered', date: 'Apr 28', done: true },
+          { name: 'Installation Start', date: 'May 5', done: true },
+          { name: 'Final Inspection', date: 'Jun 1', done: false },
+        ],
+        6: [
+          { name: 'Site Survey', date: 'Jun 1', done: false },
+          { name: 'Materials Ordered', date: 'Jun 10', done: false },
+          { name: 'Installation Start', date: 'Jun 20', done: false },
+          { name: 'Final Inspection', date: 'Jul 15', done: false },
+        ],
+      };
+      return all[id] || all[1];
+    }
 
     function getProject() {
       const params = new URLSearchParams(window.location.search);
@@ -394,13 +446,17 @@
       `;
 
       const msDiv = document.getElementById('milestones');
-      msDiv.innerHTML = milestones.map(m => `
-        <div class="milestone-card">
-          <div class="ms-name">${m.name}</div>
-          <div class="ms-date">${m.date}</div>
-          <div class="ms-status">${m.done ? '✅' : '⏳'}</div>
-        </div>
-      `).join('');
+      const pMs = getProjectMilestones(p.id);
+      let foundActive = false;
+      msDiv.innerHTML = `<div class="ms-steps">${pMs.map((m, i) => {
+        let cls = 'pending', lblCls = '', icon = '●';
+        if (m.done) { cls = 'done'; lblCls = 'done-label'; icon = '✓'; }
+        else if (!foundActive) { cls = 'active'; lblCls = 'active-label'; icon = '●'; foundActive = true; }
+        return `<div class="ms-step">
+          <div class="ms-circle ${cls}">${icon}</div>
+          <div><div class="ms-label ${lblCls}">${m.name}</div><div class="ms-date-sm">${m.date}</div></div>
+        </div>`;
+      }).join('')}</div>`;
     }
 
     let currentProgress = null;

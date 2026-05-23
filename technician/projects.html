@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AZ Aluminium Technician Portal — Manage appointments, projects, and site tasks.">
+  <meta name="keywords" content="AZ Aluminium, technician, field service, aluminium, pergola, glass, installation">
+  <meta name="author" content="AZ Aluminium">
+  <meta property="og:title" content="My Projects — Technician · AZ Aluminium">
+  <meta property="og:description" content="AZ Aluminium Technician Portal">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230891b2'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9v2c0 1.66-1.34 3-3 3v2h20v-2c-1.66 0-3-1.34-3-3V9c0-3.87-3.13-7-7-7z'/%3E%3Cpath d='M3 16h18v3H3z'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230891b2'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9v2c0 1.66-1.34 3-3 3v2h20v-2c-1.66 0-3-1.34-3-3V9c0-3.87-3.13-7-7-7z'/%3E%3Cpath d='M3 16h18v3H3z'/%3E%3C/svg%3E">
   <title>My Projects — Technician · AZ Aluminium</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,11 +42,11 @@
     .pj-card:hover { box-shadow: 0 12px 48px rgba(0,0,0,.08); transform: translateY(-6px); }
 
     /* Header gradient */
-    .pj-card .pjc-head { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 38px; color: rgba(255,255,255,.85); position: relative; overflow: hidden; }
-    .pj-card .pjc-head::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 50%; background: linear-gradient(transparent,rgba(0,0,0,.15)); }
+    .pj-card .pjc-head { height: 130px; display: flex; align-items: flex-end; padding: 14px; justify-content: flex-start; position: relative; overflow: hidden; }
+    .pj-card .pjc-head::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(0,0,0,.55)); }
 
     /* Status badge on header */
-    .pj-card .pjc-head .pjc-badge { position: absolute; top: 14px; right: 14px; padding: 4px 14px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; backdrop-filter: blur(8px); }
+    .pj-card .pjc-head .pjc-badge { padding: 5px 16px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     .pj-card .pjc-head .pjc-badge.go { background: rgba(8,145,178,.25); color: #fff; border: 1px solid rgba(255,255,255,.15); }
     .pj-card .pjc-head .pjc-badge.done { background: rgba(16,185,129,.25); color: #fff; border: 1px solid rgba(255,255,255,.15); }
     .pj-card .pjc-head .pjc-badge.hold { background: rgba(245,158,11,.25); color: #fff; border: 1px solid rgba(255,255,255,.15); }
@@ -159,8 +167,7 @@
         <!-- 1. Private Luxury Villa Pergola -->
         <div class="pj-card" onclick="location.href='project-detail.html?id=1'">
           <div class="pjc-head" style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=600');background-size:cover;background-position:center">
-            <i class="fa-solid fa-hard-hat"></i>
-            <span class="pjc-badge go">In Progress</span>
+            <span class="pjc-badge go" style="position:relative;z-index:1">In Progress</span>
           </div>
           <div class="pjc-body">
             <h4>Private Luxury Villa Pergola</h4>
@@ -180,8 +187,7 @@
         <!-- 2. Modern Lakefront Winter Garden -->
         <div class="pj-card" onclick="location.href='project-detail.html?id=2'">
           <div class="pjc-head" style="background-image:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600');background-size:cover;background-position:center">
-            <i class="fa-solid fa-building"></i>
-            <span class="pjc-badge go">In Progress</span>
+            <span class="pjc-badge go" style="position:relative;z-index:1">In Progress</span>
           </div>
           <div class="pjc-body">
             <h4>Modern Lakefront Winter Garden</h4>
@@ -201,8 +207,7 @@
         <!-- 3. Corporate Executive Garden -->
         <div class="pj-card" onclick="location.href='project-detail.html?id=3'">
           <div class="pjc-head" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=600');background-size:cover;background-position:center">
-            <i class="fa-solid fa-tree"></i>
-            <span class="pjc-badge done">Completed</span>
+            <span class="pjc-badge done" style="position:relative;z-index:1">Completed</span>
           </div>
           <div class="pjc-body">
             <h4>Corporate Executive Garden</h4>
@@ -222,8 +227,7 @@
         <!-- 4. Sustainable Home Garage Set -->
         <div class="pj-card" onclick="location.href='project-detail.html?id=4'">
           <div class="pjc-head" style="background-image:url('https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=600');background-size:cover;background-position:center">
-            <i class="fa-solid fa-warehouse"></i>
-            <span class="pjc-badge hold">On Hold</span>
+            <span class="pjc-badge hold" style="position:relative;z-index:1">On Hold</span>
           </div>
           <div class="pjc-body">
             <h4>Sustainable Home Garage Set</h4>
@@ -243,8 +247,7 @@
         <!-- 5. Smart Zonwering Pergola -->
         <div class="pj-card" onclick="location.href='project-detail.html?id=5'">
           <div class="pjc-head" style="background-image:url('https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=600');background-size:cover;background-position:center">
-            <i class="fa-solid fa-store"></i>
-            <span class="pjc-badge go">In Progress</span>
+            <span class="pjc-badge go" style="position:relative;z-index:1">In Progress</span>
           </div>
           <div class="pjc-body">
             <h4>Smart Zonwering Pergola</h4>
@@ -264,8 +267,7 @@
         <!-- 6. Family Garden Veranda -->
         <div class="pj-card" onclick="location.href='project-detail.html?id=6'">
           <div class="pjc-head" style="background-image:url('https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=600');background-size:cover;background-position:center">
-            <i class="fa-solid fa-window-maximize"></i>
-            <span class="pjc-badge wait">Scheduled</span>
+            <span class="pjc-badge wait" style="position:relative;z-index:1">Scheduled</span>
           </div>
           <div class="pjc-body">
             <h4>Family Garden Veranda</h4>
